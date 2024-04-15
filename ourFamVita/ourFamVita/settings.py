@@ -90,7 +90,7 @@ DATABASES = {
         'NAME': 'ourFamVitaDB',
         'USER': 'admin',
         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-        'HOST': 'localhost',
+        'HOST': os.environ.get('MYSQL_HOST'),
         'PORT': 3306,
     }
 }
