@@ -1,4 +1,6 @@
 <!-- menu: home -->
+{% extends "base.html" %}
+{% block content %}
 <h1>home 화면입니다</h1>
 
 <!-- rending page: recom_profile_info.html -->
@@ -24,3 +26,4 @@ ex) 추천받은 적이 있는 경우
 <form action="/recommends/profile-id/surveys/survey-id/rec-collabo-products/" method='get'>
     <button>더보기</button>
 </form>
+{% endblock content %}
