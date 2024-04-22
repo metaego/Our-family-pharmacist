@@ -1,6 +1,20 @@
+<!-- menu: AI영양제 추천받기 -->
 <h1>AI 영양제 추천받기</h1>
 <h2>나의 프로필 정보 확인</h2>
 
-<button>나에게 맞는 영양제 추천받기</button>
-<button>이전</button>
-<button>프로필 수정</button>
+<!-- 설문 기반 ai 영양 성분 및 제품 추천 -->
+<!-- rending page: recom_personal_report.html -->
+<form action="/recommends/profile-id/surveys/survey-id" method='get'>
+    <button>나에게 맞는 영양제 추천받기</button>
+</form>
+
+<!-- 홈 메인화면으로 가기 -->
+<!-- rending page: main.html -->
+<form action="/home/profile-id/surveys/survey-id" method='get'>
+    <button>이전</button>
+</form>
+
+<!-- 프로필 수정 화면으로 가기 -->
+{% comment %} <form action="" method='get'> {% endcomment %}
+    <button>프로필 수정</button>
+{% comment %} </form> {% endcomment %}
