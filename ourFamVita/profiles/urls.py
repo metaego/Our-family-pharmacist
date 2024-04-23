@@ -5,7 +5,7 @@ urlpatterns = [
     path("", profile),
     path("survey-1/", survey1),
     path("survey-2/", survey2),
-    path("survey-3", survey3),
+    path("survey-3/", survey3),
     path("profile-id/profile-info/", profile_info),
     path("profile-id/", profile_delete),
     

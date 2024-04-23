@@ -68,11 +68,7 @@ ROOT_URLCONF = 'ourFamVita.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-<<<<<<< Updated upstream
-        'DIRS': [BASE_DIR / 'templates'],
-=======
         'DIRS': [ TEMPLATES_DIR ],
->>>>>>> Stashed changes
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

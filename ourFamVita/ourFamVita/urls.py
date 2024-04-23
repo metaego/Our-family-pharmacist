@@ -15,15 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-<<<<<<< Updated upstream
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('home/', include('home.urls')),
-    path('recommends/', include('recommends.urls')),
-    path('products/', include('products.urls')),
-=======
-
 from users.views import login
 
 urlpatterns = [
@@ -31,5 +22,7 @@ urlpatterns = [
     path("", login),
     path("users/", include("users.urls")),
     path("profiles/", include("profiles.urls")),
->>>>>>> Stashed changes
+    path('home/', include('home.urls')),
+    path('recommends/', include('recommends.urls')),
+    path('products/', include('products.urls')),
 ]
