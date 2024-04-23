@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ourFamVita</title>
+</head>
+<body>
+    <div id="login">
+        <form method="POST">
+            {% csrf_token %}
+            <h1>Login</h1>
+            {{ form.as_p }}
+            <button type='submit'>로그인</button>
+        </form>
+    </div>
+    <div>
+        <a href="users/signup/">회원가입</a>
+    </div>
+</body>
+</html>
