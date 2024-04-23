@@ -7,11 +7,12 @@
 </head>
 <body>
     <div id="signup">
-        <form method="POST">
+        <form action="{% url "login" %}", method="POST">
             {% csrf_token %}
             <h1>Sign Up</h1>
             {{ form.as_p }}
             <button type="submit">회원가입</button>
+
         </form>
     </div>
 </body>

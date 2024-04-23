@@ -15,21 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-<<<<<<< Updated upstream
+from users.views import login
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("", login, name="login"),
+    path("users/", include("users.urls")),
+    path("profiles/", include("profiles.urls")),
     path('home/', include('home.urls')),
     path('recommends/', include('recommends.urls')),
     path('products/', include('products.urls')),
-=======
 
-from users.views import login
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("", login),
-    path("users/", include("users.urls")),
-    path("profiles/", include("profiles.urls")),
->>>>>>> Stashed changes
 ]

@@ -7,5 +7,32 @@
 </head>
 <body>
     <h1>Profile</h1>
+    <div>
+        { profile }
+        <br>
+        <!-- 선택 프로필의 홈 화면으로 이동-->
+        <button>선택</button>
+        <br>
+        <button>
+            <!-- 현존 프로필이 1개일 경우 삭제 불가능 -->
+            <a href="{% url "profiles:profile" %}" onclick="return confirm(
+            '선택한 프로필을 삭제하시겠습니까?')">
+            삭제
+            </a>
+        </button>
+        <button>
+            <a href="{% url "profiles:profile_info" %}">
+                수정
+            </a>
+        </button>
+    </div>
+    <div>
+        <button>
+            <a href="{% url "profiles:survey1" %}">
+            프로필 생성
+            </a>
+        </button>
+    </div>
+
 </body>
 </html>

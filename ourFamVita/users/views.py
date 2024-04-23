@@ -65,6 +65,12 @@ def signup(request):
 
 
 def acc_info(request):
-    form = PasswordChangeForm()
+    if request.method == "POST":
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = PasswordChangeForm(user=request.user)
+
     context = {"form": form}
     return render(request, "users/acc_info.html", context)

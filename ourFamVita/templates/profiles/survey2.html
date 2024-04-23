@@ -6,6 +6,29 @@
     <title>프로필 등록</title>
 </head>
 <body>
-    
+    <div id="survey">
+        <form action="{% url "profiles:survey3" %}" method="POST">
+            {% csrf_token %}
+            <h1>건강 고민</h1>
+            <div>
+                <input type="radio">
+                <label>피부 미용</label>
+                <input type="radio">
+                <label>눈 건강</label>
+            </div>
+            <div>
+                <button>
+                    <a href="{% url "profiles:survey1" %}">
+                    이전
+                    </a>
+                </button>
+                <button>
+                    <a href="{% url "profiles:survey3" %}">
+                    다음
+                    </a>
+                </button>
+            </div>
+        </form>
+    </div>     
 </body>
 </html>

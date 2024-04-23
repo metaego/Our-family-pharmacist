@@ -1,12 +1,13 @@
 from django.urls import path
-from profiles.views import profile, survey1, survey2, survey3, profile_info, profile_delete
+from . import views
+
+app_name = "profiles"
 
 urlpatterns = [
-    path("", profile),
-    path("survey-1/", survey1),
-    path("survey-2/", survey2),
-    path("survey-3", survey3),
-    path("profile-id/profile-info/", profile_info),
-    path("profile-id/", profile_delete),
-    
+    path("", views.profile, name="profile"),
+    path("survey-1/", views.survey1, name="survey1"),
+    path("survey-2/", views.survey2, name="survey2"),
+    path("survey-3/", views.survey3, name="survey3"),
+    path("profile-id/profile-info/", views.profile_info, name="profile_info"),
+    path("profile-id/", views.profile_delete, name="profile_delete"), 
 ]

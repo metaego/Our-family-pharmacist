@@ -7,7 +7,7 @@
 </head>
 <body>
     <div id="login">
-        <form method="POST">
+        <form action="{% url "profiles:profile" %}" method="POST">
             {% csrf_token %}
             <h1>Login</h1>
             {{ form.as_p }}
@@ -15,7 +15,7 @@
         </form>
     </div>
     <div>
-        <a href="users/signup/">회원가입</a>
+        <a href="{% url "users:signup" %}">회원가입</a>
     </div>
 </body>
 </html>

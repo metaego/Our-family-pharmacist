@@ -3,9 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로필 정보</title>
+    <title>프로필 수정</title>
 </head>
 <body>
-    
+    <div id="profile_info">
+        <form method="POST">
+            {% csrf_token %}
+            <h1>프로필 수정</h1>
+            {{ form.as_p }}
+        </form>
+    </div>
+    <div>
+        <button>
+            <a href="{% url "profiles:profile" %}">
+            이전
+            </a>
+        </button>
+        <button>
+            <a href="{% url "profiles:profile" %}">
+            저장
+            </a>
+        </button>
+    </div>
 </body>
 </html>
