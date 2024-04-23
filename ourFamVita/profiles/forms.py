@@ -21,7 +21,7 @@ class ProfileInfo(forms.Form):
 
 class Survey1Form(forms.Form):
     nickname = forms.CharField(widget=forms.TextInput, required=True)
-    birth = forms.DateField(widget=forms.DateInput(format='$y/%d/%m', attrs={"type":"date",}), required=True)
+    birth = forms.DateField(widget=forms.DateInput(format='%Y/%d/%m', attrs={"type":"date",}), required=True)
     # choicefield = (DB 저장값, 사용자에게 표시할 값)
     sex = forms.ChoiceField(choices=[("f", "여자"), ("m", "남자")], required=True)
     pregnancy = forms.ChoiceField(choices=[("P3", "임신 중"), ("P2", "수유 중"), ("P1", "임신 계획 중"), ("P0", "해당 사항 없음")], required=True)

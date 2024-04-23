@@ -14,16 +14,14 @@
         </form>
     </div>
     <div>
-        <button>
-            <a href="{% url "profiles:profile" %}">
-            이전
-            </a>
-        </button>
-        <button>
-            <a href="{% url "profiles:profile" %}">
-            저장
-            </a>
-        </button>
+        <!-- AI 추천받기 페이지에서 이전 버튼 눌렀을 때의 IF문 추가 필요 -->
+        <form action="{% url "profiles:profile" %}" method="GET">
+            <button>이전</button>
+        </form>
+        <form action="{% url "profiles:profile" %}" method="POST">
+            {% csrf_token %}
+            <button>저장</button>
+        </form>
     </div>
 </body>
 </html>

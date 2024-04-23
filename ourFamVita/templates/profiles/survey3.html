@@ -11,16 +11,14 @@
             {% csrf_token %}
             <h1>상태 정보</h1>
             {{ form.as_p }}
-            <button>
-                <a href="{% url "profiles:survey2" %}">
-                이전
-                </a>
-            </button>
-            <button>
-                <a href="{% url "profiles:profile" %}">
-                등록
-                </a>
-            </button>
+            <div>
+                <button>
+                    <a href="{% url "profiles:survey2" %}">이전</a>
+                </button>
+                <button>
+                    <a href="{% url "profiles:profile" %}">등록</a>
+                </button>    
+            </div>
         </form>
     </div>     
 </body>

@@ -11,8 +11,9 @@
         { profile }
         <br>
         <!-- 선택 프로필의 홈 화면으로 이동-->
-        <button>선택</button>
-        <br>
+        <form action="{% url "home:home_main" %}" method="GET">
+            <button>선택</button>
+        </form>
         <button>
             <!-- 현존 프로필이 1개일 경우 삭제 불가능 -->
             <a href="{% url "profiles:profile" %}" onclick="return confirm(
@@ -20,19 +21,16 @@
             삭제
             </a>
         </button>
-        <button>
-            <a href="{% url "profiles:profile_info" %}">
-                수정
-            </a>
-        </button>
+        <form action="{% url "profiles:profile_info" %}" method="POST">
+            {% csrf_token %}
+            <button>수정</button>
+        </form>
     </div>
     <div>
-        <button>
-            <a href="{% url "profiles:survey1" %}">
-            프로필 생성
-            </a>
-        </button>
+        <form action="{% url "profiles:survey1" %}" method="POST">
+            {% csrf_token %}
+            <button>프로필 생성</button>
+        </form>
     </div>
-
 </body>
 </html>
