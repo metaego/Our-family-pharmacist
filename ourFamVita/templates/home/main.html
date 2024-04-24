@@ -8,22 +8,22 @@
     <button>건강설문하고 영양제 추천 받기</button>
 </form>
 
-<h3>{xx}님을 위한 맞춤 영양제 추천</h3>
+<h3>{{ profile.profile_name }} 님을 위한 맞춤 영양제 추천</h3>
 ex) 추천받은 적이 없는 경우
 <!-- rending page: recom_profile_info.html -->
-<form action="/recommends/profile-id/info" method='get'>
+<form action="/recommends/<int:profile-id>/info" method='get'>
     <button>나의 맞춤 영양제 추천을 위한 건강 설문 하러 가기</button>
 </form>
 
 ex) 추천받은 적이 있는 경우
 <!-- rending page: recom_profile_product_list.html -->
-<form action="/recommends/profile-id/surveys/survey-id/rec-total-products/" method='get'>
+<form action="/recommends/<int:profile-id>/surveys/<int:survey-id>/rec-total-products/" method='get'>
     <button>더보기</button>
 </form>
 
-<h3>{30}대 {여성}에게 인기 많은 영양제를 확인해보세요</h3>
+<h3>{{ survey.survey_age_group }} {{ survey.survey_sex }}에게 인기 많은 영양제를 확인해보세요</h3>
 <!-- rending page: recom_profile_product_list.html -->
-<form action="/recommends/profile-id/surveys/survey-id/rec-collabo-products/" method='get'>
+<form action="/recommends/<int:profile-id>/surveys/<int:survey-id>/rec-collabo-products/" method='get'>
     <button>더보기</button>
 </form>
 {% endblock content %}

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'home',
     'recommends',
     'products',
+    'ourFamVita',
 ]
 
 MIDDLEWARE = [

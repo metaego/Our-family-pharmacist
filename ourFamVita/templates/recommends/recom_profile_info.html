@@ -2,7 +2,20 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>AI 영양제 추천받기</h1>
-<h2>나의 프로필 정보 확인</h2>
+<h2>{{ profile.profile_name }}의 프로필 정보 확인</h2>
+<li>나이: 만 {{ age }}</li>
+<li>성별: {{ survey.survey_sex }}</li>  
+<li>임신상태: {{ survey.survey_pregnancy_code }}</li>  
+<li>알레르기 여부: {{ allergy }}
+</li>  
+<li>기저질환: {{ disease }}</li>  
+ 
+ 
+{% comment %} 
+<li>키: {{ }}</li> 
+<li>몸무게: {{ }}</li>  
+<li>음주여부: {{ }}</li> 
+<li>흡연여부: {{ }}</li>   {% endcomment %}
 
 <!-- 설문 기반 ai 영양 성분 및 제품 추천 -->
 <!-- rending page: recom_personal_report.html -->
