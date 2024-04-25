@@ -2,7 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from users.forms import LoginForm, SignupForm
-from ourFamVita.models import User
+# from ourFamVita.models import User
+from users.models import User
 
 def login(request):
     if request.user.is_authenticated:
