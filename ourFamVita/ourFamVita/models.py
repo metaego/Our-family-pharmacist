@@ -41,7 +41,7 @@ class Profile(models.Model):
 
 
 
-class AllergyCode(models.Model):
+class AllergyInfo(models.Model):
     allergy_code = models.CharField(primary_key=True, max_length=20)
     allergy_code_name = models.CharField(max_length=50)
     allergy_code_desc = models.CharField(max_length=500, blank=True, null=True)
@@ -144,7 +144,7 @@ class Survey(models.Model):
 class SurveyAllergy(models.Model):
     survey_allergy_id = models.BigAutoField(primary_key=True)
     survey_id = models.ForeignKey(Survey, models.DO_NOTHING)
-    allergy_code = models.ForeignKey(AllergyCode, models.DO_NOTHING, db_column='allergy_code')
+    allergy_code = models.ForeignKey(AllergyInfo, models.DO_NOTHING, db_column='allergy_code')
 
     class Meta:
         managed = False
