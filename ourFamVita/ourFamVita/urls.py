@@ -26,6 +26,7 @@ urlpatterns = [
     path('home/', include('home.urls')),
     path('recommends/', include('recommends.urls')),
     path('products/', include('products.urls')),
-
+    path('mypages/', include('mypages.urls')),
+    path('groups/', include('groups.urls')),
 
 ]
