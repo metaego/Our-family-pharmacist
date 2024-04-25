@@ -29,14 +29,14 @@ def survey3(request):
     context = {"form": form}
     return render(request, "profiles/survey3.html", context)
 
-def profile_info(request, profile_id):
-    profile = get_object_or_404(Profile, pk=profile_id)
+def profile_info(request):
+    # profile = get_object_or_404(Profile, pk=profile_id)
 
     if request.method == "POST":
-        form = ProfileInfo(request.POST, instance=profile)
+        form = ProfileInfo(request.POST)
         if form.is_valid():
             profile = form.save()
-            return redirect("profiles:profile", profile.profile_id)
+            return redirect("profiles:profile")
     else:
         form = ProfileInfo(instance=profile)
     

@@ -12,9 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
-# 커스텀 유저 모델을 사용하는 경우
-AUTH_USER_MODEL = "ourFamVita.User"
-
 from dotenv import load_dotenv
 import os
 
