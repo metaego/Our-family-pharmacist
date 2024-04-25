@@ -31,5 +31,5 @@ class SignupForm(forms.Form):
     #     user_password = self.cleaned_data["user_password"]
     #     user = User(user_email, user_password=user_password)
     #     return user
-        # user = User(user_email=email, user_password=password)
-        # user.save()
+    #     user = User(user_email=email, user_password=password)
+    #     user.save()

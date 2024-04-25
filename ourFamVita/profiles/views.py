@@ -1,9 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from profiles.forms import Survey1Form, Survey3Form, ProfileInfo
 from ourFamVita.models import Profile
+from profiles.forms import ProfileView
 
-def profile(request):
-    profiles = Profile.objects.all()
+
+def profile_create(request):
+    if request.method == "POST":
+        form = ProfileView(request.POST)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            return redirect('/profiles/profile/')
+    else:
+        form = ProfileView()
     return render(request, 'profiles/profile.html')
 
 def survey1(request):
@@ -29,19 +39,20 @@ def survey3(request):
     context = {"form": form}
     return render(request, "profiles/survey3.html", context)
 
-def profile_info(request):
-    # profile = get_object_or_404(Profile, pk=profile_id)
-
-    if request.method == "POST":
-        form = ProfileInfo(request.POST)
-        if form.is_valid():
-            profile = form.save()
-            return redirect("profiles:profile")
-    else:
-        form = ProfileInfo(instance=profile)
+def profile_info(request, profile_id):
+    profile = get_object_or_404(Profile, pk=profile_id)
+    form = ProfileInfo()
+    # if request.method == "POST":
+    #     form = ProfileInfo(request.POST)
+    #     if form.is_valid():
+    #         profile = form.save()
+    #         return redirect("profiles:profile")
+    # else:
+    #     form = ProfileInfo()
     
-    context = {"form": form}
+    context = {"form": form, "profile": profile}
     return render(request, "profiles/profile_info.html", context)
+
 
 def profile_delete(request):
     return redirect("/profiles")
