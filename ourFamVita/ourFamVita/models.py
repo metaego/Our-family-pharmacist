@@ -90,7 +90,7 @@ class AuthUserUserPermissions(models.Model):
 
 class ComCode(models.Model):
     com_code = models.CharField(primary_key=True, max_length=10)
-    com_code_grp = models.OneToOneField('ComCodeGrp', models.DO_NOTHING, db_column='com_code_grp')
+    com_code_grp = models.ForeignKey('ComCodeGrp', models.DO_NOTHING, db_column='com_code_grp')
     com_code_name = models.CharField(max_length=50)
     com_code_desc = models.CharField(max_length=500, blank=True, null=True)
     use_yn = models.CharField(max_length=1)
@@ -180,7 +180,7 @@ class FunctionCode(models.Model):
 
 
 class Ingredient(models.Model):
-    ingredient_id = models.CharField(primary_key=True, max_length=10)
+    ingredient_id = models.AutoField(primary_key=True)
     ingredient_name = models.CharField(max_length=100)
     ingredient_limit_high = models.DecimalField(max_digits=15, decimal_places=10, blank=True, null=True)
     ingredient_limit_low = models.DecimalField(max_digits=15, decimal_places=10, blank=True, null=True)
@@ -328,7 +328,7 @@ class Survey(models.Model):
     survey_alcohol_code = models.CharField(max_length=10, blank=True, null=True)
     survey_smoke = models.CharField(max_length=1, blank=True, null=True)
     survey_height = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
-    survey_wieght = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
+    survey_weight = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
     created_at = models.DateTimeField()
 
     class Meta:
@@ -379,43 +379,3 @@ class User(models.Model):
     class Meta:
         managed = False
         db_table = 'user'
-
-
-class UsersUser(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.IntegerField()
-    username = models.CharField(unique=True, max_length=150)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    email = models.CharField(max_length=254)
-    is_staff = models.IntegerField()
-    is_active = models.IntegerField()
-    date_joined = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'users_user'
-
-
-class UsersUserGroups(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(UsersUser, models.DO_NOTHING)
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'users_user_groups'
-        unique_together = (('user', 'group'),)
-
-
-class UsersUserUserPermissions(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(UsersUser, models.DO_NOTHING)
-    permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'users_user_user_permissions'
-        unique_together = (('user', 'permission'),)

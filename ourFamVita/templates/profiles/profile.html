@@ -8,7 +8,7 @@
 <body>
     <h1>Profile</h1>
     <div>
-        { profile }
+        {{ profiles.as_table }}
         <br>
         <!-- 선택 프로필의 홈 화면으로 이동-->
         <form action="{% url "home:home_main" %}" method="GET">
