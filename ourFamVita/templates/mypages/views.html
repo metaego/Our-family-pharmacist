@@ -1,0 +1,22 @@
+<!-- menu: home -->
+{% extends "base.html" %}
+{% block content %}
+
+<div>
+    <a href="{% url "mypages" profile.pk %}">
+    <button>이전</button>
+    </a>
+</div>
+
+<h1> 최근 조회 제품 </h1>
+
+
+
+<ul>
+    {% for recommend in recommends %}
+      <li>
+        <p>이미지</p>
+        <a href="{% url "hospital:detail" patient.pk %}">{{ patient.name }}({{ patient.age }})</a>
+      </li>
+    {% endfor %}
+  </ul>

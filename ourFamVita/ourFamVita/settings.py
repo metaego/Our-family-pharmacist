@@ -32,14 +32,13 @@ SECRET_KEY = 'django-insecure-ea%%5i6&ill1g(s@i#4p$c0u*6n9z-kd@0&gzc$rj&hwps2@8=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
-    'profiles',
+
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,9 +46,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
+    'ourFamVita',
+    'users',
+    'profiles',
     'home',
     'recommends',
     'products',
+    'mypages',
+    'groups',
+    
 ]
 
 MIDDLEWARE = [
@@ -126,9 +133,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -136,6 +143,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+DEFAULT_CHARSET = 'utf-8'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
