@@ -1,4 +1,5 @@
 from django import forms
+from ourFamVita.models import Profile
 
 class ProfileInfo(forms.Form):
     nickname = forms.CharField(widget=forms.TextInput, required=True)
@@ -17,6 +18,10 @@ class ProfileInfo(forms.Form):
     smoke = forms.ChoiceField(choices=[("y", "흡연 중"), ("n", "비흡연")], required=False)
     disease = forms.CharField(widget=forms.TextInput, required=False)
     alcohol = forms.ChoiceField(choices=[("A3", "주 4회 이상"), ("A2", "주 2~3회"), ("A1", "주 1회"), ("A0", "거의 마시지 않음")], required=False)
+
+    class Meta:
+        model = Profile
+        fields = '__all__'
 
 
 class Survey1Form(forms.Form):

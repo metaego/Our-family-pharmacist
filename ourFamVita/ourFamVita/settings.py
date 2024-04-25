@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 
 # 커스텀 유저 모델을 사용하는 경우
-# AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "ourFamVita.User"
 
 from dotenv import load_dotenv
 import os
@@ -38,18 +38,19 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
-    'profiles',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'users',
+    'profiles',
     'home',
     'recommends',
     'products',
+    'ourFamVita',
 ]
 
 MIDDLEWARE = [
@@ -141,6 +142,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# CSS 건들 때 사용할 경로
+# STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

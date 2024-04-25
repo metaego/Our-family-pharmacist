@@ -7,21 +7,20 @@
 </head>
 <body>
     <div id="profile_info">
-        <form method="POST">
+        <form action="{% url "profiles:profile" profile.id %}" method="POST">
             {% csrf_token %}
             <h1>프로필 수정</h1>
             {{ form.as_p }}
+            <div>
+                <button>
+                    <a href="{% url "profiles:profile" %}">이전</a>
+                </button>
+            </div>
+            <div>
+                <input type="submit">
+            </div>
         </form>
-    </div>
-    <div>
         <!-- AI 추천받기 페이지에서 이전 버튼 눌렀을 때의 IF문 추가 필요 -->
-        <form action="{% url "profiles:profile" %}" method="GET">
-            <button>이전</button>
-        </form>
-        <form action="{% url "profiles:profile" %}" method="POST">
-            {% csrf_token %}
-            <button>저장</button>
-        </form>
     </div>
 </body>
 </html>
