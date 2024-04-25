@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from ourFamVita.models import Profile, ProductLog, Recommendation
+from ourFamVita.models import Profile, ProductLog, RecommendationProduct
 
 
 
@@ -14,7 +14,8 @@ def mypage_main(request, pk):
                   })
 
 def mypage_views(request, pk):
-    productlog = get_object_or_404(ProductLog, profile=pk)    
+    productlog = get_object_or_404(ProductLog, profile=pk)   
+    recommends = get_object_or_404(RecommendationProduct, recommendation_product_id = pk) 
     return render(request, 'mypages/views.html', {'productlog':productlog,                                                 
                   })
 
