@@ -1,19 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from profiles.forms import Survey1Form, Survey3Form, ProfileInfo
 from ourFamVita.models import Profile
-from profiles.forms import ProfileView
 
 
-def profile_create(request):
-    if request.method == "POST":
-        form = ProfileView(request.POST)
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.user = request.user
-            profile.save()
-            return redirect('/profiles/profile/')
-    else:
-        form = ProfileView()
+
+def profile(request):
+    # if request.method == "POST":
+    #     form = ProfileView(request.POST)
+    #     if form.is_valid():
+    #         profile = form.save(commit=False)
+    #         profile.user = request.users
+    #         profile.save()
+    #         return redirect('/profiles/profile/')
+    # else:
+    #     form = ProfileView()
     return render(request, 'profiles/profile.html')
 
 def survey1(request):

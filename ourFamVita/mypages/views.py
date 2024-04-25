@@ -1,20 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from ourFamVita.models import Profile, ProductLog, Recommendation
-
-
+from ourFamVita.models import Profile, ProductLog, RecommendationProduct
 
 
 # Create your views here.
 
-def mypage_main(request, pk):
-    profile = get_object_or_404(Profile, pk=pk)
+def mypage_main(request, profile_id):
+    profile = get_object_or_404(Profile, profile_id=profile_id)
 
-    return render(request, 'mypages/main.html', {'profile':profile,
+    return render(request, 'mypages/main.html', {'profile': profile,
                                                  
                   })
 
-def mypage_views(request, pk):
-    productlog = get_object_or_404(ProductLog, profile=pk)    
+def mypage_views(request, profile_id):
+    productlog = get_object_or_404(ProductLog, profile=profile_id)   
+    # recommends = get_object_or_404(RecommendationProduct, recommendation_product_id = profile_id) 
     return render(request, 'mypages/views.html', {'productlog':productlog,                                                 
                   })
 

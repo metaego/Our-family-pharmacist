@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from ourFamVita.models import Profile, Survey, SurveyAllergy, SurveyDisease, DiseaseCode, AllergyInfo
+from ourFamVita.models import Profile, Survey, SurveyAllergy, SurveyDisease, DiseaseCode, AllergyCode
 from datetime import datetime
 
 
@@ -46,7 +46,7 @@ def recom_info(request):
     # 알레르기 여부
     ## 알레르기를 기입한 적이 없는 경우
     profile_allergy = SurveyAllergy.objects.filter(survey_id=survey.survey_id).get()
-    allergy_code = AllergyInfo.objects.get(allergy_code=profile_allergy.allergy_code.allergy_code)
+    allergy_code = AllergyCode.objects.get(allergy_code=profile_allergy.allergy_code.allergy_code)
 
 
     # 키
