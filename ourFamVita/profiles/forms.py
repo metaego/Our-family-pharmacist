@@ -1,5 +1,5 @@
 from django import forms
-from ourFamVita.models import Profile
+from users.models import Profile
 
 class ProfileInfo(forms.Form):
     nickname = forms.CharField(widget=forms.TextInput, required=True)

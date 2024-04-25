@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from profiles.forms import Survey1Form, Survey3Form, ProfileInfo
-from ourFamVita.models import Profile
+from users.models import Profile
 
 def profile(request):
     profiles = Profile.objects.all()

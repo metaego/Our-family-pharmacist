@@ -3,9 +3,10 @@
 {% block content %}
 <h1>영양제 추천 목록</h1>
 
-<h3>{xxx}님을 위해 맞춤 추천한 제품입니다</h3>
+<h3>{{ profile.profile_name }}님을 위해 맞춤 추천한 제품입니다</h3>
 <!-- rending page: product_detail.html -->
-<form action="/products/product-id/profile-id" method='get'>
+<!-- /products/product-id/profile-id -->
+<form action="{% url "products:products_detail" product.product_id profile.profile_id %}" method='get'>
     <button>product1</button>
 </form>
 {% endblock content %}
