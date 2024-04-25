@@ -29,23 +29,12 @@ SECRET_KEY = 'django-insecure-ea%%5i6&ill1g(s@i#4p$c0u*6n9z-kd@0&gzc$rj&hwps2@8=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
-
-
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-
-    'ourFamVita',
     'users',
     'profiles',
     'home',
@@ -53,6 +42,13 @@ INSTALLED_APPS = [
     'products',
     'mypages',
     'groups',
+
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     
 ]
 
@@ -131,13 +127,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'Asia/Seoul'
+TIME_ZONE = 'Asia/Seoul' # 한국 시간 적용 
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = False # False 로 설정해야 DB에 변경 된 TIME_ZONE 이 반영 됨 
 
 DEFAULT_CHARSET = 'utf-8'
 

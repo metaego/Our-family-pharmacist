@@ -5,32 +5,34 @@
 <h2>{{ profile.profile_name }}의 프로필 정보 확인</h2>
 <li>나이: 만 {{ age }}</li>
 <li>성별: {{ survey.survey_sex }}</li>  
-<li>임신상태: {{ survey.survey_pregnancy_code }}</li>  
+<li>키: {{ survey.survey_weight }}</li> 
+<li>몸무게: {{ survey.survey_height }}</li>  
+<li>임신상태: {{ pregnancy }}</li>  
 <li>알레르기 여부: {{ allergy }}
 </li>  
 <li>기저질환: {{ disease }}</li>  
- 
- 
-{% comment %} 
-<li>키: {{ }}</li> 
-<li>몸무게: {{ }}</li>  
-<li>음주여부: {{ }}</li> 
-<li>흡연여부: {{ }}</li>   {% endcomment %}
+<li>흡연여부: {% if survey.survey_smoke == 'y' %}
+                {{ '흡연' }}
+              {% else %}
+                {{ '비흡연' }}
+              {% endif %}
+</li> 
+<li>음주여부: {{ alcohol }}</li>   
 
 <!-- 설문 기반 ai 영양 성분 및 제품 추천 -->
 <!-- rending page: recom_personal_report.html -->
-<form action="/recommends/profile-id/surveys/survey-id" method='get'>
+<form action="{% url "recommends:products_profile_base" profile_id survey_id %}"  method='get'>
     <button>나에게 맞는 영양제 추천받기</button>
 </form>
 
 <!-- 홈 메인화면으로 가기 -->
 <!-- rending page: main.html -->
-<form action="/home/profile-id/surveys/survey-id" method='get'>
+<form action="{% url "home:home_main" profile_id survey_id %}" method='get'>
     <button>이전</button>
 </form>
 
 <!-- 프로필 수정 화면으로 가기 -->
-<form action="/profiles/profile-id/profile-info" method='get'>
+<form action="/profiles/<int:profile-id>/profile-info" method='get'>
     <button>프로필 수정</button>
 </form>
 {% endblock content %}

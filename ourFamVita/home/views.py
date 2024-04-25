@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from ourFamVita.models import Profile, Survey
+from users.models import Profile, Survey
 # Create your views here.
-def home_main(request):
+def home_main(request, profile_id, survey_id):
     # profile 데이터 가져오기
     profile = Profile.objects.get(profile_id=1)
     profile_id = profile.profile_id
@@ -12,7 +12,7 @@ def home_main(request):
         survey.survey_sex = '여성'
     else:
         survey.survey_sex = '남성'
-
+    print(profile_id)
     return render(request, 'home/main.html', {
         'profile': profile,
         'profile_id':profile_id,
