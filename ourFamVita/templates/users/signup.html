@@ -7,7 +7,8 @@
 </head>
 <body>
     <div id="signup">
-        <form method="POST">
+        {% comment %} <form action="{% url "users:signup" %}" method="POST"> {% endcomment %}
+        <form method="POST">    
             {% csrf_token %}
             <h1>Sign Up</h1>
             {{ form.as_p }}

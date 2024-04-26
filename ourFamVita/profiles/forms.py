@@ -1,6 +1,13 @@
 from django import forms
 from users.models import Profile
 
+
+# class ProfileView(forms.Form):
+#     class Meta:
+#         model = Profile
+#         fields = ["profile_name"]
+
+
 class ProfileInfo(forms.Form):
     nickname = forms.CharField(widget=forms.TextInput, required=True)
     birth = forms.DateField(required=True)   # '$y/%d/%m'
