@@ -196,7 +196,9 @@ class SurveyFunction(models.Model):
     survey_function_id = models.BigAutoField(primary_key=True)
     survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE)
     function_code = models.ForeignKey(FunctionCode, on_delete=models.CASCADE, db_column='function_code')
-    survey_function_rank = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    # function_code가 '해당 없음'일 경우 survey_function_rank를 null로 주기로 결정해서 모델 스키마 재 정의(2024.04.26)
+    # survey_function_rank = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    survey_function_rank = models.IntegerField(null=True)
 
     class Meta:
         
