@@ -1,27 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 선택</title>
+</head>
 
-{% extends "base.html" %}
-{% block content %}
 <body>
     <h1>Profile</h1>
+    {% for profile in profiles %}
     <div>
-        {{ profiles.as_table }}
-        <br>
-        <!-- 선택 프로필의 홈 화면으로 이동-->
+        <li>
+            <a href="{% url "profiles:profile" profile.pk %}">{{ profile.name }}</a>
+        </li>
         <form action="{% url "home:home_main" %}" method="GET">
             <button>선택</button>
         </form>
         <button>
-            <!-- 현존 프로필이 1개일 경우 삭제 불가능 -->
-            <a href="{% url "profiles:profile" %}" onclick="return confirm(
-            '선택한 프로필을 삭제하시겠습니까?')">
-            삭제
-            </a>
+            {% if profile_count == 1 %}
+            <a href="#" onclick="alert('프로필을 삭제할 수 없습니다.')">삭제</a>
+            {% else %}
+            <a href="{% url "profiles:profile" %}" 
+               onclick="return confirm('선택한 프로필을 삭제하시겠습니까?')">삭제</a>
+            {% endif %}            
         </button>
-        <form action="{% url "profiles:profile_info" %}" method="POST">
+        <form action="{% url "profiles:profile_info" profile.pk %}" method="POST">
             {% csrf_token %}
             <button>수정</button>
         </form>
     </div>
+    {% endfor %}
     <div>
         <form action="{% url "profiles:survey1" %}" method="POST">
             {% csrf_token %}
@@ -30,4 +38,4 @@
     </div>
 </body>
 
-{% endblock content %}
+</html>

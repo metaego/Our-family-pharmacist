@@ -2,11 +2,6 @@ from django import forms
 from users.models import Profile
 
 
-# class ProfileView(forms.Form):
-#     class Meta:
-#         model = Profile
-#         fields = ["profile_name"]
-
 
 class ProfileInfo(forms.Form):
     nickname = forms.CharField(widget=forms.TextInput, required=True)
@@ -14,6 +9,7 @@ class ProfileInfo(forms.Form):
     sex = forms.ChoiceField(choices=[("f", "여자"), ("m", "남자")], required=True)
     pregnancy = forms.ChoiceField(choices=[("P3", "임신 중"), ("P2", "수유 중"), ("P1", "임신 계획 중"), ("P0", "해당 사항 없음")], required=True)
     allergy = forms.CharField(widget=forms.TextInput, required=True)
+    # function
     height = forms.DecimalField(max_digits=4, 
                                 decimal_places=2, 
                                 widget=forms.TextInput(attrs={"placeholder": "cm"}),
@@ -32,27 +28,35 @@ class ProfileInfo(forms.Form):
 
 
 class Survey1Form(forms.Form):
+    # profile_name (profile model)
     nickname = forms.CharField(widget=forms.TextInput, required=True)
+    # profile_birth (profile model)
     birth = forms.DateField(widget=forms.DateInput(format='%Y/%d/%m', attrs={"type":"date",}), required=True)
-    # choicefield = (DB 저장값, 사용자에게 표시할 값)
+    # survey_sex (survey model)   ## choicefield = (DB 저장값, 사용자에게 표시할 값)
     sex = forms.ChoiceField(choices=[("f", "여자"), ("m", "남자")], required=True)
+    # survey_pregnancy_code (survey model)
     pregnancy = forms.ChoiceField(choices=[("P3", "임신 중"), ("P2", "수유 중"), ("P1", "임신 계획 중"), ("P0", "해당 사항 없음")], required=True)
-    # 알레르기 >> 선택 방법 미확정
+    # allergy_code_name (allergycode model)   ## 알레르기 >> 선택 방법 미확정
     allergy = forms.CharField(widget=forms.TextInput, required=True)
 
 class Survey2Form(forms.Form):
-    # 건강고민 >> 카테고리 미확정
+    # function_code_name (functioncode model)   ## 건강고민 >> 카테고리 미확정
     pass
 
 class Survey3Form(forms.Form):
+    # survey_height (survey model)
     height = forms.DecimalField(max_digits=4, 
                                 decimal_places=2, 
                                 widget=forms.TextInput(attrs={"placeholder": "cm"}),
                                 required=False)
+    # survey_weight (survey model)
     weight = forms.DecimalField(max_digits=4, 
                                 decimal_places=2, 
                                 widget=forms.TextInput(attrs={"placeholder": "kg"}),
                                 required=False)
+    # survey_smoke (survey model)
     smoke = forms.ChoiceField(choices=[("y", "흡연 중"), ("n", "비흡연")], required=False)
+    # disease_code (diseasecode model)
     disease = forms.CharField(widget=forms.TextInput, required=False)
+    # survey_alcohol_code (survey model)
     alcohol = forms.ChoiceField(choices=[("A3", "주 4회 이상"), ("A2", "주 2~3회"), ("A1", "주 1회"), ("A0", "거의 마시지 않음")], required=False)

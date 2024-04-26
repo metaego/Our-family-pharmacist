@@ -3,18 +3,13 @@ from profiles.forms import Survey1Form, Survey3Form, ProfileInfo
 from users.models import Profile
 
 
-
+# 전체 프로필 모두 보여주는 화면
 def profile(request):
-    # if request.method == "POST":
-    #     form = ProfileView(request.POST)
-    #     if form.is_valid():
-    #         profile = form.save(commit=False)
-    #         profile.user = request.users
-    #         profile.save()
-    #         return redirect('/profiles/profile/')
-    # else:
-    #     form = ProfileView()
+    profiles = Profile.objects.order_by("-pk")
+    profile_count = profiles.count()
+    context = {"profiles": profiles}
     return render(request, 'profiles/profile.html')
+
 
 def survey1(request):
     if request.method == "POST":
@@ -42,15 +37,7 @@ def survey3(request):
 def profile_info(request, profile_id):
     profile = get_object_or_404(Profile, pk=profile_id)
     form = ProfileInfo()
-    # if request.method == "POST":
-    #     form = ProfileInfo(request.POST)
-    #     if form.is_valid():
-    #         profile = form.save()
-    #         return redirect("profiles:profile")
-    # else:
-    #     form = ProfileInfo()
-    
-    context = {"form": form, "profile": profile}
+    context = {"profile": profile, "form": form}
     return render(request, "profiles/profile_info.html", context)
 
 
