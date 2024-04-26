@@ -19,8 +19,8 @@ def login_view(request):
                 form.add_error("user_email", "등록되지 않은 사용자입니다.")
             else:
                 user = users.first()
-                if check_password(user_password, user.user_password):
-                    request.session["user"] = user.id
+                if user_password == user.user_password:
+                    request.session["user"] = user.user_id
                     return redirect("/profiles")
                 else:
                     form.add_error("user_password", "비밀번호가 유효하지 않습니다.")
