@@ -3,7 +3,7 @@
 {% block content %}
 
 <div>
-    <a href="{% url "mypages" profile.pk %}">
+    <a href="{% url "mypages:main" profile.pk %}">
     <button>이전</button>
     </a>
 </div>
@@ -12,7 +12,7 @@
 
 
   <ul> 
-    {% for product in products.set.all|slice:":5" %}
+    {% for product in products_set.all|slice:":5" %}
       <li>
         <p>이미지</p>
         {{ product.product_name }}
@@ -21,7 +21,7 @@
     
     {% for product_review in product_reviews.set.all|slice:":5" %}
   
-        <a href="{% url "products" product.pk profile.pk %}">{{product_reviews.product_review_content }}</a>
+        <a href="{% url "products:products_detail" product.pk profile.pk %}">{{product_reviews.product_review_content }}</a>
       
     {% endfor %}   
     </li> 
