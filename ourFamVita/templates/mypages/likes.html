@@ -1,10 +1,24 @@
-<!-- menu: home -->
+
+
 {% extends "base.html" %}
 {% block content %}
 
-{% comment %} 좋아요 표시 영양제 목록 {% endcomment %}
 <div>
-    <a href="{% url "users:login" %}">
-    <button>로그아웃</button>
-</a>
+    <a href="{% url "mypages" profile.pk %}">
+    <button>이전</button>
+    </a>
 </div>
+
+<h1> 좋아요 표시 영양제 목록 </h1>
+
+
+  <ul> 
+    {% for product in products.set.all|slice:":5" %}
+      <li>
+        <p>이미지</p>
+        {{ product.product_name }}
+        <a href="{% url "products" product.pk profile.pk %}">{{product.product_instruction }}</a>
+      </li>
+    {% endfor %}
+</ul>
+{% endblock content %}
