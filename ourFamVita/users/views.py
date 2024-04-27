@@ -14,15 +14,14 @@ def login_view(request):
             user_email = form.cleaned_data["user_email"]
             user_password = form.cleaned_data["user_password"]
 
-            users = User.objects.filter(user_email=user_email)
+            users = User.objects.filter(custom_user_email=user_email)
             if not users.exists():
                 form.add_error("user_email", "등록되지 않은 사용자입니다.")
             else:
                 user = users.first()
-                if user_password == user.user_password:
+                if user_password == user.custom_user_password:
                     login(request, user)
-                    request.session["user_id"] = user.user_id
-                    # request.session["user"] = user.user_id
+                    request.session["user_id"] = user.custom_user_id
                     return redirect("/profiles")
                 else:
                     form.add_error("user_password", "비밀번호가 유효하지 않습니다.")
@@ -67,7 +66,7 @@ def signup(request):
             user_password = form.cleaned_data["user_password"]
             re_password = form.cleaned_data["re_password"]
 
-        if User.objects.filter(user_email=user_email).exists():
+        if User.objects.filter(custom_user_email=user_email).exists():
                 form.add_error("user_email", "중복된 이메일입니다.")
         
         elif user_password != re_password:
@@ -78,7 +77,7 @@ def signup(request):
             return render(request, "users/signup.html", context)
         
         else:
-            user = User(user_email=user_email, user_password=user_password)
+            user = User(custom_user_email=user_email, custom_user_password=user_password)
             user.save()
             login(request, user)
         return redirect("/")

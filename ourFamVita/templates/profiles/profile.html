@@ -8,8 +8,52 @@
 
 <body>
     <h1>Profile</h1>
-    {% comment %} {% for profile in profiles %} {% endcomment %}
-    <div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th> </th>
+                        <th>프로필 이름</th>
+                        <th> </th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for profile in profiles %}
+                    <tr>
+                        <th>{{ profile.profile_id}}</th>
+                        <td>{{ profile.profile_name }}</td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <button>수정</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{% url "profiles:profile" %}" method="POST">
+                                {% csrf_token %}
+                                <button onclick="alert('선택한 프로필을 삭제하시겠습니까?')">삭제</button>
+                            </form>                            
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <form action="{% url "profiles:survey1" %}">
+                <button>프로필 생성</button>
+            </form>
+        </div>
+    </div>
+
+        <!--
         {% comment %} <li>
             <a href="{% url "profiles:profile" profile.pk %}">{{ profile.name }}</a>
         </li> {% endcomment %}
@@ -31,11 +75,12 @@
     </div>
     {% comment %} {% endfor %} {% endcomment %}
     <div>
-        <form method="POST">
+        <form action="{% url "profiles:survey1" %}" method="POST">
             {% csrf_token %}
             <button>프로필 생성</button>
         </form>
     </div>
+    -->
 </body>
 
 </html>

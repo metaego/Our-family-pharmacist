@@ -48,20 +48,21 @@ class Survey1Form(forms.Form):
 
 class Survey2Form(forms.Form):
     # function_code_name (functioncode model) 
-    function = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+    function = forms.MultipleChoiceField(label="최대 5개 선택", widget=forms.CheckboxSelectMultiple,
                                          choices=[("HF01", "간"), ("HF02", "피로개선"), ("HF03", "뼈/관절"), ("HF04", "치아/구강"), ("HF05", "면역개선"), ("HF06", "노화/항산화"), 
                                                   ("HF07", "피부"), ("HF08", "눈"), ("HF09", "위/소화"), ("HF10", "장 건강"), ("HF11", "비뇨"), ("HF12", "요로"), 
                                                   ("HF13", "전립선"), ("HF14", "남성 건강"), ("HF15", "여성 갱년기"), ("HF16", "여성 건강"), ("HF17", "운동 능력"), ("HF18", "체지방 감소"), 
-                                                  ("HF19", "스트레스/수면"), ("HF20", "두뇌 활동"), ("HF21", "어린이 성장"), ("HF22", "혈당"), ("HF23", "혈압"), ("HF24", "혈관/혈액순환")])
-
+                                                  ("HF19", "스트레스/수면"), ("HF20", "두뇌 활동"), ("HF21", "어린이 성장"), ("HF22", "혈당"), ("HF23", "혈압"), ("HF24", "혈관/혈액순환"),
+                                                  ("HF25", "임산/태아건강")])
+    
 
 class Survey3Form(forms.Form):
     # survey_height (survey model)
     height = forms.DecimalField(label="키", max_digits=4, decimal_places=2, required=False,
-                                widget=forms.TextInput(attrs={"placeholder": "cm"}))
+                                widget=forms.TextInput(attrs={"placeholder": "cm로 입력하세요"}))
     # survey_weight (survey model)
     weight = forms.DecimalField(label="몸무게", max_digits=4, decimal_places=2, required=False,
-                                widget=forms.TextInput(attrs={"placeholder": "kg"}))
+                                widget=forms.TextInput(attrs={"placeholder": "kg로 입력하세요"}))
     # survey_smoke (survey model)
     smoke = forms.ChoiceField(label="흡연 상태", required=False,
                               choices=[("y", "흡연 중"), ("n", "비흡연")])
