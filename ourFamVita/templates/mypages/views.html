@@ -1,22 +1,25 @@
+
 <!-- menu: home -->
 {% extends "base.html" %}
 {% block content %}
 
-<div>
-    <a href="{% url "mypages" profile.pk %}">
-    <button>이전</button>
-    </a>
-</div>
+{% comment %} <div>
+  <a href="{% url 'mypages' pk %}">
+      <button>이전</button>
+  </a>
+</div>  {% endcomment %}
 
 <h1> 최근 조회 제품 </h1>
 
+{{productlog.product_id_id}}
 
-
-<ul>
-    {% for recommend in recommends %}
+{% comment %} <ul> 
+    {% for product in products.set.all|slice:":5" %}
       <li>
         <p>이미지</p>
-        <a href="{% url "hospital:detail" patient.pk %}">{{ patient.name }}({{ patient.age }})</a>
+        {{ product.product_name }}
+        <a href="{% url "products" product.pk profile.pk %}">{{product.product_instruction }}</a>
       </li>
     {% endfor %}
-  </ul>
+  </ul> {% endcomment %}
+  {% endblock content %}

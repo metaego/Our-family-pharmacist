@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% block content %}
 
- <div>
+ {% comment %} <div>
     <a href="{% url "users:logout" %}">
     <button>로그아웃</button>
 </a>
@@ -28,11 +28,11 @@
     <a href="{% url "profiles" %}">
     <button>다른 프로필로 전환</button>
 </a>
-</div>
+</div> {% endcomment %}
 
 <h3>{{ profile.profile_name }}님의 활동</h3>
 
-<div>
+{% comment %} <div>
     <a href="{% url "mypages:recommends" profile.pk %}">
     <button>추천받은 영양성분</button>
 </a>
@@ -55,6 +55,6 @@
     <a href="{% url "mypages:reviews" profile.pk %}">
     <button>리뷰 작성한 영양제</button>
 </a>
-</div>
+</div> {% endcomment %}
 
 {% endblock content %}

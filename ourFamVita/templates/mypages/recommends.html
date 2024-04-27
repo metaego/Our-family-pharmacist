@@ -1,10 +1,33 @@
+
 <!-- menu: home -->
 {% extends "base.html" %}
 {% block content %}
 
-{% comment %}영양성분 AI 추천 기록 {% endcomment %}
 <div>
-    <a href="{% url "users:login" %}">
-    <button>로그아웃</button>
-</a>
+    <a href="{% url "mypages" profile.pk %}">
+    <button>이전</button>
+    </a>
 </div>
+
+<h1>영양성분 AI 추천 기록 </h1>
+<div>
+
+    <a href="{% url "recommends:surveys" profile.pk survey.pk %}">
+    <button>리포트 보기</button>
+    </a>
+</div>
+
+<ul> 
+    {% for recommendation in recommendation.set.all|slice:":5" %}
+    <p>{{recommendation.created_at}} 추천 영양 성분 리포트 </p>
+    {% endfor %}
+
+    {% for ingredient in ingredient.set.all|slice:":5" %}
+    <p>영양성분이름 {{ ingredient.ingredient_name }}</p>
+    {% endfor %}
+
+    {% for survey_function in survey_functions.set.all|slice:":5" %}
+    <p>선택한 건강고민 {{ survey_functions.function_code }}</p>
+    {% endfor %}
+  </ul>
+  {% endblock content %}
