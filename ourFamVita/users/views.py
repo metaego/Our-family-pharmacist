@@ -20,7 +20,9 @@ def login_view(request):
             else:
                 user = users.first()
                 if user_password == user.user_password:
-                    request.session["user"] = user.user_id
+                    login(request, user)
+                    request.session["user_id"] = user.user_id
+                    # request.session["user"] = user.user_id
                     return redirect("/profiles")
                 else:
                     form.add_error("user_password", "비밀번호가 유효하지 않습니다.")

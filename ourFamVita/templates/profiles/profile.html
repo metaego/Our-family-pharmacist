@@ -8,30 +8,30 @@
 
 <body>
     <h1>Profile</h1>
-    {% for profile in profiles %}
+    {% comment %} {% for profile in profiles %} {% endcomment %}
     <div>
-        <li>
+        {% comment %} <li>
             <a href="{% url "profiles:profile" profile.pk %}">{{ profile.name }}</a>
-        </li>
-        <form action="{% url "home:home_main" %}" method="GET">
+        </li> {% endcomment %}
+        <form  method="GET">
             <button>선택</button>
         </form>
         <button>
-            {% if profile_count == 1 %}
+            {% comment %} {% if profile_count == 1 %}
             <a href="#" onclick="alert('프로필을 삭제할 수 없습니다.')">삭제</a>
-            {% else %}
+            {% else %} {% endcomment %}
             <a href="{% url "profiles:profile" %}" 
                onclick="return confirm('선택한 프로필을 삭제하시겠습니까?')">삭제</a>
-            {% endif %}            
+            {% comment %} {% endif %}             {% endcomment %}
         </button>
-        <form action="{% url "profiles:profile_info" profile.pk %}" method="POST">
+        <form method="POST">
             {% csrf_token %}
             <button>수정</button>
         </form>
     </div>
-    {% endfor %}
+    {% comment %} {% endfor %} {% endcomment %}
     <div>
-        <form action="{% url "profiles:survey1" %}" method="POST">
+        <form method="POST">
             {% csrf_token %}
             <button>프로필 생성</button>
         </form>

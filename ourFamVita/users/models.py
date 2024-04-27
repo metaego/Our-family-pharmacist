@@ -39,7 +39,7 @@ class User(models.Model):
 
 class Profile(models.Model):
     profile_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
     profile_name = models.CharField(max_length=20)
     profile_birth = models.DateField()
     profile_status = models.CharField(max_length=10)
@@ -139,7 +139,7 @@ class Ingredient(models.Model):
 
 class IngredientFunction(models.Model):
     ingredient_function_id = models.AutoField(primary_key=True)
-    ingredient_id = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    ingredient_id = models.ForeignKey(Ingredient, on_delete=models.CASCADE, db_column='ingredient_id')
     function_code = models.ForeignKey(FunctionCode, on_delete=models.CASCADE, db_column='function_code')
 
 
@@ -151,8 +151,8 @@ class IngredientFunction(models.Model):
 
 class Survey(models.Model):
     survey_id = models.BigAutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
+    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id')
     survey_age_group = models.CharField(max_length=20)
     survey_sex = models.CharField(max_length=1)
     survey_pregnancy_code = models.CharField(max_length=10)
@@ -172,7 +172,7 @@ class Survey(models.Model):
 
 class SurveyAllergy(models.Model):
     survey_allergy_id = models.BigAutoField(primary_key=True)
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
     allergy_code = models.ForeignKey(AllergyCode, on_delete=models.CASCADE, db_column='allergy_code')
 
     class Meta:
@@ -182,7 +182,7 @@ class SurveyAllergy(models.Model):
 
 class SurveyDisease(models.Model):
     survey_disease_id = models.BigAutoField(primary_key=True)
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
     disease_code = models.ForeignKey(DiseaseCode, on_delete=models.CASCADE, db_column='disease_code')
 
 
@@ -194,9 +194,11 @@ class SurveyDisease(models.Model):
 
 class SurveyFunction(models.Model):
     survey_function_id = models.BigAutoField(primary_key=True)
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
     function_code = models.ForeignKey(FunctionCode, on_delete=models.CASCADE, db_column='function_code')
-    survey_function_rank = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    # function_code가 '해당 없음'일 경우 survey_function_rank를 null로 주기로 결정해서 모델 스키마 재 정의(2024.04.26)
+    # survey_function_rank = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    survey_function_rank = models.IntegerField(null=True)
 
     class Meta:
         
@@ -226,7 +228,7 @@ class Product(models.Model):
 
 class ProductFunction(models.Model):
     product_function_id = models.BigAutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
     function_code = models.ForeignKey(FunctionCode,  on_delete=models.CASCADE, db_column='function_code')
 
     class Meta:
@@ -237,8 +239,8 @@ class ProductFunction(models.Model):
 
 class ProductIngredient(models.Model):
     product_ingredient_id = models.BigAutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
-    ingredient_id = models.ForeignKey(Ingredient,  on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+    ingredient_id = models.ForeignKey(Ingredient,  on_delete=models.CASCADE, db_column='ingredient_id')
 
 
     class Meta:
@@ -249,9 +251,9 @@ class ProductIngredient(models.Model):
 
 class ProductReview(models.Model):
     product_review_id = models.AutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE)
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE) 
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
+    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
     product_review_rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
     product_review_content = models.CharField(max_length=200)
     created_at = models.DateTimeField(default=timezone.now)
@@ -267,9 +269,9 @@ class ProductReview(models.Model):
 
 class ProductLike(models.Model):
     product_like_id = models.AutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE) 
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
     created_at = models.DateTimeField(default=timezone.now)
     deleted_at = models.DateTimeField(blank=True, null=True)
 
@@ -282,9 +284,9 @@ class ProductLike(models.Model):
 
 class ProductLog(models.Model):
     product_log_id = models.AutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE)
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
+    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id')
     visited_at = models.DateTimeField(blank=True, null=True)
     leaved_at = models.DateTimeField(blank=True, null=True)
     product_log_duration = models.PositiveIntegerField(blank=True, null=True)
@@ -298,11 +300,14 @@ class ProductLog(models.Model):
 
 class Recommendation(models.Model):
     recommendation_id = models.BigAutoField(primary_key=True)
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
     created_at = models.DateTimeField(default=timezone.now)
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id')
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id', related_name='recommendations_user')
 
-
+# related_name='recommendations'이 설정하면
+# User 모델에서 Recommendation 모델로 역참조할 때 recommendations라는 속성을 사용할 수 있음
+# user.recommendations와 같이 사용하여 사용자와 관련된 모든 추천을 가져올 수 있음
     class Meta:
         
         db_table = 'recommendation'
@@ -311,8 +316,8 @@ class Recommendation(models.Model):
 
 class RecommendationIngredient(models.Model):
     recommendation_ingredient_id = models.BigAutoField(primary_key=True)
-    recommendation_id = models.ForeignKey(Recommendation,  on_delete=models.CASCADE)
-    ingredient_id = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    recommendation_id = models.ForeignKey(Recommendation,  on_delete=models.CASCADE, db_column='recommendation_id')
+    ingredient_id = models.ForeignKey(Ingredient, on_delete=models.CASCADE, db_column='ingredient_id')
 
     class Meta:
         
@@ -322,8 +327,8 @@ class RecommendationIngredient(models.Model):
 
 class RecommendationProduct(models.Model):
     recommendation_product_id = models.BigAutoField(primary_key=True)
-    recommendation_id = models.ForeignKey(Recommendation, on_delete=models.CASCADE)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    recommendation_id = models.ForeignKey(Recommendation, on_delete=models.CASCADE, db_column='recommendation_id')
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
 
 
     class Meta:
