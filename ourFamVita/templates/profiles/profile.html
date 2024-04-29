@@ -8,6 +8,13 @@
 
 <body>
     <h1>Profile</h1>
+    <div>
+        <form action="{% url "users:logout" %}" method="POST">
+            {% csrf_token %}
+            <button>로그아웃</button>
+        </form>
+    </div>
+    <h3>{{ user.custom_user_email }}님의 프로필 목록입니다.</h3>
     <div class="row mt-5">
         <div class="col-12">
             <table class="table">
@@ -21,25 +28,34 @@
                 </thead>
                 <tbody>
                     {% for profile in profiles %}
-                    <tr>
-                        <th>{{ profile.profile_id}}</th>
-                        <td>{{ profile.profile_name }}</td>
-                        <td>
+                        {% comment %} {% if profile.profile_status == 'activate' %} {% endcomment %}
+                        <tr>
+                            <th>{{ forloop.counter }}</th>
+                            <td>{{ profile.profile_name }}</td>
+                            <td>
 
-                        </td>
-                        <td>
-                            <form method="POST">
-                                {% csrf_token %}
-                                <button>수정</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form action="{% url "profiles:profile" %}" method="POST">
-                                {% csrf_token %}
-                                <button onclick="alert('선택한 프로필을 삭제하시겠습니까?')">삭제</button>
-                            </form>                            
-                        </td>
-                    </tr>
+                            </td>
+                            <td>
+                                <form action="/profiles/{{ profile.profile_id }}/profile-info/" method="POST">
+                                    {% csrf_token %}
+                                    <button>수정</button>
+                                </form>
+                            </td>
+                            <td>
+                                {% if profile_count == 1 %}
+                                    <form action="{% url "profiles:profile" %}" method="POST">
+                                        {% csrf_token %}
+                                        <button onclick="alert('프로필을 삭제할 수 없습니다.')">삭제</button>
+                                    </form>
+                                {% else %}
+                                    <form action="/profiles/{{ profile.profile_id }}/" method="POST">
+                                        {% csrf_token %}
+                                        <button onclick="alert('선택한 프로필을 삭제하시겠습니까?')">삭제</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% comment %} {% endif %} {% endcomment %}
                     {% endfor %}
                 </tbody>
             </table>
@@ -47,40 +63,19 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <form action="{% url "profiles:survey1" %}">
-                <button>프로필 생성</button>
-            </form>
+            {% if profile_count >= 10 %}
+                <form action="{% url "profiles:profile" %}" method="POST">
+                    {% csrf_token %}
+                    <button onclick="alert('프로필은 최대 10개까지 생성 가능합니다.')">프로필 생성</button>
+                </form>
+            {% else %}
+                <form action="{% url "profiles:survey1" %}" method="POST">
+                    {% csrf_token %}
+                    <button>프로필 생성</button>
+                </form>
+            {% endif %}
         </div>
     </div>
-
-        <!--
-        {% comment %} <li>
-            <a href="{% url "profiles:profile" profile.pk %}">{{ profile.name }}</a>
-        </li> {% endcomment %}
-        <form  method="GET">
-            <button>선택</button>
-        </form>
-        <button>
-            {% comment %} {% if profile_count == 1 %}
-            <a href="#" onclick="alert('프로필을 삭제할 수 없습니다.')">삭제</a>
-            {% else %} {% endcomment %}
-            <a href="{% url "profiles:profile" %}" 
-               onclick="return confirm('선택한 프로필을 삭제하시겠습니까?')">삭제</a>
-            {% comment %} {% endif %}             {% endcomment %}
-        </button>
-        <form method="POST">
-            {% csrf_token %}
-            <button>수정</button>
-        </form>
-    </div>
-    {% comment %} {% endfor %} {% endcomment %}
-    <div>
-        <form action="{% url "profiles:survey1" %}" method="POST">
-            {% csrf_token %}
-            <button>프로필 생성</button>
-        </form>
-    </div>
-    -->
 </body>
 
 </html>
