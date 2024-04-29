@@ -9,7 +9,7 @@
   <p>
     <li>  
    추천 영양제: {{ product.product_name }} | 
-    <a href="{% url "products:product_detail" product.product_id %}"> {{ product.product_instruction }} 
+    <a href="{% url "products:product_detail" product.product_id profile.profile_id %}"> {{ product.product_instruction }} 
      </a>
     </li> 
 </p>
