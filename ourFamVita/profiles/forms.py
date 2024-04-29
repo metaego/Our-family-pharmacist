@@ -63,7 +63,7 @@ class ProfileInfo(forms.Form):
                                                  ("AL10", "호박씨"), ("AL11", "홍삼"), ("AL12", "사상자"), ("AL13", "산수유"), ("AL14", "무화과"), 
                                                  ("AL15", "사과"), ("AL16", "국화과"), ("AL17", "난화"), ("AL18", "달맞이꽃종자유"), ("AL19", "석류"), 
                                                  ("AL20", "강황")])
-    function = forms.MultipleChoiceField(label="최대 5개 선택", widget=forms.CheckboxSelectMultiple, required=False,
+    function = forms.MultipleChoiceField(label="건강고민 (최대 5개 선택)", widget=forms.CheckboxSelectMultiple, required=False,
                                          choices=[("HF01", "간"), ("HF02", "피로개선"), ("HF03", "뼈/관절"), ("HF04", "치아/구강"), ("HF05", "면역개선"), ("HF06", "노화/항산화"), 
                                                   ("HF07", "피부"), ("HF08", "눈"), ("HF09", "위/소화"), ("HF10", "장 건강"), ("HF11", "비뇨"), ("HF12", "요로"), 
                                                   ("HF13", "전립선"), ("HF14", "남성 건강"), ("HF15", "여성 갱년기"), ("HF16", "여성 건강"), ("HF17", "운동 능력"), ("HF18", "체지방 감소"), 

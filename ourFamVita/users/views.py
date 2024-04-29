@@ -85,7 +85,6 @@ def signup(request):
         return render(request, "users/signup.html", context)
 
 
-
 def acc_info(request):
     if request.method == "POST":
         form = PasswordChangeForm(user=request.user, data=request.POST)
