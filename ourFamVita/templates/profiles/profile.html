@@ -34,7 +34,7 @@
                             <td>{{ profile.profile_name }}</td>
                             <td>
                                 {% comment %} <form action="{{ profile.profile_id }}/surveys/{{ survey.survey_id }}/" method="POST"> {% endcomment %}
-                                <form action="" method="POST">
+                                <form action="{% url "home:home_main" profile.profile_id %}" method="POST">
                                     {% csrf_token %}
                                     <button>선택</button>
                                 </form>
