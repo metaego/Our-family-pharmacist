@@ -1,0 +1,69 @@
+
+<!-- menu: home -->
+{% extends "base.html" %}
+{% block content %}
+
+<h1>공통 영양 성분 리포트 </h1>
+<h2>우리가족이 함께 고민하는 건강 문제예요 </h2>
+{% for survey_function in survey_functions %}
+<li>
+건강고민: {{ survey_function.function_code.function_code }}
+</li> 
+{% endfor %}
+
+
+<h2>우리가족에게 추천하는 영양성분이에요 </h2>
+
+<ul> 
+  
+    {% for ingredient in ingredients %}
+                 
+          <li>          
+            <p>
+             추천영양성분: {{ ingredient.ingredient_name }} |   {{ ingredient.ingredient_instruction }} 
+            <a href="{% url "groups:group_individual" profile.profile_id ingredient.ingredient_id %}">
+            <button> 추천 영양제 보기</button> </a>
+          </p>
+          
+           </li> 
+
+      {% endfor %}
+</ul>  
+
+<h2>영양제 추천 </h2>
+<h3>우리가족에게 추천할 수 있는 영양제에요!</h3>
+<ul> 
+  
+    {% for product in products %}
+                 
+          <li>          
+            <p>
+             추천영양성분: {{ product.product_name }} |  {{ product.product_instruction }} 
+            <a href="{% url "groups:group_detail" profile.profile_id %}">
+            <button> 더보기</button> </a>
+          </p>
+          
+           </li> 
+
+      {% endfor %}
+</ul>  
+
+<h2>가족 좋아요 영양제</h2>
+<h3>최근 우리가족이 좋아요를 눌렀어요!</h3>
+
+<ul> 
+  
+    {% for product_like in product_likes %}
+                 
+          <li>          
+            <p>
+             추천영양성분: {{ product_like.product_name }} |  {{ product_like.product_instruction }} 
+            <a href="{% url "groups:group_detail" profile.profile_id %}">
+            <button> 더보기</button> </a>
+          </p>
+          
+           </li> 
+
+      {% endfor %}
+</ul>  
+  {% endblock content %}

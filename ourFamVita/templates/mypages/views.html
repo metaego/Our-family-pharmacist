@@ -1,0 +1,25 @@
+
+<!-- menu: home -->
+{% extends "base.html" %}
+{% block content %}
+
+ <div>
+  <a href="{% url "mypages:main" profile.profile_id %}">
+      <button>이전</button>
+  </a>
+</div> 
+
+<h1> 최근 조회 제품 </h1>
+
+
+<ul> 
+    {% for product in products %}
+        <li>
+          <p>{{ product.product_image }} | {{ product.product_name }} |  <a href="{% url 'products:products_detail' product.pk profile.pk %}">{{ product.product_instruction }}</a></p>
+        </li>
+      
+    {% endfor %}
+
+</ul>
+
+  {% endblock content %}

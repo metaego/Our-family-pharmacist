@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 등록</title>
+</head>
+<body>
+    <div id="survey">
+        <form method="POST">
+            {% csrf_token %}
+            <h1>건강 고민</h1>
+            {{ form.as_p }}
+            <button>
+                <a href="{% url "profiles:survey1" %}">이전</a>
+            </button>
+            <button type=submit>다음</button>
+        </form>
+    </div>     
+</body>
+</html>

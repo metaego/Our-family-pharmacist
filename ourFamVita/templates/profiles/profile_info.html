@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 수정</title>
+</head>
+<body>
+    <div id="profile_info">
+        <form action="{% url "profiles:profile" %}" method="POST">
+            {% csrf_token %}
+            <h1>프로필 수정</h1>
+            {{ form.as_p }}
+            <div>
+                <button>
+                    <a href="{% url "profiles:profile" %}">이전</a>
+                </button>
+            </div>
+            <div>
+                <button type=submit>저장</button>
+            </div>
+        </form>
+        <!-- AI 추천받기 페이지에서 이전 버튼 눌렀을 때의 IF문 추가 필요 -->
+    </div>
+</body>
+</html>

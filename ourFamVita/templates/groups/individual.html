@@ -1,0 +1,20 @@
+
+<!-- menu: home -->
+{% extends "base.html" %}
+{% block content %}
+
+<h1>영양제 추천 목록 </h1>
+<h2>추천영양성분 {{ingredient.ingredient_name}} 을 개선하는데 좋은 제품이에요 </h2>
+{% for product in products %}         
+  <p>
+    <li>  
+   추천 영양제: {{ product.product_name }} | 
+    <a href="{% url "products:product_detail" product.product_id profile.profile_id %}"> {{ product.product_instruction }} 
+     </a>
+    </li> 
+</p>
+
+
+
+{% endfor %} 
+{% endblock content %}

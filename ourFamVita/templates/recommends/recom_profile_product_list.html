@@ -1,0 +1,13 @@
+<!-- menu: ai 영양제 추천받기 > 영양 성분 리포트 > 영양제 추천 목록 -->
+{% extends "base.html" %}
+{% block content %}
+<h1>영양제 추천 목록</h1>
+
+<h3>{{ profile.profile_name }}님을 위해 맞춤 추천한 제품입니다</h3>
+<!-- rending page: product_detail.html -->
+<!-- /products/product-id/profile-id -->
+영양제 제품 리스트가 출력될 예정
+<form action="{% url "products:products_detail" product.product_id profile.profile_id %}" method='get'>
+    <button>product1</button>
+</form>
+{% endblock content %}
