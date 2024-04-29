@@ -28,11 +28,11 @@ class User(models.Model):
     custom_created_at = models.DateTimeField(auto_now_add=True)
     custom_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     cumstom_deleted_at = models.DateTimeField(blank=True, null=True)
-    custom_last_login = models.DateTimeField(auto_now=True, blank=True, null=True)
+    last_login = models.DateTimeField(auto_now=True, blank=True, null=True)
 
 
     class Meta:
-        
+        managed = True
         db_table = 'user'
 
 
@@ -49,7 +49,7 @@ class Profile(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'profile'
 
 
@@ -62,7 +62,7 @@ class AllergyCode(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'allergy_code'
 
 
@@ -75,7 +75,7 @@ class DiseaseCode(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'disease_code'
 
 
@@ -88,7 +88,7 @@ class FunctionCode(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'function_code'
 
 
@@ -101,7 +101,7 @@ class ComCodeGrp(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'com_code_grp'
 
 
@@ -115,7 +115,7 @@ class ComCode(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'com_code'
     
 
@@ -132,7 +132,7 @@ class Ingredient(models.Model):
 
     
     class Meta:
-        
+        managed = True
         db_table = 'ingredient'
 
 
@@ -144,7 +144,7 @@ class IngredientFunction(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'ingredient_function'
 
 
@@ -165,7 +165,7 @@ class Survey(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'survey'
 
 
@@ -176,7 +176,7 @@ class SurveyAllergy(models.Model):
     allergy_code = models.ForeignKey(AllergyCode, on_delete=models.CASCADE, db_column='allergy_code')
 
     class Meta:
-        
+        managed = True
         db_table = 'survey_allergy'
 
 
@@ -187,7 +187,7 @@ class SurveyDisease(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'survey_disease'
 
 
@@ -198,10 +198,10 @@ class SurveyFunction(models.Model):
     function_code = models.ForeignKey(FunctionCode, on_delete=models.CASCADE, db_column='function_code')
     # function_code가 '해당 없음'일 경우 survey_function_rank를 null로 주기로 결정해서 모델 스키마 재 정의(2024.04.26)
     # survey_function_rank = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    survey_function_rank = models.IntegerField(null=True)
+    # survey_function_rank = models.IntegerField(null=True)
 
     class Meta:
-        
+        managed = True
         db_table = 'survey_function'
 
 
@@ -221,7 +221,7 @@ class Product(models.Model):
     product_rating_cnt = models.PositiveIntegerField()
 
     class Meta:
-        
+        managed = True
         db_table = 'product'
 
 
@@ -232,7 +232,7 @@ class ProductFunction(models.Model):
     function_code = models.ForeignKey(FunctionCode,  on_delete=models.CASCADE, db_column='function_code')
 
     class Meta:
-        
+        managed = True
         db_table = 'product_function'
 
 
@@ -244,7 +244,7 @@ class ProductIngredient(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'product_ingredient'
 
 
@@ -262,7 +262,7 @@ class ProductReview(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'product_review'
 
 
@@ -277,7 +277,7 @@ class ProductLike(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'product_like'
 
 
@@ -293,7 +293,7 @@ class ProductLog(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'product_log'
 
 
@@ -310,7 +310,7 @@ class Recommendation(models.Model):
 # User 모델에서 Recommendation 모델로 역참조할 때 recommendations라는 속성을 사용할 수 있음
 # user.recommendations와 같이 사용하여 사용자와 관련된 모든 추천을 가져올 수 있음
     class Meta:
-        
+        managed = True
         db_table = 'recommendation'
 
 
@@ -321,7 +321,7 @@ class RecommendationIngredient(models.Model):
     ingredient_id = models.ForeignKey(Ingredient, on_delete=models.CASCADE, db_column='ingredient_id')
 
     class Meta:
-        
+        managed = True
         db_table = 'recommendation_ingredient'
 
 
@@ -333,5 +333,5 @@ class RecommendationProduct(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'recommendation_product'

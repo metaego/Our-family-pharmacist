@@ -4,7 +4,7 @@ from users.models import Profile, Survey, SurveyAllergy, SurveyDisease, SurveyFu
 
 
 # 전체 프로필 모두 보여주는 화면
-def profile(request):
+def profile(request, pk):
     profiles = Profile.objects.order_by("-pk")
     profile_count = profiles.count()
     context = {"profiles": profiles}

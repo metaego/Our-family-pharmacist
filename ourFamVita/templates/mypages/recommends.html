@@ -4,30 +4,34 @@
 {% block content %}
 
 <div>
-    <a href="{% url "mypages:main" profile.pk %}">
+    <a href="{% url "mypages:main" profile.profile_id %}">
     <button>이전</button>
     </a>
 </div>
 
 <h1>영양성분 AI 추천 기록 </h1>
-<div>
 
-    <a href="{% url "recommends:profile_total_report" profile.pk survey.pk %}">
-    <button>리포트 보기</button>
-    </a>
-</div>
+
 
 <ul> 
-    {% for recommendation in recommendation_set.all|slice:":5" %}
-    <p>{{recommendation.created_at}} 추천 영양 성분 리포트 </p>
-    {% endfor %}
+    
+    {% for ingredient in ingredients %}
+      
+           
+          <li>
+          
+            <p><a href="{% url "recommends:profile_total_report" profile.profile_id survey_functions.survey_id.survey_id %}">{{recommendations_info.created_at}} ) 추천 영양 성분 리포트 - </a>
+           
+            영양성분이름: {{ ingredient.ingredient_name }} |         
+            
+            선택한 건강고민: {{ survey_functions.function_code.function_code }}
+          </p>
+          
+           </li> 
 
-    {% for ingredient in ingredient_set.all|slice:":5" %}
-    <p>영양성분이름 {{ ingredient.ingredient_name }}</p>
-    {% endfor %}
+      {% endfor %}
+   
+    
+</ul> 
 
-    {% for survey_function in survey_functions_set.all|slice:":5" %}
-    <p>선택한 건강고민 {{ survey_functions.function_code }}</p>
-    {% endfor %}
-  </ul>
   {% endblock content %}
