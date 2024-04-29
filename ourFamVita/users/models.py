@@ -23,7 +23,7 @@ class User(models.Model):
     custom_user_id = models.AutoField(primary_key=True)
     custom_user_email = models.CharField(unique=True, max_length=50)
     custom_user_password = models.TextField()
-    custom_user_role = models.CharField(max_length=20)
+    custom_user_role = models.CharField(max_length=20, default='user')
     custom_user_status = models.CharField(max_length=10, default='activate')
     custom_created_at = models.DateTimeField(auto_now_add=True)
     custom_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
@@ -198,7 +198,7 @@ class SurveyFunction(models.Model):
     function_code = models.ForeignKey(FunctionCode, on_delete=models.CASCADE, db_column='function_code')
     # function_code가 '해당 없음'일 경우 survey_function_rank를 null로 주기로 결정해서 모델 스키마 재 정의(2024.04.26)
     # survey_function_rank = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    survey_function_rank = models.IntegerField(null=True)
+    # survey_function_rank = models.IntegerField(null=True)
 
     class Meta:
         managed = True
@@ -333,5 +333,5 @@ class RecommendationProduct(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'recommendation_product'

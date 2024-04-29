@@ -3,27 +3,24 @@
 {% block content %}
 
 <div>
-    <a href="{% url "mypages" profile.pk %}">
+    <a href="{% url "mypages:main" profile.profile_id%}">
     <button>이전</button>
     </a>
 </div>
 
 <h1> 리뷰작성 영양제 목록 조회 </h1>
 
-
   <ul> 
-    {% for product in products.set.all|slice:":5" %}
+    {% for product in products %}
       <li>
-        <p>이미지</p>
-        {{ product.product_name }}
-       
-    {% endfor %}   
-    
-    {% for product_review in product_reviews.set.all|slice:":5" %}
-  
-        <a href="{% url "products" product.pk profile.pk %}">{{product_reviews.product_review_content }}</a>
-      
+      <p>제품이미지: {{ product.product_image }} | <a href="{% url "products:products_detail" product.pk profile.pk %}">제품명: {{ product.product_name }}</a> | 
+      평점: {{ product_reviews.product_review_rating }} |
+       리뷰: {{product_reviews.product_review_content }}</p> 
+
+   
     {% endfor %}   
     </li> 
 </ul>
+
+
 {% endblock content %}

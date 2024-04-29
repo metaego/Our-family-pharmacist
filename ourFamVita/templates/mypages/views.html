@@ -3,23 +3,23 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% comment %} <div>
-  <a href="{% url 'mypages' pk %}">
+ <div>
+  <a href="{% url "mypages:main" profile.profile_id %}">
       <button>이전</button>
   </a>
-</div>  {% endcomment %}
+</div> 
 
 <h1> 최근 조회 제품 </h1>
 
-{{productlog.product_id_id}}
 
-{% comment %} <ul> 
-    {% for product in products.set.all|slice:":5" %}
-      <li>
-        <p>이미지</p>
-        {{ product.product_name }}
-        <a href="{% url "products" product.pk profile.pk %}">{{product.product_instruction }}</a>
-      </li>
+<ul> 
+    {% for product in products %}
+        <li>
+          <p>{{ product.product_image }} | {{ product.product_name }} |  <a href="{% url 'products:products_detail' product.pk profile.pk %}">{{ product.product_instruction }}</a></p>
+        </li>
+      
     {% endfor %}
-  </ul> {% endcomment %}
+
+</ul>
+
   {% endblock content %}
