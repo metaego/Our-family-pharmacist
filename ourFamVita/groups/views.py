@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from users.models import User, Recommendation, Profile, Product, ProductLike, RecommendationIngredient, RecommendationProduct, Ingredient, SurveyFunction
+from users.models import User, Recommendation, ProductIngredient, Product, ProductLike, RecommendationIngredient, RecommendationProduct, Ingredient, SurveyFunction
 
 # Create your views here.
 def group_main(request, user_id):
@@ -45,3 +45,13 @@ def group_detail(request, user_id):
     context = {'user': user, 'recommendations_info':recommendations_info, 'products':products,
     }
     return render(request, 'groups/detail.html', context)
+
+def group_individual(request, user_id, ingredient_id):
+    user = get_object_or_404(User, custom_user_id=user_id)
+    ingredient = Ingredient.objects.filter(ingredient_id=ingredient_id)
+    product_ingredient = ProductIngredient.objects.filter(ingredient_id=ingredient_id).get()
+    # user 추천 영양제
+    products = Product.objects.filter(product_id = product_ingredient.product_id.product_id)[:5] 
+    context = {'user': user, 'ingredient':ingredient, 'products':products,
+    }
+    return render(request, 'groups/individual.html', context)

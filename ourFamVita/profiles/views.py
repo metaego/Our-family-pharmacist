@@ -3,16 +3,10 @@ from profiles.forms import Survey1Form, Survey2Form, Survey3Form, ProfileInfo
 from users.models import User, Profile, Survey, SurveyAllergy, SurveyDisease, SurveyFunction, AllergyCode, DiseaseCode, FunctionCode
 
 
-<<<<<<< HEAD
-# 전체 프로필 모두 보여주는 화면
-def profile(request, pk):
-    profiles = Profile.objects.order_by("-pk")
-=======
 def profile(request):
     user_id = request.session.get('user_id')
     user = User.objects.get(pk=user_id)
     profiles = Profile.objects.filter(custom_user_id=user_id, profile_status='activate')
->>>>>>> 71b70b7a57edbc570f137e511a425cdb227e94ed
     profile_count = profiles.count()
     context = {'profiles':profiles, "user": user, "profile_count": profile_count}
     return render(request, 'profiles/profile.html', context)

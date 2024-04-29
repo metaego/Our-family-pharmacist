@@ -21,7 +21,7 @@
           <li>          
             <p>
              추천영양성분: {{ ingredient.ingredient_name }} |   {{ ingredient.ingredient_instruction }} 
-            <a href="{% url "groups:group_detail" user.custom_user_id %}">
+            <a href="{% url "groups:group_individual" user.custom_user_id ingredient.ingredient_id %}">
             <button> 추천 영양제 보기</button> </a>
           </p>
           
@@ -38,7 +38,7 @@
                  
           <li>          
             <p>
-             추천영양성분: {{ product.product_name }} |  {{ product.ingredient_instruction }} 
+             추천영양성분: {{ product.product_name }} |  {{ product.product_instruction }} 
             <a href="{% url "groups:group_detail" user.custom_user_id %}">
             <button> 더보기</button> </a>
           </p>
@@ -57,7 +57,7 @@
                  
           <li>          
             <p>
-             추천영양성분: {{ product_like.product_name }} |  {{ product_like.ingredient_instruction }} 
+             추천영양성분: {{ product_like.product_name }} |  {{ product_like.product_instruction }} 
             <a href="{% url "groups:group_detail" user.custom_user_id %}">
             <button> 더보기</button> </a>
           </p>
