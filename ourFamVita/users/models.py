@@ -23,7 +23,7 @@ class User(models.Model):
     custom_user_id = models.AutoField(primary_key=True)
     custom_user_email = models.CharField(unique=True, max_length=50)
     custom_user_password = models.TextField()
-    custom_user_role = models.CharField(max_length=20)
+    custom_user_role = models.CharField(max_length=20, default='user')
     custom_user_status = models.CharField(max_length=10, default='activate')
     custom_created_at = models.DateTimeField(auto_now_add=True)
     custom_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
