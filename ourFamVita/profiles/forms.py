@@ -1,5 +1,5 @@
 from django import forms
-from users.models import Profile
+# from .models import Profile, Survey, SurveyAllergy, SurveyDisease, SurveyFunction
 
 
 class Survey1Form(forms.Form):
@@ -85,5 +85,5 @@ class ProfileInfo(forms.Form):
                                 required=False)
 
     # class Meta:
-    #     model = Profile
+    #     model = Profile, Survey, SurveyAllergy, SurveyDisease, SurveyFunction
     #     fields = '__all__'
