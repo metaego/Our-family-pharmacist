@@ -4,7 +4,7 @@
 {% block content %}
 
 <div>
-    <a href="{% url "mypages" profile.pk %}">
+    <a href="{% url "mypages:main" profile.profile_id %}">
     <button>이전</button>
     </a>
 </div>
@@ -12,13 +12,16 @@
 <h1> 좋아요 표시 영양제 목록 </h1>
 
 
-  <ul> 
-    {% for product in products.set.all|slice:":5" %}
+ <ul> 
+    {% for product in products %}
       <li>
-        <p>이미지</p>
-        {{ product.product_name }}
-        <a href="{% url "products" product.pk profile.pk %}">{{product.product_instruction }}</a>
+        <p>{{ product.product_image }} | {{ product.product_name }} | <a href="{% url "products:products_detail" product.pk profile.pk %}">{{ product.product_instruction }}</a></p>
+        
+        
       </li>
     {% endfor %}
-</ul>
+</ul> 
+
+
+
 {% endblock content %}

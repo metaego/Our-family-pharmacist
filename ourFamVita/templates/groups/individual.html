@@ -3,11 +3,9 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>공통 영양 성분 리포트 </h1>
-<h2>우리가족을 위해 맞춤 추천된 제품입니다 </h2>
-{% for product in products %}
-                 
-        
+<h1>영양제 추천 목록 </h1>
+<h2>추천영양성분 {{ingredient.ingredient_name}} 을 개선하는데 좋은 제품이에요 </h2>
+{% for product in products %}         
   <p>
     <li>  
    추천 영양제: {{ product.product_name }} | 
@@ -18,5 +16,5 @@
 
 
 
-{% endfor %}
+{% endfor %} 
 {% endblock content %}

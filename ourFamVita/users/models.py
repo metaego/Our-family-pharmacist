@@ -333,5 +333,5 @@ class RecommendationProduct(models.Model):
 
 
     class Meta:
-        
+        managed = True
         db_table = 'recommendation_product'
