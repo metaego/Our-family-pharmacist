@@ -27,6 +27,6 @@ urlpatterns = [
     # AI추천받기: 영양제 추천 목록(나이 & 성별 기반)
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록 
     # menu: home main(나이 & 성별 기반) > 영양제 추천 목록
-    # /recommends/{profile-id}/surveys/{survey-id}/rec-collabo-products/
-    path('<int:profile_id>/surveys/<int:survey_id>/rec_collabo_products/', views.recom_products_collabo_base, name='products_collabo_base')
+    # /recommends/{profile-id}/rec-collabo-products/
+    path('<int:profile_id>/rec_collabo_products/', views.recom_products_collabo_base, name='products_collabo_base')
 ]
