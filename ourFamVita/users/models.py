@@ -24,7 +24,7 @@ class User(models.Model):
     custom_user_email = models.CharField(unique=True, max_length=50)
     custom_user_password = models.TextField()
     custom_user_role = models.CharField(max_length=20)
-    custom_user_status = models.CharField(max_length=10)
+    custom_user_status = models.CharField(max_length=10, default='activate')
     custom_created_at = models.DateTimeField(auto_now_add=True)
     custom_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     cumstom_deleted_at = models.DateTimeField(blank=True, null=True)
@@ -42,7 +42,7 @@ class Profile(models.Model):
     custom_user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='custom_user_id')
     profile_name = models.CharField(max_length=20)
     profile_birth = models.DateField()
-    profile_status = models.CharField(max_length=10)
+    profile_status = models.CharField(max_length=10, default='activate')
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
@@ -159,8 +159,8 @@ class Survey(models.Model):
     survey_operation_code = models.CharField(max_length=10, blank=True, null=True)
     survey_alcohol_code = models.CharField(max_length=10, blank=True, null=True)
     survey_smoke = models.CharField(max_length=1, blank=True, null=True)
-    survey_height = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, validators=[MinValueValidator(0)])
-    survey_weight = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, validators=[MinValueValidator(0)])
+    survey_height = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True, validators=[MinValueValidator(0)])
+    survey_weight = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True, validators=[MinValueValidator(0)])
     created_at = models.DateTimeField(auto_now_add=True)
 
 

@@ -1,0 +1,22 @@
+
+<!-- menu: home -->
+{% extends "base.html" %}
+{% block content %}
+
+<h1>공통 영양 성분 리포트 </h1>
+<h2>우리가족을 위해 맞춤 추천된 제품입니다 </h2>
+{% for product in products %}
+                 
+        
+  <p>
+    <li>  
+   추천영양제: {{ product.product_name }} | 
+    {% comment %} <a href="{% url "groups:group_detail" user.custom_user_id %}"> {{ product.ingredient_instruction }} 
+     </a> {% endcomment %}
+    </li> 
+</p>
+
+
+
+{% endfor %}
+{% endblock content %}

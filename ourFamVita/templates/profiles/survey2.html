@@ -7,15 +7,10 @@
 </head>
 <body>
     <div id="survey">
-        <form action="{% url "profiles:survey3" %}" method="POST">
+        <form method="POST">
             {% csrf_token %}
             <h1>건강 고민</h1>
-            <div>
-                <input type="radio">
-                <label>피부 미용</label>
-                <input type="radio">
-                <label>눈 건강</label>
-            </div>
+            {{ form.as_p }}
             <button>
                 <a href="{% url "profiles:survey1" %}">이전</a>
             </button>

@@ -5,6 +5,6 @@ app_name = 'groups'
 
 urlpatterns = [
     path('rec-nut-products/<int:user_id>/', views.group_main, name='group_main'),
-    path('rec-total-products/<int:user_id>>/', views.group_detail, name='group_detail'),
+    path('rec-total-products/<int:user_id>/', views.group_detail, name='group_detail'),
      
     ]

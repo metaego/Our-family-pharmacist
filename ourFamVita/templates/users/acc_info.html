@@ -13,14 +13,19 @@
             <h1>회원정보 수정</h1>
             {{ form.as_p }}
             <button>이전</button>
-            <button>저장</button>
+            <button>저장</button> 
         </form>
     </div>
     <div>
-        <a href="{% url "login" %}" onclick="return confirm(
+        <form action="{% url "users:signout" %}" method="POST">
+            {% csrf_token %}
+            <button type=summit onclick="alert('멀티 프로필의 모든 내용이 삭제되어 기존 서비스를 사용할 수 없습니다.
+            정말 회원 탈퇴하시겠습니까?')">회원탈퇴</button>
+        </form>
+        {% comment %} <a href="{% url "users:signout" %}" onclick="return confirm(
             '멀티 프로필의 모든 내용이 삭제되어 기존 서비스를 사용할 수 없습니다. 정말 회원 탈퇴하시겠습니까?')">
             회원탈퇴
-        </a>
+        </a> {% endcomment %}
     </div>
 </body>
 </html>
