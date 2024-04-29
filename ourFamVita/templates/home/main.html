@@ -6,6 +6,11 @@
     <h3>나의 프로필</h3>
     프로필 정보가 노출될 예정
     <li>프로필 사진</li>
+    <div>
+        <form action="{% url "profiles:profile" %}" method="get">
+            <button>프로파일 전환</button>
+        </form>
+    </div>
     <li>프로필명: {{ profile.profile_name }}</li>
     <li>생년월일: {{ profile.profile_birth }}</li>
     <li>성별: {%if survey.survey_sex == 'f' %}
