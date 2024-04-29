@@ -1,17 +1,44 @@
 <!-- menu: ai 영양제 추천받기 > 영양 성분 리포트 > 영양제 추천 목록 > 영양제 상세보기 -->
 {% extends "base.html" %}
 {% block content %}
+
 <h1>영양제 상세보기</h1>
-{xx}을 개선하는데 좋은 제품이에요 <br>
+<strong>{xx}을 개선하는데 좋은 제품이에요</strong>
+<li> 제품명: {{ product.product_name }}</li>
+<li> 제조사명: {{ product.product_company }}</li>
 
-추천 성분 분석 <br>
+<div>
+    <strong>추천 성분 분석</strong>
 
-주요 건강 기능 <br>
+</div>
+<div>
+    <strong>주요 건강 기능</strong>
 
-리뷰 <br>
+</div>
+<div>
+    <strong>리뷰</strong>
+    <li>{{ review.product_review_rating }} 점 | {{ review.product_review_content }} 
+        <form action="">
+            <button>리뷰 삭제</button>
+        </form>
+    </li>
+</div>
 
-현재 시간 
-{% comment %} function whatTimeIsIT() {
-    new Date()
-}; {% endcomment %}
+<div>
+<strong>현재시간: </strong>
+    <div id="current-time"> 
+    </div>
+    <script>
+        function whatTimeIsIT() {
+            var currentTime = new Date();
+            return currentTime;
+        }
+    
+        // 페이지가 로드될 때마다 현재 시간을 표시
+        window.onload = function() {
+            var currentTimeElement = document.getElementById('current-time');
+            currentTimeElement.innerHTML = whatTimeIsIT();
+        };
+    </script>
+</div>
 {% endblock content %}

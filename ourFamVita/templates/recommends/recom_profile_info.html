@@ -2,11 +2,17 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>AI 영양제 추천받기</h1>
-<h2>{{ profile.profile_name }}의 프로필 정보 확인</h2>
-<li>나이: 만 {{ age }}</li>
-<li>성별: {{ survey.survey_sex }}</li>  
-<li>키: {{ survey.survey_weight }}</li> 
-<li>몸무게: {{ survey.survey_height }}</li>  
+<h2>{{ profile.profile_name }}님의 프로필 정보 확인</h2>
+<li>나이: 만 {{ age }} 세</li>
+<li>성별:
+  {% if survey.survey_sex == 'f' %}
+    {{ '여성'}}
+  {% else %}
+    {{ '남성' }}
+  {% endif %}
+</li>  
+<li>키: {{ survey.survey_height }} cm</li> 
+<li>몸무게: {{ survey.survey_weight }} kg</li>  
 <li>임신상태: {{ pregnancy }}</li>  
 <li>알레르기 여부: {{ allergy }}
 </li>  
@@ -21,18 +27,18 @@
 
 <!-- 설문 기반 ai 영양 성분 및 제품 추천 -->
 <!-- rending page: recom_personal_report.html -->
-<form action="{% url "recommends:products_profile_base" profile_id survey_id %}"  method='get'>
+<form action="{% url "recommends:products_profile_base" profile.profile_id survey.survey_id %}"  method='get'>
     <button>나에게 맞는 영양제 추천받기</button>
 </form>
 
 <!-- 홈 메인화면으로 가기 -->
 <!-- rending page: main.html -->
-<form action="{% url "home:home_main" profile_id survey_id %}" method='get'>
+<form action="{% url "home:home_main" profile.profile_id %}" method='get'>
     <button>이전</button>
 </form>
 
 <!-- 프로필 수정 화면으로 가기 -->
-<form action="/profiles/<int:profile-id>/profile-info" method='get'>
+<form action="{% url "profiles:profile_info" profile.profile_id %}" method='get'>
     <button>프로필 수정</button>
 </form>
 {% endblock content %}

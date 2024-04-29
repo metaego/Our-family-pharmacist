@@ -1,9 +1,9 @@
 <nav>
     <div>서비스명</div>
     <div>
-        <a href="http://localhost:8000/home/profile-id/surveys/survey-id">Home</a>  
-        <a href="http://localhost:8000/recommends/profile-id/info">AI영양제추천받기</a>  
-        <a href="">Mypage</a> 
-        <a href="">GroupPage</a> 
+        <a href="{% url "home:home_main" profile.profile_id %}">Home</a>  
+        <a href="{% url "recommends:profile_info" profile.profile_id %}">AI영양제추천받기</a>  
+        <a href="{% url "mypages:main" profile.profile_id %}">Mypage</a> 
+        <a href="{% url "groups:group_main" profile.profile_id %}">GroupPage</a> 
     </div>
 </nav>

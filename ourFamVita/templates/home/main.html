@@ -2,31 +2,58 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>home 화면입니다</h1>
+<div>
+    <h3>나의 프로필</h3>
+    프로필 정보가 노출될 예정
+    <li>프로필 사진</li>
+    <div>
+        <form action="{% url "profiles:profile" %}" method="get">
+            <button>프로파일 전환</button>
+        </form>
+    </div>
+    <li>프로필명: {{ profile.profile_name }}</li>
+    <li>생년월일: {{ profile.profile_birth }}</li>
+    <li>성별: {%if survey.survey_sex == 'f' %}
+                {{ '여성' }}
+              {% else %}
+                {{ '남성' }}
+              {% endif %}</li>
+    <li>임신상태: {{ pregnancy }}</li>
+    <li>알레르기 여부: {{ allergy }}</li>
 
+</div>
 <!-- rending page: recom_profile_info.html -->
-{{ profile_id }}
 {% comment %} <form action="/recommends/{{ profile_id }}/info/"  method='get'> {% endcomment %}
 <form action="{% url "recommends:profile_info" profile_id %}"  method='get'>
     <button>건강설문하고 영양제 추천 받기</button>
 </form>
 
 <h3>{{ profile.profile_name }} 님을 위한 맞춤 영양제 추천</h3>
-ex) 추천받은 적이 없는 경우
-<!-- rending page: recom_profile_info.html -->
-<form action="{% url "recommends:profile_info" profile_id %}" method='get'>
-    <button>나의 맞춤 영양제 추천을 위한 건강 설문 하러 가기</button>
-</form>
+{% if survey == None %}
+    <!-- rending page: recom_profile_info.html -->
+    영양제를 추천받아보신 적이 없으시군요!
+    <form action="{% url "recommends:profile_info" profile_id %}" method='get'>
+        <button>나의 맞춤 영양제 추천을 위한 건강 설문 하러 가기</button>
+    </form>
+{% else %}
+    <!-- rending page: recom_profile_product_list.html -->
+    <!-- /recommends/<int:profile-id>/surveys/<int:survey-id>/rec-total-products/ -->
+    추천받은 영양제들이 노출될 예정
+    <form action="{% url "recommends:products_profile_base" profile_id survey.survey_id %} " method='get'>
+        <button>더보기</button>
+    </form>
+{% endif %}
 
-ex) 추천받은 적이 있는 경우
-<!-- rending page: recom_profile_product_list.html -->
-<!-- /recommends/<int:profile-id>/surveys/<int:survey-id>/rec-total-products/ -->
-<form action="{% url "recommends:products_profile_base" profile_id survey.survey_id %} " method='get'>
-    <button>더보기</button>
-</form>
 
-<h3>{{ survey.survey_age_group }} {{ survey.survey_sex }}에게 인기 많은 영양제를 확인해보세요</h3>
+<h3>{{ survey.survey_age_group }}  
+    {%if survey.survey_sex == 'f' %}
+        {{ '여성' }}
+    {% else %}
+        {{ '남성' }}
+    {% endif %}에게 인기 많은 영양제를 확인해보세요</h3>
 <!-- rending page: recom_profile_product_list.html -->
-<form action="/recommends/<int:profile-id>/surveys/<int:survey-id>/rec-collabo-products/" method='get'>
+협업 필터링 기반 영양제들이 노출될 예정
+<form action="{% url "recommends:products_collabo_base" profile_id %}" method='get'>
     <button>더보기</button>
 </form>
 {% endblock content %}
