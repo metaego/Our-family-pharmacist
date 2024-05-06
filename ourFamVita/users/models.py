@@ -129,6 +129,7 @@ class Ingredient(models.Model):
     ingredient_function_content = models.TextField(blank=True, null=True)
     ingredient_caution = models.TextField(blank=True, null=True)
     ingredient_type = models.CharField(max_length=10, blank=True, null=True)
+    ingredient_caution_code = models.TextField(blank=True, null=True) # 영양성분 주의사항 코드 e.g.: ['AL01', 'DI02']
 
     
     class Meta:
@@ -207,18 +208,19 @@ class SurveyFunction(models.Model):
 
 
 class Product(models.Model):
-    product_id = models.BigAutoField(primary_key=True)
+    product_id = models.BigIntegerField(primary_key=True)
     product_name = models.CharField(max_length=50)
     product_company = models.CharField(max_length=50)
     product_instruction = models.TextField(blank=True, null=True)
     product_function_content = models.TextField(blank=True, null=True)
-    product_caution = models.TextField(blank=True, null=True)
+    product_caution = models.TextField(blank=True, null=True) # 섭취 시 주의사항 text 필드
     product_serving = models.TextField(blank=True, null=True)
     product_dispos = models.CharField(max_length=20, blank=True, null=True)
     product_storage_method = models.TextField(blank=True, null=True)
     product_image = models.TextField(blank=True, null=True)
-    product_rating_avg = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(5)])
-    product_rating_cnt = models.PositiveIntegerField()
+    product_rating_avg = models.DecimalField(max_digits=3, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    product_rating_cnt = models.PositiveIntegerField(default=0)
+    product_caution_code = models.TextField(blank=True, null=True) # 영양제 주의사항 코드 필드. e.g.: ['AI01', 'DI02']
 
     class Meta:
         managed = True
