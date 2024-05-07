@@ -40,9 +40,8 @@
                                 </form>
                             </td>
                             <td>
-                                {% comment %} <form action="/profiles/{{ profile.profile_id }}/profile-info/" method="GET"> {% endcomment %}
-                                {% comment %} {% csrf_token %} {% endcomment %}
-                                <form action="{% url "profiles:profile_info" profile.profile_id %}" method="GET">
+                                <form action="{% url "profiles:profile_info" profile.profile_id %}" method="POST">
+                                    {% csrf_token %}
                                     <button>수정</button>
                                 </form>
                             </td>
