@@ -143,7 +143,7 @@ DEFAULT_CHARSET = 'utf-8'
 STATIC_URL = '/static/'
 
 # CSS 건들 때 사용할 경로
-# STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
