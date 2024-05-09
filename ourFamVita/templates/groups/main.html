@@ -5,9 +5,9 @@
 
 <h1>공통 영양 성분 리포트 </h1>
 <h2>우리가족이 함께 고민하는 건강 문제예요 </h2>
-{% for survey_function in survey_functions %}
+{% for function_code in function_codes %}
 <li>
-건강고민: {{ survey_function.function_code.function_code }}
+건강고민: {{ function_code.function_code_name.function_code_name }}
 </li> 
 {% endfor %}
 
@@ -19,11 +19,11 @@
     {% for ingredient in ingredients %}
                  
           <li>          
-            <p>
+            <div>
              추천영양성분: {{ ingredient.ingredient_name }} |   {{ ingredient.ingredient_instruction }} 
             <a href="{% url "groups:group_individual" profile.profile_id ingredient.ingredient_id %}">
             <button> 추천 영양제 보기</button> </a>
-          </p>
+            </div>
           
            </li> 
 
@@ -37,11 +37,11 @@
     {% for product in products %}
                  
           <li>          
-            <p>
+            <div>
              추천영양성분: {{ product.product_name }} |  {{ product.product_instruction }} 
             <a href="{% url "groups:group_detail" profile.profile_id %}">
             <button> 더보기</button> </a>
-          </p>
+            </div>
           
            </li> 
 
@@ -56,11 +56,11 @@
     {% for product_like in product_likes %}
                  
           <li>          
-            <p>
+            <div>
              추천영양성분: {{ product_like.product_name }} |  {{ product_like.product_instruction }} 
             <a href="{% url "groups:group_detail" profile.profile_id %}">
             <button> 더보기</button> </a>
-          </p>
+            </div>
           
            </li> 
 

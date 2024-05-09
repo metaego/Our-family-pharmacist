@@ -8,13 +8,20 @@
 {% for product in products %}
                  
         
-  <p>
+  <div>
     <li>  
-   추천 영양제: {{ product.product_name }} | 
-    <a href="{% url "products:product_detail" product.product_id profile.profile_id %}"> {{ product.product_instruction }} 
+   추천 영양제:
+    <a href="{% url "products:product_detail" product.product_id profile.profile_id %}"> {{ product.product_name }}
      </a>
+     {{ product_company}} 
+     {{ product.product_instruction }} 
+     {{ product_function_content}} 
+     {{ product_dispos}} 
+      {{ product_serving}} 
+    {{product_storage_method}} 
+     {{ product.product_caution }} 
     </li> 
-</p>
+  </div>
 
 
 

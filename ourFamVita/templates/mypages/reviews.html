@@ -13,7 +13,7 @@
   <ul> 
     {% for product in products %}
       <li>
-      <p>제품이미지: {{ product.product_image }} | <a href="{% url "products:products_detail" product.pk profile.pk %}">제품명: {{ product.product_name }}</a> | 
+      <div>제품이미지: {{ product.product_image }} | <a href="{% url "products:products_detail" product.pk profile.pk %}">제품명: {{ product.product_name }}</div> | 
       평점: {{ product_reviews.product_review_rating }} |
        리뷰: {{product_reviews.product_review_content }}</p> 
 

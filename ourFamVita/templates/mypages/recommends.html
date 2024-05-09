@@ -20,12 +20,12 @@
            
           <li>
           
-            <p><a href="{% url "recommends:profile_total_report" profile.profile_id survey_functions.survey_id.survey_id %}">{{recommendations_info.created_at}} ) 추천 영양 성분 리포트 - </a>
+            <div><a href="{% url "recommends:profile_total_report" profile.profile_id survey_functions.survey_id.survey_id %}">{{recommendations_info.created_at}} ) 추천 영양 성분 리포트 - </a>
            
             영양성분이름: {{ ingredient.ingredient_name }} |         
             
-            선택한 건강고민: {{ survey_functions.function_code.function_code }}
-          </p>
+            선택한 건강고민: {{ function_codes.function_code_name.function_code_name }}
+            </div>
           
            </li> 
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from users.models import Profile, ProductLog, Product, Recommendation, RecommendationIngredient, Ingredient, SurveyFunction, ProductLike, ProductReview
+from users.models import Profile, ProductLog, Product, Recommendation, RecommendationIngredient, Ingredient, SurveyFunction, ProductLike, ProductReview, FunctionCode
 
 
 # Create your views here.
@@ -30,8 +30,10 @@ def mypage_recommends(request, profile_id):
     recommendation_ingredients = get_object_or_404(recommendation_ingredients)
     ingredients = Ingredient.objects.filter(ingredient_id = recommendation_ingredients.ingredient_id.ingredient_id)[:5] 
     survey_functions = SurveyFunction.objects.filter(survey_id = recommendations_info.survey_id).get()
+    function_codes = FunctionCode.objects.filter(function_code = survey_functions.function_code).get()
+    
     context = {'profile': profile, 'recommendations_info':recommendations_info, 'recommendation_ingredients':recommendation_ingredients, 
-               'ingredients':ingredients, 'survey_functions': survey_functions,                                  
+               'ingredients':ingredients, 'survey_functions': survey_functions, 'function_codes': function_codes,                                  
                   }
     return render(request, 'mypages/recommends.html', context)
 
