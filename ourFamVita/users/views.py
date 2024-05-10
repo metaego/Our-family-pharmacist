@@ -7,30 +7,71 @@ from users.models import User
 # from django.contrib.auth.hashers import make_password, check_password
 
 def login_view(request):
-    if request.user.is_authenticated:
-        return redirect('/profiles/')
-    
-    if request.method == "POST":
+    user_id = request.session.get('user')
+    if user_id:
+        return redirect('/profiles')
+    if request.method == 'POST':
         form = LoginForm(data=request.POST)
         if form.is_valid():
-            user_email = form.cleaned_data["user_email"]
-            user_password = form.cleaned_data["user_password"]
+            user_email = request.POST.get('user_email', None)
+            user_password = request.POST.get('user_password', None)
 
-            users = User.objects.filter(custom_user_email=user_email)
-            if not users.exists():
-                form.add_error("user_email", "등록되지 않은 사용자입니다.")
+            if not (user_email and user_password):
+                form.add_error(None, '모든 값을 입력해야 합니다.')
             else:
-                user = users.first()
-                if user_password == user.custom_user_password:
-                    login(request, user)
-                    request.session["user_id"] = user.custom_user_id
-                    return redirect("/profiles")
+                user = User.objects.get(custom_user_email=user_email)
+                print(user)
+                if not user_email == user.custom_user_email:
+                    form.add_error('user_email', '등록되지 않은 사용자입니다.')
+                    # print(request.session['user'])
                 else:
-                    form.add_error("user_password", "비밀번호가 유효하지 않습니다.")
+                    if user_password == user.custom_user_password:
+                        request.session['user'] = user.custom_user_id
+                        return redirect('/profiles')
+                    else:
+                        form.add_error('user_password', '비밀번호가 유효하지 않습니다.')
     else:
         form = LoginForm()
-    context = {"form": form}
-    return render(request, "users/login.html", context)
+    context = {'form':form}
+    return render(request, 'users/login.html', context)
+
+    # print(request.user)
+    # if request.user.is_authenticated:
+    #     return redirect('/profiles/')
+    
+    # if request.method == "POST":
+    #     form = LoginForm(data=request.POST)
+    #     if form.is_valid():
+    #         # user_email = form.cleaned_data["user_email"]
+    #         # user_password = form.cleaned_data["user_password"]
+
+    #         user_email = request.POST.get('user_email', None)
+    #         user_password = request.POST.get('user_password', None)
+
+    #         users = User.objects.filter(custom_user_email=user_email)
+    #         print(users)
+    #         print(user_email)
+    #         print(request.POST.get('user'))
+
+    #         if not users.exists():
+    #             form.add_error("user_email", "등록되지 않은 사용자입니다.")
+    #         else:
+    #             user = users.first()
+    #             print(user)
+
+    #             if user_password == user.custom_user_password:
+    #                 login(request, user)
+    #                 request.session["user_id"] = user.custom_user_id
+    #                 print(user.custom_user_id)
+
+
+    #                 return redirect("/profiles")
+    #             else:
+    #                 form.add_error("user_password", "비밀번호가 유효하지 않습니다.")
+    # else:
+    #     form = LoginForm()
+    # context = {"form": form}
+    # return render(request, "users/login.html", context)
 
 
 def signout(request):

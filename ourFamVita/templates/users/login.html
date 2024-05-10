@@ -1,9 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ourFamVita</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
 </head>
 <body>
     <div id="login">
@@ -11,11 +11,9 @@
             {% csrf_token %}
             <h1>Login</h1>
             {{ form.as_p }}
-            <button type='submit'>로그인</button>
+            <button type='submit' class='btn btn-login' style='background-color: #BC55EF'>로그인</button>
+            <a href="{% url "users:signup" %}">회원가입</a>
         </form>
-    </div>
-    <div>
-        <a href="{% url "users:signup" %}">회원가입</a>
     </div>
 </body>
 </html>

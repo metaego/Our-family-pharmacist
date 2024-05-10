@@ -1,18 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
 </head>
 <body>
     <div id="signup">
-        {% comment %} <form action="{% url "users:signup" %}" method="POST"> {% endcomment %}
         <form method="POST" autocomplete="off">    
             {% csrf_token %}
             <h1>Sign Up</h1>
             {{ form.as_p }}
-            <button type="submit">회원가입</button>
+            <button type='submit' class='btn btn-login' style='background-color: #BC55EF'>회원가입</button>
         </form>
     </div>
 </body>
