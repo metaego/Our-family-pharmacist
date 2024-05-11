@@ -1,11 +1,20 @@
 <!-- menu: home -->
 {% extends "base.html" %}
 {% block content %}
-<h1>home 화면입니다</h1>
+{% load static %}
+<style>
+    .profile_image {
+        width: 100px; 
+        height: auto; 
+    }
+    .product_image {
+        width: 100px; 
+        height: auto; 
+    }
+</style>
 <div>
     <h3>나의 프로필</h3>
-    프로필 정보가 노출될 예정
-    <li>프로필 사진</li>
+    <img src="{% static 'home/profile_temp_image_240506.png' %}" alt="사용자 프로필 사진" class='profile_image'>
     <div>
         <form action="{% url "profiles:profile" %}" method="get">
             <button>프로파일 전환</button>
@@ -38,7 +47,10 @@
 {% else %}
     <!-- rending page: recom_profile_product_list.html -->
     <!-- /recommends/<int:profile-id>/surveys/<int:survey-id>/rec-total-products/ -->
-    추천받은 영양제들이 노출될 예정
+    <!-- 이미지 클릭 시 해당 영양제 제품 상세 페이지로 이동하는 기능 구현할 예정 -->
+    <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+    <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+    <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
     <form action="{% url "recommends:products_profile_base" profile_id survey.survey_id %} " method='get'>
         <button>더보기</button>
     </form>
@@ -52,7 +64,10 @@
         {{ '남성' }}
     {% endif %}에게 인기 많은 영양제를 확인해보세요</h3>
 <!-- rending page: recom_profile_product_list.html -->
-협업 필터링 기반 영양제들이 노출될 예정
+<!-- 이미지 클릭 시 해당 영양제 제품 상세 페이지로 이동하는 기능 구현할 예정 -->
+<img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+<img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+<img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
 <form action="{% url "recommends:products_collabo_base" profile_id %}" method='get'>
     <button>더보기</button>
 </form>
