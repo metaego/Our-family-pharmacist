@@ -256,7 +256,7 @@ class ProductReview(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
     survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
     profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
-    product_review_rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+    product_review_rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, default=0)
     product_review_content = models.CharField(max_length=200, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
