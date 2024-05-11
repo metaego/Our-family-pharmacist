@@ -40,16 +40,20 @@ class Survey3Form(forms.Form):
     # survey_smoke (survey model)
     smoke = forms.ChoiceField(label="흡연 상태", required=False,
                               choices=[(None, "선택"), ("y", "흡연 중"), ("n", "비흡연")])
+    # survey_alcohol_code (survey model)
+    alcohol = forms.ChoiceField(label="음주 상태", required=False,
+                                choices=[(None, "선택"), ("A3", "주 4회 이상"), ("A2", "주 2~3회"), ("A1", "주 1회"), ("A0", "거의 마시지 않음")])
+    # survey_alcohol_code (survey model)
+    operation = forms.ChoiceField(label="수술 상태", required=False,
+                                choices=[(None, "선택"), ("O3", "수술 전"), ("O2", "수술 후"), ("O1", "수술 예정"), ("O0", "해당 사항 없음")])
+
     # disease_code (diseasecode model)
     disease = forms.MultipleChoiceField(label="기저질환 상태 (최대 5개 선택)", widget=forms.CheckboxSelectMultiple, required=False, 
                                         choices=[("DI01", "위 및 장 관련 질환"), ("DI02", "간 관련 질환"), ("DI03", "심장/혈관 관련 질환"), ("DI04", "신장/콩팥 관련 질환"), ("DI05", "당뇨"), 
                                                 ("DI06", "고혈압"), ("DI07", "고지혈증"), ("DI08", "혈액응고장애"), ("DI09", "갑상선 관련 질환"), ("DI10", "천식"), 
                                                 ("DI11", "담당/쓸개 관련 질환"), ("DI12", "자가면역 및 면역 억제제 복용"), ("DI13", "신경 및 정신계 질환"), ("DI14", "암"), ("DI15", "단장증후군 및 유당불내증"), 
                                                 ("DI16", "피부 광과민성"), ("DI17", "호르몬제(경구 피임약) 복용"), ])
-    # survey_alcohol_code (survey model)
-    alcohol = forms.ChoiceField(label="음주 상태", 
-                                choices=[(None, "선택"), ("A3", "주 4회 이상"), ("A2", "주 2~3회"), ("A1", "주 1회"), ("A0", "거의 마시지 않음")], 
-                                required=False)
+
     
 
 class ProfileInfo(forms.Form):
@@ -75,14 +79,17 @@ class ProfileInfo(forms.Form):
                                 widget=forms.TextInput(attrs={"placeholder": "kg로 입력하세요"}))
     smoke = forms.ChoiceField(label="흡연 상태", required=False,
                               choices=[(None, "선택"), ("y", "흡연 중"), ("n", "비흡연")])
+    alcohol = forms.ChoiceField(label="음주 상태", 
+                                choices=[(None, "선택"), ("A3", "주 4회 이상"), ("A2", "주 2~3회"), ("A1", "주 1회"), ("A0", "거의 마시지 않음")], 
+                                required=False)
+    operation = forms.ChoiceField(label="수술 상태", required=False,
+                                  choices=[(None, "선택"), ("O3", "수술 전"), ("O2", "수술 후"), ("O1", "수술 예정"), ("O0", "해당 사항 없음")])
     disease = forms.MultipleChoiceField(label="기저질환 상태 (최대 5개 선택)", widget=forms.CheckboxSelectMultiple, required=False, 
                                         choices=[("DI01", "위 및 장 관련 질환"), ("DI02", "간 관련 질환"), ("DI03", "심장/혈관 관련 질환"), ("DI04", "신장/콩팥 관련 질환"), ("DI05", "당뇨"), 
                                                 ("DI06", "고혈압"), ("DI07", "고지혈증"), ("DI08", "혈액응고장애"), ("DI09", "갑상선 관련 질환"), ("DI10", "천식"), 
                                                 ("DI11", "담당/쓸개 관련 질환"), ("DI12", "자가면역 및 면역 억제제 복용"), ("DI13", "신경 및 정신계 질환"), ("DI14", "암"), ("DI15", "단장증후군 및 유당불내증"), 
                                                 ("DI16", "피부 광과민성"), ("DI17", "호르몬제(경구 피임약) 복용"), ])
-    alcohol = forms.ChoiceField(label="음주 상태", 
-                                choices=[(None, "선택"), ("A3", "주 4회 이상"), ("A2", "주 2~3회"), ("A1", "주 1회"), ("A0", "거의 마시지 않음")], 
-                                required=False)
+
 
     # class Meta:
     #     model = Profile, Survey, SurveyAllergy, SurveyDisease, SurveyFunction
