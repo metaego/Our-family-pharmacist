@@ -1,41 +1,58 @@
 <!-- menu: AI영양제 추천받기 > 영양성분리포트 -->
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<style>
+    .profile_image {
+        width: 100px; 
+        height: auto; 
+    }
+    .product_image {
+        width: 100px; 
+        height: auto; 
+    }
+</style>
 <h1>영양성분리포트</h1>
-
 <div>
-    <h3>추천 영양 성분1</h3>
-    <!-- rending page: recom_profile_product_list.html -->
-    <form action="/recommends/profile-id/surveys/survey-id/rec-nut-products/nutri-num" method='get'>
-        <button>추천 영양제 보기</button>
-    </form>
-
-    <h3>추천 영양 성분2</h3>
-    <!-- rending page: recom_profile_product_list.html -->
-    <form action="/recommends/profile-id/surveys/survey-id/rec-nut-products/nutri-num" method='get'>
-        <button>추천 영양제 보기</button>
-    </form>
-
-    <h3>추천 영양 성분3</h3>
-    <!-- rending page: recom_profile_product_list.html -->
-    <form action="/recommends/profile-id/surveys/survey-id/rec-nut-products/nutri-num" method='get'>
-        <button>추천 영양제 보기</button>
-    </form>
+    {% for r_ingredient in recommend_ingredients %}
+        <h3>추천 영양 성분{{ forloop.counter }}</h3>
+        <ul>
+            <li>영양 성분명: {{ r_ingredient.ingredient_name }}</li>
+            <li>주요 건강 기능: {{ r_ingredient.ingredient_function_content }}</li>
+            <li>일일 섭취량 상하한: 최대 {{ r_ingredient.ingredient_limit_high }} {{ r_ingredient.ingredient_unit }}/ 최소{{ r_ingredient.ingredient_limit_low }} {{ r_ingredient.ingredient_unit }}</li>
+            <!-- rending page: recom_profile_product_list.html -->
+            <form action="/recommends/profile-id/surveys/survey-id/rec-nut-products/nutri-num" method='get'>
+                <button>추천 영양제 보기</button>
+            </form>
+        </ul>
+        <br>
+    {% endfor %}
 </div>
-
+<br><br>
 <div>
-    <h2>영양제 추천</h2>
-    영양성분 리포트를 바탕으로 추천하는 
-    <!-- rending page: recom_profile_product_list.html -->
-    <form action="/recommends/profile-id/surveys/survey-id/rec-total-products/" method='get'>
-        <button>더보기</button>
-    </form>
-
-    비슷한 {30}대 {여성}에게 인기있는 영양제
-    <!-- rending page: recom_profile_product_list.html -->
-    <form action="/recommends/profile-id/surveys/survey-id/rec-collabo-products/" method='get'>
-        <button>더보기</button>
-    </form>
+    <h3>영양제 추천</h3>
+    <div>
+        영양성분 리포트를 바탕으로 추천하는 <br>
+        <!-- rending page: recom_profile_product_list.html -->
+        <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+        <form action="/recommends/profile-id/surveys/survey-id/rec-total-products/" method='get'>
+            <button>더보기</button>
+        </form>
+    </div>
+    <br>
+    <div>
+        비슷한 {{ survey.survey_age_group }} {% if survey.survey_sex == 'f' %}
+                                                    {{ '여성' }}에게 인기있는 영양제
+                                                {% else %}
+                                                    {{ '남성' }}에게 인기있는 영양제
+                                               {% endif %}<br>
+        <!-- rending page: recom_profile_product_list.html -->
+        <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+        <form action="/recommends/profile-id/surveys/survey-id/rec-collabo-products/" method='get'>
+            <button>더보기</button>
+        </form>
+    </div>
+    <br>
 </div>
 
 {% endblock content %}

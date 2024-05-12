@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from datetime import datetime
-from users.models import (Profile, Survey, SurveyAllergy, SurveyDisease, DiseaseCode
-                        , AllergyCode, ComCode, Product, SurveyFunction
-                        , FunctionCode) # 코드 가독성을 위해 () 사용
+from users.models import (Profile
+                        , Survey, SurveyAllergy, SurveyDisease, SurveyFunction  
+                        , ComCode, DiseaseCode, AllergyCode, FunctionCode
+                        , RecommendationIngredient, RecommendationProduct, Recommendation
+                        , Product, Ingredient) # 코드 가독성을 위해 () 사용
 from django.db.models import Count
 # from .cal_weight_and_height import impute_weight, impute_height 
 from django.utils import timezone
@@ -199,10 +201,12 @@ def request_flask_recom_model(request, profile_id, survey_id):
         print(f'response_data.profile_id: {response_data["profileid"]}, {type(response_data["profileid"])}')
         profile = Profile.objects.get(profile_id=profile_id)
         survey = Survey.objects.get(survey_id=survey_id)
-        return render(request, 'recommends/recom_profile_report.html', {
-        'profile': profile,
-        'survey':survey,
-    })
+
+        return redirect('recommends:profile_total_report', profile.profile_id, survey.survey_id)
+        # return render(request, 'recommends/recom_profile_report.html', {
+        # 'profile': profile,
+        # 'survey':survey,
+    # })
 
 
 
@@ -212,16 +216,47 @@ def recom_profile_total_report(request, profile_id, survey_id):
     # /recommends/{profile-id}/surveys/{survey-id}
     # profile = Profile.objects.get(profile_id=profile_id)
     # survey = Survey.objects.filter(survey_id=survey_id).get()
+    profile_id = 2
+    survey_id = 14146
+
+    # 1) 추천 영양 성분 가져오기
+    ## 영양 성분명, 주요건강기능, 일일 섭취량 상하한
+    recommendation = Recommendation.objects.get(survey_id=survey_id)
+    recommendation_ingredients = RecommendationIngredient.objects.filter(recommendation_id=recommendation.recommendation_id).values_list('ingredient_id', flat=True)
+    recommendation_ingredients = list(recommendation_ingredients)
+    print(f'recommendation_ingredients: {recommendation_ingredients}') # [150, 362]
+    print()
+
+    recommend_ingredients = Ingredient.objects.filter(ingredient_id__in=recommendation_ingredients)
+    print(recommend_ingredients) # <QuerySet [<Ingredient: Ingredient object (150)>, <Ingredient: Ingredient object (362)>]>
+    print()
 
 
 
+    # 2) 영양 성분 리포트 바탕으로 영양제 추천
+    ## recommendation_product에서 데이터 가져오기
+    recommendation_products = RecommendationProduct.objects.filter(recommendation_id=recommendation.recommendation_id).values_list('product_id', flat=True)
+    recommendation_products = list(recommendation_products)
+    print(f'recommendation_products: {recommendation_products}') # [200400150831149, 200400200072802]
+    print()
 
-    # flask에서 전달 받은 내용을 장고 html에 보여주기
+    recommend_products = Product.objects.filter(product_id__in=recommendation_products)
+    print(f'products: {recommend_products}') # <QuerySet [<Product: Product object (200400150831149)>, <Product: Product object (200400200072802)>]>
+    print()
 
-    print("profile_id: ", profile_id, survey_id)
+    
+    
+    # 3) 성별*연령 기반 영양제 추천
+    ## 성별*연령별 기반 영양제
+
+    # return HttpResponse('pass')
+    profile = Profile.objects.get(profile_id=profile_id)
+    survey = Survey.objects.get(survey_id=survey_id)
     return render(request, 'recommends/recom_profile_report.html', {
-        'profile_id': profile_id,
-        'survey_id':survey_id,
+        'profile': profile,
+        'survey':survey,
+        'recommend_ingredients': recommend_ingredients,
+        'recommend_products': recommend_products,
     })
 
 
