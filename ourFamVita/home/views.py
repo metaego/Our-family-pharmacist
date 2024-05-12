@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from users.models import (Profile, Survey, ComCode, SurveyAllergy, 
-                          AllergyCode, Recommendation, RecommendationProduct)
+                          AllergyCode, Recommendation, RecommendationProduct
+                          , Product)
 # Create your views here.
 def home_main(request, profile_id):
     # profile 데이터 가져오기
@@ -43,8 +44,8 @@ def home_main(request, profile_id):
     
     # 추천 받았는지 여부 확인
     # 영양제 번호, 이미지 주소
-
-
+    product_id = 200400150395
+    product = Product.objects.get(product_id=product_id)
     return render(request, 'home/main.html', {
         'profile': profile,
         'profile_id':profile_id,
@@ -52,4 +53,5 @@ def home_main(request, profile_id):
         'pregnancy': pregnancy.com_code_name,
         'allergys': kr_allergy_codes,
         'recommendation': recommendation,
+        'product': product,
     })

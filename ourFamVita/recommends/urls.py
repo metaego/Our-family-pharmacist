@@ -22,7 +22,7 @@ urlpatterns = [
     # AI추천받기: 영양제 추천 목록(추천받은 영양 성분 기반)
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록 
     # /recommends/{profile-id}/surveys/{survey-id}/rec-nut-products/{nutri-num}
-    path('<int:profile_id>/surveys/<int:survey_id>/rec_nut_products/nutri_num/', views.recom_products_nutri_base, name='products_nutri_base'),
+    path('<int:profile_id>/surveys/<int:survey_id>/rec_nut_products/<int:nutri_num>/', views.recom_products_nutri_base, name='products_nutri_base'),
     
     # AI추천받기: 영양제 추천 목록(영양 성분 리포트 기반)
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록 

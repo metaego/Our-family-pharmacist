@@ -4,7 +4,7 @@ from users.models import (Profile
                         , Survey, SurveyAllergy, SurveyDisease, SurveyFunction  
                         , ComCode, DiseaseCode, AllergyCode, FunctionCode
                         , RecommendationIngredient, RecommendationProduct, Recommendation
-                        , Product, Ingredient) # 코드 가독성을 위해 () 사용
+                        , Product, Ingredient, ProductIngredient) # 코드 가독성을 위해 () 사용
 from django.db.models import Count
 # from .cal_weight_and_height import impute_weight, impute_height 
 from django.utils import timezone
@@ -252,19 +252,207 @@ def recom_profile_total_report(request, profile_id, survey_id):
     # return HttpResponse('pass')
     profile = Profile.objects.get(profile_id=profile_id)
     survey = Survey.objects.get(survey_id=survey_id)
+
+    # 만나이 계산
+    profile_birth = str(profile.profile_birth)
+    birth = datetime.strptime(profile_birth, '%Y-%m-%d').date()
+    today = datetime.now().date()
+    age = today.year - int(profile_birth[:4])
+    ## 생일이 있는 달을 아직 안 지남
+    if today.month < birth.month:
+        age -= 1
+
+    ## 현재 월이 생일이 있는 달이지만 생일 일자가 아직 안 지남
+    elif today.month == birth.month and today.day < birth.day:
+        age -= 1
+
+
+
+    # 성별
+    if survey.survey_sex == 'f':
+        survey.survey_sex = '여성'
+    else:
+        survey.survey_sex = '남성'
+
+
+
+    # 임신상태
+    profile_pregnancy = ComCode.objects.get(com_code=survey.survey_pregnancy_code)
+    
+
+
+    # 알레르기 여부
+    ## profile allergy 가져오기
+    profile_allergys = SurveyAllergy.objects.filter(survey_id=survey.survey_id).values_list('allergy_code', flat=True)
+    profile_allergys = list(profile_allergys)
+    ## profile allergy 코드를 한글 코드명으로 변환
+    kr_allergy_codes = []
+    for profile_allergy_code in profile_allergys:
+        kr_allergy_code = AllergyCode.objects.filter(allergy_code=profile_allergy_code).values_list('allergy_code_name')
+        kr_allergy_code = ''.join(kr_allergy_code[0])
+        kr_allergy_codes.append(kr_allergy_code)
+
+
+
+    # 키
+    if survey.survey_height == None:
+        survey.survey_height = '미입력'
+
+
+    # 몸무게
+    if survey.survey_weight == None:
+        survey.survey_weight = '미입력'
+
+
+
+    # 기저질환
+    profile_disease = SurveyDisease.objects.filter(survey_id=survey.survey_id).values_list('disease_code', flat=True)
+    profile_disease = list(profile_disease)
+    # print(f'profile_disease: {profile_disease}') #  ['DI01', 'DI02', 'DI03', 'DI04', 'DI07']
+    kr_disease_codes = []
+    for profile_disease_code in profile_disease:
+        kr_disease_code = DiseaseCode.objects.filter(disease_code=profile_disease_code).values_list('disease_code_name', flat=True)
+        kr_disease_code = str(kr_disease_code[0])
+        kr_allergy_code = ''.join(kr_disease_code)
+        kr_disease_codes.append(kr_disease_code)
+    # print(f'kr_disease_codes_list: {kr_disease_codes}')
+
+
+
+    # 음주여부
+    profile_alcohol = ComCode.objects.filter(com_code=survey.survey_alcohol_code).get()
+    
+    
+
+    # 흡연여부
+    if survey.survey_smoke == 'y':
+        survey.survey_smoke = '흡연'
+    else:
+        survey.survey_smoke = '비흡연'
+
+    product_id = 200400150395
+    product = Product.objects.get(product_id=product_id)
     return render(request, 'recommends/recom_profile_report.html', {
         'profile': profile,
         'survey':survey,
         'recommend_ingredients': recommend_ingredients,
         'recommend_products': recommend_products,
+        'age': age,
+        'allergy': kr_allergy_codes,
+        'disease': kr_disease_codes,
+        'alcohol': profile_alcohol.com_code_name,
+        'pregnancy': profile_pregnancy.com_code_name,
+        'product' : product,
     })
 
 
-def recom_products_nutri_base(request):
+def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
     # AI추천받기: 영양제 추천 목록(영양 성분 기반)
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(영양 성분 기반)
     # /recommends/{profile-id}/surveys/{survey-id}/rec-nut-products/{nutri-num}
-    return render(request, 'recommends/recom_profile_product_list.html')
+    # 프로필 및 survey 데이터 가져오기
+    profile = Profile.objects.get(profile_id=profile_id)
+    survey = Survey.objects.get(survey_id=survey_id)
+
+
+    
+    # 만나이 계산
+    profile_birth = str(profile.profile_birth)
+    birth = datetime.strptime(profile_birth, '%Y-%m-%d').date()
+    today = datetime.now().date()
+    age = today.year - int(profile_birth[:4])
+    ## 생일이 있는 달을 아직 안 지남
+    if today.month < birth.month:
+        age -= 1
+
+    ## 현재 월이 생일이 있는 달이지만 생일 일자가 아직 안 지남
+    elif today.month == birth.month and today.day < birth.day:
+        age -= 1
+
+
+
+    # 성별
+    if survey.survey_sex == 'f':
+        survey.survey_sex = '여성'
+    else:
+        survey.survey_sex = '남성'
+
+
+
+    # 임신상태
+    profile_pregnancy = ComCode.objects.get(com_code=survey.survey_pregnancy_code)
+    
+
+
+    # 알레르기 여부
+    ## profile allergy 가져오기
+    profile_allergys = SurveyAllergy.objects.filter(survey_id=survey.survey_id).values_list('allergy_code', flat=True)
+    profile_allergys = list(profile_allergys)
+    ## profile allergy 코드를 한글 코드명으로 변환
+    kr_allergy_codes = []
+    for profile_allergy_code in profile_allergys:
+        kr_allergy_code = AllergyCode.objects.filter(allergy_code=profile_allergy_code).values_list('allergy_code_name')
+        kr_allergy_code = ''.join(kr_allergy_code[0])
+        kr_allergy_codes.append(kr_allergy_code)
+
+
+
+    # 키
+    if survey.survey_height == None:
+        survey.survey_height = '미입력'
+
+
+    # 몸무게
+    if survey.survey_weight == None:
+        survey.survey_weight = '미입력'
+
+
+
+    # 기저질환
+    profile_disease = SurveyDisease.objects.filter(survey_id=survey.survey_id).values_list('disease_code', flat=True)
+    profile_disease = list(profile_disease)
+    # print(f'profile_disease: {profile_disease}') #  ['DI01', 'DI02', 'DI03', 'DI04', 'DI07']
+    kr_disease_codes = []
+    for profile_disease_code in profile_disease:
+        kr_disease_code = DiseaseCode.objects.filter(disease_code=profile_disease_code).values_list('disease_code_name', flat=True)
+        kr_disease_code = str(kr_disease_code[0])
+        kr_allergy_code = ''.join(kr_disease_code)
+        kr_disease_codes.append(kr_disease_code)
+    # print(f'kr_disease_codes_list: {kr_disease_codes}')
+
+
+
+    # 음주여부
+    profile_alcohol = ComCode.objects.filter(com_code=survey.survey_alcohol_code).get()
+    
+    
+
+    # 흡연여부
+    if survey.survey_smoke == 'y':
+        survey.survey_smoke = '흡연'
+    else:
+        survey.survey_smoke = '비흡연'
+
+
+    # 추천받은 영양 성분 정보
+    recommend_ingredient = Ingredient.objects.get(ingredient_id=nutri_num)
+
+
+    # 추천받은 영양 성분을 가진 제품 리스트
+    nutrient_included_products = ProductIngredient.objects.filter(ingredient_id=nutri_num).values_list('product_id', flat=True)
+    nutrient_included_products = list(nutrient_included_products)
+    popular_products = Product.objects.filter(product_id__in=nutrient_included_products).order_by('-product_rating_avg', '-product_rating_cnt')[:20]
+    return render(request, 'recommends/recom_profile_product_list.html', {
+        'profile': profile,
+        'survey': survey,
+        'age': age,
+        'allergy': kr_allergy_codes,
+        'disease': kr_disease_codes,
+        'alcohol': profile_alcohol.com_code_name,
+        'pregnancy': profile_pregnancy.com_code_name,
+        'recommend_ingredient': recommend_ingredient,
+        'popular_products': popular_products,
+    })
 
 
 def recom_products_profile_base(request, profile_id, survey_id):
@@ -275,7 +463,7 @@ def recom_products_profile_base(request, profile_id, survey_id):
     # survey = Survey.objects.filter(survey_id=survey_id).get()
 
     # ai 추천 받은 후 추천해주는 제품의 product_id가 필요
-    product_id = 1
+    product_id = 200400150395
     product = Product.objects.get(product_id=product_id)
     return render(request, 'recommends/recom_profile_product_list.html', {
         'profile': profile,

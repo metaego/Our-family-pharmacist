@@ -14,14 +14,36 @@
 </style>
 <h1>영양성분리포트</h1>
 <div>
+    <li>나이: 만 {{ age }} 세</li>
+    <li>성별: {{ survey.survey_sex }}</li>  
+    <li>키: {% if survey.survey_height != '미입력' %}
+              {{ survey.survey_height }}cm
+            {% else %}
+              {{ survey.survey_height }}
+            {% endif %}
+    </li> 
+    <li>몸무게: {% if survey.survey_weight != '미입력' %}
+                  {{ survey.survey_weight }}kg
+                {% else %}
+                  {{ survey.survey_weight }}
+                {% endif %}
+    </li>  
+    <li>임신상태: {{ pregnancy }}</li>  
+    <li>알레르기 여부: {{ allergy|join:', ' }}</li>  
+    <li>기저질환: {{ disease|join:', ' }}</li>  
+    <li>흡연여부: {{ survey.survey_smoke }}</li> 
+    <li>음주여부: {{ alcohol }}</li>   
+</div>
+<br><br>
+<div>
     {% for r_ingredient in recommend_ingredients %}
         <h3>추천 영양 성분{{ forloop.counter }}</h3>
         <ul>
             <li>영양 성분명: {{ r_ingredient.ingredient_name }}</li>
             <li>주요 건강 기능: {{ r_ingredient.ingredient_function_content }}</li>
-            <li>일일 섭취량 상하한: 최대 {{ r_ingredient.ingredient_limit_high }} {{ r_ingredient.ingredient_unit }}/ 최소{{ r_ingredient.ingredient_limit_low }} {{ r_ingredient.ingredient_unit }}</li>
+            <li>일일 섭취량 상하한: 최대 {{ r_ingredient.ingredient_limit_high }} {{ r_ingredient.ingredient_unit }} / 최소{{ r_ingredient.ingredient_limit_low }} {{ r_ingredient.ingredient_unit }}</li>
             <!-- rending page: recom_profile_product_list.html -->
-            <form action="/recommends/profile-id/surveys/survey-id/rec-nut-products/nutri-num" method='get'>
+            <form action="{% url "recommends:products_nutri_base" profile.profile_id survey.survey_id r_ingredient.ingredient_id %}" method='get'>
                 <button>추천 영양제 보기</button>
             </form>
         </ul>
@@ -34,8 +56,28 @@
     <div>
         영양성분 리포트를 바탕으로 추천하는 <br>
         <!-- rending page: recom_profile_product_list.html -->
-        <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
-        <form action="/recommends/profile-id/surveys/survey-id/rec-total-products/" method='get'>
+        <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
+            {% if product.product_image == '0' %}
+                <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% else %}
+                <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% endif %}
+        </a>
+        <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
+            {% if product.product_image == '0' %}
+                <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% else %}
+                <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% endif %}
+        </a>
+        <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
+            {% if product.product_image == '0' %}
+                <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% else %}
+                <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% endif %}
+        </a>
+        <form action="{% url "recommends:products_profile_base" profile.profile_id survey.survey_id %}" method='get'>
             <button>더보기</button>
         </form>
     </div>
@@ -47,7 +89,27 @@
                                                     {{ '남성' }}에게 인기있는 영양제
                                                {% endif %}<br>
         <!-- rending page: recom_profile_product_list.html -->
-        <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+        <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
+            {% if product.product_image == '0' %}
+                <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% else %}
+                <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% endif %}
+        </a>
+        <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
+            {% if product.product_image == '0' %}
+                <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% else %}
+                <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% endif %}
+        </a>
+        <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
+            {% if product.product_image == '0' %}
+                <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% else %}
+                <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% endif %}
+        </a>
         <form action="/recommends/profile-id/surveys/survey-id/rec-collabo-products/" method='get'>
             <button>더보기</button>
         </form>
