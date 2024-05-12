@@ -1,29 +1,133 @@
 <!-- menu: AI영양제 추천받기 -->
+<style>
+  .ui-checkbox {
+    --primary-color: #1677ff;
+    --secondary-color: #fff;
+    --primary-hover-color: #4096ff;
+    /* checkbox */
+    --checkbox-diameter: 20px;
+    --checkbox-border-radius: 5px;
+    --checkbox-border-color: #d9d9d9;
+    --checkbox-border-width: 1px;
+    --checkbox-border-style: solid;
+    /* checkmark */
+    --checkmark-size: 1.2;
+  }
+  
+  .ui-checkbox, 
+  .ui-checkbox *, 
+  .ui-checkbox *::before, 
+  .ui-checkbox *::after {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  
+  .ui-checkbox {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: var(--checkbox-diameter);
+    height: var(--checkbox-diameter);
+    border-radius: var(--checkbox-border-radius);
+    background: var(--secondary-color);
+    border: var(--checkbox-border-width) var(--checkbox-border-style) var(--checkbox-border-color);
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .ui-checkbox::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-box-shadow: 0 0 0 calc(var(--checkbox-diameter) / 2.5) var(--primary-color);
+    box-shadow: 0 0 0 calc(var(--checkbox-diameter) / 2.5) var(--primary-color);
+    border-radius: inherit;
+    opacity: 0;
+    -webkit-transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+    -o-transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+    transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+  }
+  
+  .ui-checkbox::before {
+    top: 40%;
+    left: 50%;
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 7px;
+    border-right: 2px solid var(--secondary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    -webkit-transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    -ms-transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    opacity: 0;
+    -webkit-transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6),opacity 0.1s;
+    -o-transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6),opacity 0.1s;
+    transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6),opacity 0.1s;
+  }
+  
+  /* actions */
+  
+  .ui-checkbox:hover {
+    border-color: var(--primary-color);
+  }
+  
+  .ui-checkbox:checked {
+    background: var(--primary-color);
+    border-color: transparent;
+  }
+  
+  .ui-checkbox:checked::before {
+    opacity: 1;
+    -webkit-transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
+    -ms-transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
+    transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
+    -webkit-transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+    -o-transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+    transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+  }
+  
+  .ui-checkbox:active:not(:checked)::after {
+    -webkit-transition: none;
+    -o-transition: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    transition: none;
+    opacity: 1;
+  }
+</style>
 {% extends "base.html" %}
 {% block content %}
 <h1>AI 영양제 추천받기</h1>
-<h2>{{ profile.profile_name }}님의 프로필 정보 확인</h2>
-<li>나이: 만 {{ age }} 세</li>
-<li>성별:
-  {% if survey.survey_sex == 'f' %}
-    {{ '여성'}}
-  {% else %}
-    {{ '남성' }}
-  {% endif %}
-</li>  
-<li>키: {{ survey.survey_height }} cm</li> 
-<li>몸무게: {{ survey.survey_weight }} kg</li>  
-<li>임신상태: {{ pregnancy }}</li>  
-<li>알레르기 여부: {{ allergy }}
-</li>  
-<li>기저질환: {{ disease }}</li>  
-<li>흡연여부: {% if survey.survey_smoke == 'y' %}
-                {{ '흡연' }}
-              {% else %}
-                {{ '비흡연' }}
-              {% endif %}
-</li> 
-<li>음주여부: {{ alcohol }}</li>   
+<h2>1. 나의 프로필 정보 확인</h2>
+아래 내용으로 추천해드릴까요? <br>
+<div>
+  <li>나이: 만 {{ age }} 세</li>
+  <li>성별: {{ survey.survey_sex }}</li>  
+  <li>키: {{ survey.survey_height }} cm</li> 
+  <li>몸무게: {{ survey.survey_weight }} kg</li>  
+  <li>임신상태: {{ pregnancy }}</li>  
+  <li>알레르기 여부: {{ allergy|join:', ' }}</li>  
+  <li>기저질환: {{ disease|join:', ' }}</li>  
+  <li>흡연여부: {{ survey.survey_smoke }}</li> 
+  <li>음주여부: {{ alcohol }}</li>   
+</div>
+<div>
+  건강고민 순위를 선택하시면 더 자세한 추천이 가능해요!(최대 5개)<br>
+  <form id="checkbox-form" action="{% url "recommends:request_flask_recom_model" profile.profile_id survey.survey_id %}" method="post">
+    {% csrf_token %}
+    {% for code in function_code_list %}
+    <input type="checkbox" class="ui-checkbox" name="checkbox[]" value={{ code|urlencode }}> {{ code }}
+    {% endfor %}
+    <button type="submit">나에게 맞는 영양제 추천받기</button>
+  </form>
+</div>
 
 <!-- 설문 기반 ai 영양 성분 및 제품 추천 -->
 <!-- rending page: recom_personal_report.html -->
@@ -41,4 +145,14 @@
 <form action="{% url "profiles:profile_info" profile.profile_id %}" method='get'>
     <button>프로필 수정</button>
 </form>
+
+<script>
+  document.getElementById("checkbox-form").addEventListener("submit", function(event) {
+      var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      if (checkboxes.length > 5) {
+          event.preventDefault();
+          alert("건강고민을 5개 이상 선택하셨습니다.");
+      }
+  });
+</script>
 {% endblock content %}

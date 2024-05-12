@@ -28,7 +28,7 @@
                 {{ '남성' }}
               {% endif %}</li>
     <li>임신상태: {{ pregnancy }}</li>
-    <li>알레르기 여부: {{ allergy }}</li>
+    <li>알레르기 여부: {{ allergys|join:', ' }}</li>
 
 </div>
 <!-- rending page: recom_profile_info.html -->
@@ -38,7 +38,7 @@
 </form>
 
 <h3>{{ profile.profile_name }} 님을 위한 맞춤 영양제 추천</h3>
-{% if survey == None %}
+{% if recommendation == None %}
     <!-- rending page: recom_profile_info.html -->
     영양제를 추천받아보신 적이 없으시군요!
     <form action="{% url "recommends:profile_info" profile_id %}" method='get'>
@@ -48,6 +48,8 @@
     <!-- rending page: recom_profile_product_list.html -->
     <!-- /recommends/<int:profile-id>/surveys/<int:survey-id>/rec-total-products/ -->
     <!-- 이미지 클릭 시 해당 영양제 제품 상세 페이지로 이동하는 기능 구현할 예정 -->
+    {% comment %} # /products/{product-id}/{profile-id} {% endcomment %}
+    {% comment %} products:products_detail {% endcomment %}
     <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
     <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
     <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
