@@ -60,7 +60,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -70,11 +72,13 @@ body {
   margin-right: 10px;
 }
 .navbar .btn {
-  position: absolute;
+  position: relative;
   right: 20px;
 }
 
 .btn {
+  width: 66px;
+  height: 30px;
   line-height: 25px;
   background-color: #fff;
   border-radius: 15px;
@@ -86,6 +90,7 @@ body {
 }
 
 a.btn {
+  position: relative;
   height: 28px;
 }
 
@@ -190,7 +195,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -200,13 +207,14 @@ body {
   margin-right: 10px;
 }
 .navbar .btn {
-  position: absolute;
+  position: relative;
   right: 20px;
 }
 
 .btn {
-  line-height: 25px;
-  background-color: #fff;
+  width: 188px;
+  height: 30px;
+  background-color: #ce9be7;
   border-radius: 15px;
   transition-duration: 0.3s;
   transition-timing-function: ease;
@@ -216,6 +224,7 @@ body {
 }
 
 a.btn {
+  position: relative;
   height: 28px;
 }
 
@@ -259,30 +268,31 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #666;
 }
 
-#survey {
-  display: grid;
+#login, #signup {
+  display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
   background-color: #fafafa;
 }
-#survey > form {
-  display: grid;
+#login > form, #signup > form {
+  display: flex;
   flex-direction: column;
   align-items: center;
   border: 1px solid #ddd;
-  margin-top: 50px;
+  margin-top: -40px;
   padding: 30px 40px 40px;
   border-radius: 2px;
   background-color: white;
 }
-#survey > form > h1 {
+#login > form > h1, #signup > form > h1 {
   margin: 0 0 20px 0;
   font-weight: bold;
 }
-#survey > form > p {
+#login > form > p, #signup > form > p {
   margin: 0;
 }
-#survey > form > p > label > label {
+#login > form > p > label, #signup > form > p > label {
   display: block;
   position: relative;
   font-size: 12px;
@@ -290,14 +300,14 @@ input:-webkit-autofill:active {
   margin-bottom: 2px;
   color: #333;
 }
-#survey > form > p > label::after > label::after {
+#login > form > p > label::after, #signup > form > p > label::after {
   bottom: 0;
   color: white;
   content: ":";
-  position: absolute;
+  position: relative;
   transform: translate(-100%, 0);
 }
-#survey > form > p > input {
+#login > form > p > input, #signup > form > p > input {
   padding: 11px 0 10px 10px;
   min-width: 250px;
   outline: 0;
@@ -307,18 +317,17 @@ input:-webkit-autofill:active {
   border: 1px solid #ddd;
   border-radius: 2px;
 }
-#survey > form > ul.errorlist {
+#login > form > ul.errorlist, #signup > form > ul.errorlist {
   color: red;
-  text-align: right;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
-  margin-bottom: 3px;
+  margin-bottom: 6px;
 }
-#survey .btn-survey {
+#login .btn-login, #login .btn-signup, #signup .btn-login, #signup .btn-signup {
   width: 100%;
   border: none;
   color: white;
-  background-color: #BC55EF;
+  background-color: #0095f6;
   margin-top: 10px;
   border-radius: 4px;
   font-size: 13px;
@@ -385,7 +394,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -395,11 +406,13 @@ body {
   margin-right: 10px;
 }
 .navbar .btn {
-  position: absolute;
+  position: relative;
   right: 20px;
 }
 
 .btn {
+  width: 66px;
+  height: 30px;
   line-height: 25px;
   background-color: #fff;
   border-radius: 15px;
@@ -411,6 +424,7 @@ body {
 }
 
 a.btn {
+  position: relative;
   height: 28px;
 }
 
@@ -454,7 +468,14 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #666;
 }
 
-.post-container {
+.profile-container {
+  border-radius: 20px;
+  box-shadow: 0.6px 0.6px 8px 0.6px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  margin: 30px 40%;
+  text-align: center;
+  padding: 10px 0 10px 0;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -677,7 +698,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -687,11 +710,13 @@ body {
   margin-right: 10px;
 }
 .navbar .btn {
-  position: absolute;
+  position: relative;
   right: 20px;
 }
 
 .btn {
+  width: 66px;
+  height: 30px;
   line-height: 25px;
   background-color: #fff;
   border-radius: 15px;
@@ -703,6 +728,7 @@ body {
 }
 
 a.btn {
+  position: relative;
   height: 28px;
 }
 
@@ -843,7 +869,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -853,11 +881,13 @@ body {
   margin-right: 10px;
 }
 .navbar .btn {
-  position: absolute;
+  position: relative;
   right: 20px;
 }
 
 .btn {
+  width: 66px;
+  height: 30px;
   line-height: 25px;
   background-color: #fff;
   border-radius: 15px;
@@ -869,6 +899,7 @@ body {
 }
 
 a.btn {
+  position: relative;
   height: 28px;
 }
 
@@ -1002,7 +1033,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -1012,11 +1045,13 @@ body {
   margin-right: 10px;
 }
 .navbar .btn {
-  position: absolute;
+  position: relative;
   right: 20px;
 }
 
 .btn {
+  width: 66px;
+  height: 30px;
   line-height: 25px;
   background-color: #fff;
   border-radius: 15px;
@@ -1028,6 +1063,7 @@ body {
 }
 
 a.btn {
+  position: relative;
   height: 28px;
 }
 
@@ -1160,7 +1196,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -1170,11 +1208,13 @@ body {
   margin-right: 10px;
 }
 .navbar .btn {
-  position: absolute;
+  position: relative;
   right: 20px;
 }
 
 .btn {
+  width: 66px;
+  height: 30px;
   line-height: 25px;
   background-color: #fff;
   border-radius: 15px;
@@ -1186,6 +1226,7 @@ body {
 }
 
 a.btn {
+  position: relative;
   height: 28px;
 }
 

@@ -51,7 +51,7 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  width: 100%;
+  /* width: 100%; */
   z-index: 999;
   display: flex;
   flex-direction: row;
@@ -60,8 +60,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
-  font-weight: bold;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -76,10 +77,9 @@ body {
 }
 
 .btn {
-  width: 66px;
+  width: 80px;
   height: 30px;
   line-height: 25px;
-  background-color: #fff;
   border-radius: 15px;
   transition-duration: 0.3s;
   transition-timing-function: ease;
@@ -92,18 +92,30 @@ a.btn {
   height: 28px;
 }
 
+.btn-recommendation {
+  border: 1px solid #BC55EF;
+  background-color: #BC55EF;
+  color: white;
+}
+.btn-recommendation:hover {
+  border: 1px solid #daaeef;
+  background-color: #daaeef;
+}
+
 .btn-primary {
   border: 1px solid #BC55EF;
+  background-color: white;
   color: #666;
 }
 .btn-primary:hover {
   color: white;
-  background-color: #ce9be7;
+  background-color: #BC55EF;
 }
 
 .btn-secondary {
   border: 0.5px solid #bbb;
-  color: #666;
+  background-color: white;
+  color: #666
 }
 .btn-secondary:hover {
   color: white;
@@ -184,7 +196,7 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  width: 100%;
+  /* width: 100%; */
   z-index: 999;
   display: flex;
   flex-direction: row;
@@ -193,7 +205,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -208,9 +222,6 @@ body {
 }
 
 .btn {
-  width: 188px;
-  height: 30px;
-  background-color: #ce9be7;
   border-radius: 15px;
   transition-duration: 0.3s;
   transition-timing-function: ease;
@@ -221,7 +232,10 @@ body {
 
 a.btn {
   height: 28px;
+  
 }
+
+
 
 .btn-primary {
   border: 1px solid #BC55EF;
@@ -229,7 +243,7 @@ a.btn {
 }
 .btn-primary:hover {
   color: white;
-  background-color: #ce9be7;
+  background-color: #BC55EF;
 }
 
 .btn-secondary {
@@ -380,16 +394,18 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  width: 100%;
+  /* width: 100%; */
   z-index: 999;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
-  align-items: center;
+    align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -404,10 +420,7 @@ body {
 }
 
 .btn {
-  width: 66px;
-  height: 30px;
   line-height: 25px;
-  background-color: #fff;
   border-radius: 15px;
   transition-duration: 0.3s;
   transition-timing-function: ease;
@@ -420,13 +433,15 @@ a.btn {
   height: 28px;
 }
 
+
+
 .btn-primary {
   border: 1px solid #BC55EF;
   color: #666;
 }
 .btn-primary:hover {
   color: white;
-  background-color: #ce9be7;
+  background-color: #BC55EF;
 }
 
 .btn-secondary {
@@ -463,8 +478,8 @@ input:-webkit-autofill:active {
 .profile-container {
   border-radius: 20px;
   box-shadow: 0.6px 0.6px 8px 0.6px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
-  margin: 30px 40%;
+  max-width: 1500px;
+  margin: 20px 40%;
   text-align: center;
   padding: 10px 0 10px 0;
 
@@ -681,7 +696,7 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  width: 100%;
+  /* width: 100%; */
   z-index: 999;
   display: flex;
   flex-direction: row;
@@ -690,7 +705,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -705,10 +722,7 @@ body {
 }
 
 .btn {
-  width: 66px;
-  height: 30px;
   line-height: 25px;
-  background-color: #fff;
   border-radius: 15px;
   transition-duration: 0.3s;
   transition-timing-function: ease;
@@ -723,11 +737,11 @@ a.btn {
 
 .btn-primary {
   border: 1px solid #BC55EF;
-  color: #666;
+  color: white;
 }
 .btn-primary:hover {
   color: white;
-  background-color: #ce9be7;
+  background-color: #BC55EF;
 }
 
 .btn-secondary {
@@ -849,7 +863,7 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  width: 100%;
+  /* width: 100%; */
   z-index: 999;
   display: flex;
   flex-direction: row;
@@ -858,7 +872,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -873,10 +889,7 @@ body {
 }
 
 .btn {
-  width: 66px;
-  height: 30px;
   line-height: 25px;
-  background-color: #fff;
   border-radius: 15px;
   transition-duration: 0.3s;
   transition-timing-function: ease;
@@ -889,13 +902,15 @@ a.btn {
   height: 28px;
 }
 
+
+
 .btn-primary {
   border: 1px solid #BC55EF;
   color: #666;
 }
 .btn-primary:hover {
   color: white;
-  background-color: #ce9be7;
+  background-color: #BC55EF;
 }
 
 .btn-secondary {
@@ -1010,7 +1025,7 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  width: 100%;
+  /* width: 100%; */
   z-index: 999;
   display: flex;
   flex-direction: row;
@@ -1019,7 +1034,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -1034,10 +1051,7 @@ body {
 }
 
 .btn {
-  width: 66px;
-  height: 30px;
   line-height: 25px;
-  background-color: #fff;
   border-radius: 15px;
   transition-duration: 0.3s;
   transition-timing-function: ease;
@@ -1050,13 +1064,15 @@ a.btn {
   height: 28px;
 }
 
+
+
 .btn-primary {
   border: 1px solid #BC55EF;
   color: #666;
 }
 .btn-primary:hover {
   color: white;
-  background-color: #ce9be7;
+  background-color: #BC55EF;
 }
 
 .btn-secondary {
@@ -1170,7 +1186,7 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  width: 100%;
+  /* width: 100%; */
   z-index: 999;
   display: flex;
   flex-direction: row;
@@ -1179,7 +1195,9 @@ body {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
   color: #666;
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
+  font-size: 24px;
+  font-weight: 400;
   height: 59px;
   border-bottom: 1px solid #ddd;
 }
@@ -1194,10 +1212,7 @@ body {
 }
 
 .btn {
-  width: 66px;
-  height: 30px;
   line-height: 25px;
-  background-color: #fff;
   border-radius: 15px;
   transition-duration: 0.3s;
   transition-timing-function: ease;
@@ -1210,13 +1225,15 @@ a.btn {
   height: 28px;
 }
 
+
+
 .btn-primary {
   border: 1px solid #BC55EF;
   color: #666;
 }
 .btn-primary:hover {
   color: white;
-  background-color: #ce9be7;
+  background-color: #BC55EF;
 }
 
 .btn-secondary {

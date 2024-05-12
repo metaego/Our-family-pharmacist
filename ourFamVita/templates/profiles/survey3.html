@@ -3,13 +3,22 @@
 <html lang="ko">
 <head>
     <title>프로필 등록</title>
-    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+    {% comment %} <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static "css/survey.css" %}">
+    <style>
+        * {
+            font-family: "Noto Sans KR";
+            font-weight: 400;
+        }    
+    </style>  
+    </style>
 </head>
 
 <body>
     <div>
-        <nav class="navbar"><span>상태 정보</span></nav>
+        <nav class="navbar" style="font-size: 24px; width: 100%;">
+            <span>상태 정보</span>
+        </nav>
     </div>
 
     <div id="survey">
@@ -17,12 +26,12 @@
             {% csrf_token %}
             {{ form.as_p }}
 
-            <p style="text-align: right">
+            <div style="text-align: center" style="margin-top: 5px;">
                 <button class='btn btn-secondary'>
                     <a href="{% url "profiles:survey2" %}">이전</a>
                 </button>
                 <button class='btn btn-primary' type=submit>등록</button>
-            </p>
+            </div>
 
         </form>
     </div>     
