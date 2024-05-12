@@ -3,12 +3,14 @@ from datetime import datetime
 from users.models import (Profile, Survey, SurveyAllergy, SurveyDisease, DiseaseCode
                         , AllergyCode, ComCode, Product, SurveyFunction
                         , FunctionCode) # 코드 가독성을 위해 () 사용
-from django.db.models import Count, Q
+from django.db.models import Count
 # from .cal_weight_and_height import impute_weight, impute_height 
-from django.http import HttpResponse
 from django.utils import timezone
 from urllib.parse import unquote
-
+import requests
+from django.http import HttpResponse
+from django.middleware.csrf import get_token
+import json
 
 # Create your views here.
 
@@ -145,40 +147,62 @@ def request_flask_recom_model(request, profile_id, survey_id):
     # post로 요청이 들어오면 건강고민 설문을 DB에 저장
     # flask 추천 알고리즘 request
     if request.method == 'POST':
-        selected_functions = [unquote(code) for code in request.POST.getlist('checkbox[]')]
+        # selected_functions = [unquote(code) for code in request.POST.getlist('checkbox[]')]
 
-        # 새로운 survey 데이터 생성
-        survey = Survey.objects.get(survey_id=survey_id)
-        survey.pk = None
-        survey.created_at = timezone.now()
-        survey.save()
+        # # 새로운 survey 데이터 생성
+        # survey = Survey.objects.get(survey_id=survey_id)
+        # survey.pk = None
+        # survey.created_at = timezone.now()
+        # survey.save()
 
-        survey = Survey.objects.get(survey_id=survey.survey_id)
+        # survey = Survey.objects.get(survey_id=survey.survey_id)
 
-        # 새로운 survey_disease 데이터 생성
-        survey_diseases = SurveyDisease.objects.filter(survey_id=survey_id).values_list('disease_code', flat=True)
-        survey_diseases = list(survey_diseases)  # ['DI01', 'DI02', 'DI03', 'DI04', 'DI05']
-        for d_code in survey_diseases:
-            disease_code = DiseaseCode.objects.get(disease_code=d_code)
-            SurveyDisease.objects.create(survey_id=survey, disease_code=disease_code)
+        # # 새로운 survey_disease 데이터 생성
+        # survey_diseases = SurveyDisease.objects.filter(survey_id=survey_id).values_list('disease_code', flat=True)
+        # survey_diseases = list(survey_diseases)  # ['DI01', 'DI02', 'DI03', 'DI04', 'DI05']
+        # for d_code in survey_diseases:
+        #     disease_code = DiseaseCode.objects.get(disease_code=d_code)
+        #     SurveyDisease.objects.create(survey_id=survey, disease_code=disease_code)
            
 
 
-        # 새로운 survey_allergy 데이터 생성
-        survey_allerges = SurveyAllergy.objects.filter(survey_id=survey_id).values_list('allergy_code', flat=True)
-        survey_allerges = list(survey_allerges)
-        for a_code in survey_allerges:
-            allergy_code = AllergyCode.objects.get(allergy_code=a_code)
-            SurveyAllergy.objects.create(survey_id=survey, allergy_code=allergy_code)
+        # # 새로운 survey_allergy 데이터 생성
+        # survey_allerges = SurveyAllergy.objects.filter(survey_id=survey_id).values_list('allergy_code', flat=True)
+        # survey_allerges = list(survey_allerges)
+        # for a_code in survey_allerges:
+        #     allergy_code = AllergyCode.objects.get(allergy_code=a_code)
+        #     SurveyAllergy.objects.create(survey_id=survey, allergy_code=allergy_code)
 
 
 
-        # 새로운 survey_function 데이터 생성
-        for kr_f_code in selected_functions:
-            function_code = FunctionCode.objects.get(function_code_name=kr_f_code)
-            SurveyFunction.objects.create(survey_id=survey, function_code=function_code)
-        print('survey, survey_disease, survey_allergey, survey_function data 신규 생성...!')
-        return HttpResponse('return!')
+        # # 새로운 survey_function 데이터 생성
+        # for kr_f_code in selected_functions:
+        #     function_code = FunctionCode.objects.get(function_code_name=kr_f_code)
+        #     SurveyFunction.objects.create(survey_id=survey, function_code=function_code)
+        # print('survey, survey_disease, survey_allergey, survey_function data 신규 생성...!')
+
+        client_ip = request.META.get('REMOTE_ADDR', None)
+        print(f'client_ip: {client_ip}')
+        content = {
+            'profile_id': profile_id,
+            'survey_id': survey_id
+        }
+        csrf_token = get_token(request)
+        response = requests.post('http://' + client_ip + ':5000/', 
+                                 data=json.dumps(content), 
+                                 headers={'X-CSRFToken': csrf_token,
+                                          'Content-Type': 'application/json'})
+        
+        response_data = json.loads(response.text)
+        print(f'flask에서 응답 받은 내용 출력: {response_data}')
+        print(type(response_data))
+        print(f'response_data.profile_id: {response_data["profileid"]}, {type(response_data["profileid"])}')
+        profile = Profile.objects.get(profile_id=profile_id)
+        survey = Survey.objects.get(survey_id=survey_id)
+        return render(request, 'recommends/recom_profile_report.html', {
+        'profile': profile,
+        'survey':survey,
+    })
 
 
 

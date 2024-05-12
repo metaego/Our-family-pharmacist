@@ -1,4 +1,6 @@
 <!-- menu: AI영양제 추천받기 -->
+{% extends "base.html" %}
+{% block content %}
 <style>
   .ui-checkbox {
     --primary-color: #1677ff;
@@ -102,50 +104,58 @@
     opacity: 1;
   }
 </style>
-{% extends "base.html" %}
-{% block content %}
 <h1>AI 영양제 추천받기</h1>
 <h2>1. 나의 프로필 정보 확인</h2>
 아래 내용으로 추천해드릴까요? <br>
 <div>
   <li>나이: 만 {{ age }} 세</li>
   <li>성별: {{ survey.survey_sex }}</li>  
-  <li>키: {{ survey.survey_height }} cm</li> 
-  <li>몸무게: {{ survey.survey_weight }} kg</li>  
+  <li>키: {% if survey.survey_height != '미입력' %}
+            {{ survey.survey_height }}cm
+          {% else %}
+            {{ survey.survey_height }}
+          {% endif %}
+  </li> 
+  <li>몸무게: {% if survey.survey_weight != '미입력' %}
+                {{ survey.survey_weight }}kg
+              {% else %}
+                {{ survey.survey_weight }}
+              {% endif %}
+  </li>  
   <li>임신상태: {{ pregnancy }}</li>  
   <li>알레르기 여부: {{ allergy|join:', ' }}</li>  
   <li>기저질환: {{ disease|join:', ' }}</li>  
   <li>흡연여부: {{ survey.survey_smoke }}</li> 
   <li>음주여부: {{ alcohol }}</li>   
 </div>
+<br><br>
 <div>
+  <!-- 설문 기반 ai 영양 성분 및 제품 추천 -->
+  <!-- rending page: recom_personal_report.html -->
   건강고민 순위를 선택하시면 더 자세한 추천이 가능해요!(최대 5개)<br>
   <form id="checkbox-form" action="{% url "recommends:request_flask_recom_model" profile.profile_id survey.survey_id %}" method="post">
     {% csrf_token %}
     {% for code in function_code_list %}
-    <input type="checkbox" class="ui-checkbox" name="checkbox[]" value={{ code|urlencode }}> {{ code }}
-    {% endfor %}
+    <input type="checkbox" class="ui-checkbox" name="checkbox[]" value={{ code|urlencode }}> {{ code }} <br>
+    {% endfor %} 
     <button type="submit">나에게 맞는 영양제 추천받기</button>
   </form>
 </div>
-
-<!-- 설문 기반 ai 영양 성분 및 제품 추천 -->
-<!-- rending page: recom_personal_report.html -->
-<form action="{% url "recommends:products_profile_base" profile.profile_id survey.survey_id %}"  method='get'>
-    <button>나에게 맞는 영양제 추천받기</button>
-</form>
-
+<div style='display: inline-block;'>
 <!-- 홈 메인화면으로 가기 -->
 <!-- rending page: main.html -->
-<form action="{% url "home:home_main" profile.profile_id %}" method='get'>
-    <button>이전</button>
-</form>
-
-<!-- 프로필 수정 화면으로 가기 -->
-<form action="{% url "profiles:profile_info" profile.profile_id %}" method='get'>
-    <button>프로필 수정</button>
-</form>
-
+  <form action="{% url "home:home_main" profile.profile_id %}" method='get'>
+    {% csrf_token %}
+      <button>이전</button>
+  </form>
+</div>
+<div style='display: inline-block;'>
+  <!-- 프로필 수정 화면으로 가기 -->
+  <form action="{% url "profiles:profile_info" profile.profile_id %}" method='get'>
+    {% csrf_token %}
+      <button>프로필 수정</button>
+  </form>
+</div>
 <script>
   document.getElementById("checkbox-form").addEventListener("submit", function(event) {
       var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');

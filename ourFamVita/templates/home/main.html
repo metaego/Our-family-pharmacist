@@ -14,63 +14,70 @@
 </style>
 <div>
     <h3>나의 프로필</h3>
-    <img src="{% static 'home/profile_temp_image_240506.png' %}" alt="사용자 프로필 사진" class='profile_image'>
-    <div>
-        <form action="{% url "profiles:profile" %}" method="get">
-            <button>프로파일 전환</button>
-        </form>
+    <div style='display: inline-block;'>
+        <img src="{% static 'home/profile_temp_image_240506.png' %}" alt="사용자 프로필 사진" class='profile_image'>
+        <div>
+            <form action="{% url "profiles:profile" %}" method="get">
+                <button>프로파일 전환</button>
+            </form>
+        </div>
     </div>
-    <li>프로필명: {{ profile.profile_name }}</li>
-    <li>연령대: {{ survey.survey_age_group }}</li>
-    <li>성별: {%if survey.survey_sex == 'f' %}
-                {{ '여성' }}
-              {% else %}
-                {{ '남성' }}
-              {% endif %}</li>
-    <li>임신상태: {{ pregnancy }}</li>
-    <li>알레르기 여부: {{ allergys|join:', ' }}</li>
-
-</div>
+    <div style='display: inline-block;'>
+        <li>프로필명: {{ profile.profile_name }}</li>
+        <li>연령대: {{ survey.survey_age_group }}</li>
+        <li>성별: {%if survey.survey_sex == 'f' %}
+                    {{ '여성' }}
+                  {% else %}
+                    {{ '남성' }}
+                  {% endif %}</li>
+        <li>임신상태: {{ pregnancy }}</li>
+        <li>알레르기 여부: {{ allergys|join:', ' }}</li>
+    </div>
 <!-- rending page: recom_profile_info.html -->
 {% comment %} <form action="/recommends/{{ profile_id }}/info/"  method='get'> {% endcomment %}
-<form action="{% url "recommends:profile_info" profile_id %}"  method='get'>
-    <button>건강설문하고 영양제 추천 받기</button>
-</form>
-
-<h3>{{ profile.profile_name }} 님을 위한 맞춤 영양제 추천</h3>
-{% if recommendation == None %}
-    <!-- rending page: recom_profile_info.html -->
-    영양제를 추천받아보신 적이 없으시군요!
-    <form action="{% url "recommends:profile_info" profile_id %}" method='get'>
-        <button>나의 맞춤 영양제 추천을 위한 건강 설문 하러 가기</button>
+    <form action="{% url "recommends:profile_info" profile_id %}"  method='get'>
+        <button>건강설문하고 영양제 추천 받기</button>
     </form>
-{% else %}
+</div>
+<br><br>
+<div>
+    <h3>{{ profile.profile_name }}님을 위한 맞춤 영양제 추천</h3>
+    {% if recommendation == None %}
+        <!-- rending page: recom_profile_info.html -->
+        영양제를 추천받아보신 적이 없으시군요!
+        <form action="{% url "recommends:profile_info" profile_id %}" method='get'>
+            <button>나의 맞춤 영양제 추천을 위한 건강 설문하러 가기</button>
+        </form>
+    {% else %}
+        <!-- rending page: recom_profile_product_list.html -->
+        <!-- /recommends/<int:profile-id>/surveys/<int:survey-id>/rec-total-products/ -->
+        <!-- 이미지 클릭 시 해당 영양제 제품 상세 페이지로 이동하는 기능 구현할 예정 -->
+        {% comment %} # /products/{product-id}/{profile-id} {% endcomment %}
+        {% comment %} products:products_detail {% endcomment %}
+        <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+        <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+        <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+        <form action="{% url "recommends:products_profile_base" profile_id survey.survey_id %} " method='get'>
+            <button>더보기</button>
+        </form>
+    {% endif %}
+</div>
+<br><br>
+<div>
+    <h3>{{ survey.survey_age_group }}  
+        {%if survey.survey_sex == 'f' %}
+            {{ '여성' }}에게
+        {% else %}
+            {{ '남성' }}에게
+        {% endif %}인기 많은 영양제를 확인해보세요</h3>
     <!-- rending page: recom_profile_product_list.html -->
-    <!-- /recommends/<int:profile-id>/surveys/<int:survey-id>/rec-total-products/ -->
     <!-- 이미지 클릭 시 해당 영양제 제품 상세 페이지로 이동하는 기능 구현할 예정 -->
-    {% comment %} # /products/{product-id}/{profile-id} {% endcomment %}
-    {% comment %} products:products_detail {% endcomment %}
     <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
     <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
     <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
-    <form action="{% url "recommends:products_profile_base" profile_id survey.survey_id %} " method='get'>
+    <form action="{% url "recommends:products_collabo_base" profile_id %}" method='get'>
         <button>더보기</button>
     </form>
-{% endif %}
+</div>
 
-
-<h3>{{ survey.survey_age_group }}  
-    {%if survey.survey_sex == 'f' %}
-        {{ '여성' }}
-    {% else %}
-        {{ '남성' }}
-    {% endif %}에게 인기 많은 영양제를 확인해보세요</h3>
-<!-- rending page: recom_profile_product_list.html -->
-<!-- 이미지 클릭 시 해당 영양제 제품 상세 페이지로 이동하는 기능 구현할 예정 -->
-<img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
-<img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
-<img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
-<form action="{% url "recommends:products_collabo_base" profile_id %}" method='get'>
-    <button>더보기</button>
-</form>
 {% endblock content %}
