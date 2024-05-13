@@ -51,20 +51,21 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  /* width: 100%; */
+  width: 99%;
   z-index: 999;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
-  color: #666;
-  /* font-size: 1.3rem; */
-  font-size: 24px;
-  font-weight: 400;
-  height: 59px;
+  color: #BC55EF;
+  font-size: 1.3rem;
   border-bottom: 1px solid #ddd;
+}
+
+.navbar a {
+  margin: 15px;
 }
 .navbar img {
   height: 29.5px;
@@ -196,20 +197,21 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  /* width: 100%; */
+  width: 99%;
   z-index: 999;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
-  color: #666;
-  /* font-size: 1.3rem; */
-  font-size: 24px;
-  font-weight: 400;
-  height: 59px;
+  color: #BC55EF;
+  font-size: 1.3rem;
   border-bottom: 1px solid #ddd;
+}
+
+.navbar a {
+  margin: 15px;
 }
 .navbar img {
   height: 29.5px;
@@ -711,21 +713,23 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  /* width: 100%; */
+  width: 99%;
   z-index: 999;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
-  color: #666;
-  /* font-size: 1.3rem; */
-  font-size: 24px;
-  font-weight: 400;
-  height: 59px;
+  color: #BC55EF;
+  font-size: 1.3rem;
   border-bottom: 1px solid #ddd;
 }
+
+.navbar a {
+  margin: 15px;
+}
+
 .navbar img {
   height: 29.5px;
   border-radius: 3px;
@@ -878,20 +882,21 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  /* width: 100%; */
+  width: 99%;
   z-index: 999;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
-  color: #666;
-  /* font-size: 1.3rem; */
-  font-size: 24px;
-  font-weight: 400;
-  height: 59px;
+  color: #BC55EF;
+  font-size: 1.3rem;
   border-bottom: 1px solid #ddd;
+}
+
+.navbar a {
+  margin: 15px;
 }
 .navbar img {
   height: 29.5px;
@@ -1040,20 +1045,21 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  /* width: 100%; */
+  width: 99%;
   z-index: 999;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
-  color: #666;
-  /* font-size: 1.3rem; */
-  font-size: 24px;
-  font-weight: 400;
-  height: 59px;
+  color: #BC55EF;
+  font-size: 1.3rem;
   border-bottom: 1px solid #ddd;
+}
+
+.navbar a {
+  margin: 15px;
 }
 .navbar img {
   height: 29.5px;
@@ -1201,20 +1207,21 @@ body {
 .navbar {
   position: fixed;
   top: 0;
-  /* width: 100%; */
+  width: 99%;
   z-index: 999;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
   background-color: rgba(255, 255, 255, 0.9);
-  color: #666;
-  /* font-size: 1.3rem; */
-  font-size: 24px;
-  font-weight: 400;
-  height: 59px;
+  color: #BC55EF;
+  font-size: 1.3rem;
   border-bottom: 1px solid #ddd;
+}
+
+.navbar a {
+  margin: 15px;
 }
 .navbar img {
   height: 29.5px;

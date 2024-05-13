@@ -3,23 +3,33 @@
 {% extends "base.html" %}
 {% block content %}
 
- <div>
-  <a href="{% url "mypages:main" profile.profile_id %}">
-      <button>이전</button>
+<div class='previous'>
+  <a href="{% url 'mypages:main' profile.profile_id %}">
+    <button>이전</button>
   </a>
-</div> 
+</div>
 
-<h1> 최근 조회 제품 </h1>
+<div>
+  <h2><strong> 최근 조회 제품 </strong></h2>
+</div>
 
-
-<ul> 
+<body> 
     {% for product in products %}
-        <li>
-          <p>{{ product.product_image }} | {{ product.product_name }} |  <a href="{% url 'products:products_detail' product.pk profile.pk %}">{{ product.product_instruction }}</a></p>
-        </li>
-      
+        
+    <ul> <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image"></ul>
+          <li> 제품명: <a href="{% url 'products:products_detail' product.pk profile.pk %}" class ='click_word'>{{ product.product_name }}</a></li> 
+          <li> 제조사: {{product.product_company}}</li> 
+          <li> 섭취방법: {{ product.product_instruction }}</li> 
+          <li> 소비기한: {{product.product_serving}}</li> 
+          <li> 제품형태: {{product.product_dispos}}</li> 
+          <li> 보관방법: {{product.product_storage_method}}</li> 
+          <li> 주의사항: {{product.product_caution}}</li> 
+          <li> 주된기능성: {{product.product_function_content}}</li> 
+        
+      <br>
+      <br>
     {% endfor %}
 
-</ul>
+</body>
 
   {% endblock content %}

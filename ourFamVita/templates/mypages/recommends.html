@@ -3,35 +3,35 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div>
+<div class='previous'>
     <a href="{% url "mypages:main" profile.profile_id %}">
-    <button>이전</button>
+      <button>이전</button>
     </a>
 </div>
 
-<h1>영양성분 AI 추천 기록 </h1>
+<h2><strong> 영양성분 AI 추천 기록 </strong></h2>
 
+<body> 
 
+  {% for ingredient in ingredients_list %}
+    <div><a href="{% url "recommends:profile_total_report" profile.profile_id ingredient.2.survey_id.survey_id  %}"  class ='click_word'> <strong>{{ingredient.2.created_at}}</strong> 추천 영양 성분 리포트 </a></div>
 
-<ul> 
-    
-    {% for ingredient in ingredients %}
-      
-           
-          <li>
-          
-            <p><a href="{% url "recommends:profile_total_report" profile.profile_id survey_functions.survey_id.survey_id %}">{{recommendations_info.created_at}} ) 추천 영양 성분 리포트 - </a>
-           
-            영양성분이름: {{ ingredient.ingredient_name }} |         
-            
-            선택한 건강고민: {{ survey_functions.function_code.function_code }}
-          </p>
-          
-           </li> 
+    <li> 영양성분이름: 
+      {% for ingredient_indi in ingredient.0 %}
+        {{ ingredient_indi.ingredient_name }} 
+          {% if not forloop.last %},  {% endif %}
+      {% endfor %} 
+    </li>   
+    <li> 선택한 건강고민:
+      {% for ingredient_func in  ingredient.1 %}
+        {{ ingredient_func.function_code_name }}
+        {% if not forloop.last %},  {% endif %}
+      {% endfor %} 
+    </li> 
+    <br>
+    <br>
 
-      {% endfor %}
-   
-    
-</ul> 
+  {% endfor %}
 
+</body> 
   {% endblock content %}
