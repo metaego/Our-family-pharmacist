@@ -11,9 +11,9 @@ def recom_info(request, profile_id):
     # ai 추천받기: 나의 프로필 정보 확인
     # ai 영양제 추천받기 전 나의 프로필 정보 확인 페이지
     # /recommends/{profile-id}/info
-    profile = Profile.objects.get(profile_id=profile_id)
-    survey = Survey.objects.filter(profile_id=profile.profile_id).get()
-    
+    profile = Profile.objects.get(pk=profile_id)
+    survey = Survey.objects.filter(profile_id=profile.pk).get()
+    print("survey_id: ", survey.survey_id)
     # 만나이 계산
     profile_birth = str(profile.profile_birth)
     birth = datetime.strptime(profile_birth, '%Y-%m-%d').date()
@@ -48,15 +48,8 @@ def recom_info(request, profile_id):
         survey.survey_weight = impute_weight(survey.survey_sex, age)
 
 
-    # 성별
-    if survey.survey_sex == 'f':
-        survey.survey_sex = '여성'
-    else:
-        survey.survey_sex = '남성'
-
-
     # 기저질환
-    profile_disease = SurveyDisease.objects.filter(survey=survey.survey_id).get()
+    profile_disease = SurveyDisease.objects.filter(survey_id=survey.pk).get()
     disease_code = DiseaseCode.objects.get(disease_code=profile_disease.disease_code.disease_code)
 
 
@@ -66,10 +59,8 @@ def recom_info(request, profile_id):
     
     return render(request, 'recommends/recom_profile_info.html', {
         'profile': profile,
-        'profile_id': profile_id,
         'age': age,
         'survey': survey,
-        'survey_id': survey.survey_id,
         'allergy': allergy_code.allergy_code_name,
         'disease': disease_code.disease_code_name,
         'alcohol': profile_alcohol.com_code_name,
@@ -116,9 +107,18 @@ def recom_products_profile_base(request, profile_id, survey_id):
     })
 
 
-def recom_products_collabo_base(request):
+def recom_products_collabo_base(request, profile_id):
     # AI추천받기: 영양제 추천 목록
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(나이 & 성별 기반)
     # menu: home main(나이 & 성별 기반) > 영양제 추천 목록
-    # /recommends/{profile-id}/surveys/{survey-id}/rec-products/
-    return render(request, 'recommends/recom_profile_product_list.html')
+    # /recommends/{profile-id}/rec-products/
+    # 해당 함수는 flask 서버와 연결 필요
+    profile = Profile.objects.get(pk=profile_id)
+
+    # 추천받은 product가 없어서 임의로 넣음
+    # 협업필터링 ML 후 업뎃 예정 
+    product = Product.objects.get(pk=1)
+    return render(request, 'recommends/recom_profile_product_list.html', {
+        'product': product,
+        'profile': profile
+    })

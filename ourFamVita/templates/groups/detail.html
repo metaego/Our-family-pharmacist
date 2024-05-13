@@ -2,28 +2,31 @@
 <!-- menu: home -->
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<br>
+<br>
+<br>
 
-<h1>공통 영양 성분 리포트 </h1>
-<h2>우리가족을 위해 맞춤 추천된 제품입니다 </h2>
-{% for product in products %}
-                 
-        
-  <div>
-    <li>  
-   추천 영양제:
-    <a href="{% url "products:product_detail" product.product_id profile.profile_id %}"> {{ product.product_name }}
-     </a>
-     {{ product_company}} 
-     {{ product.product_instruction }} 
-     {{ product_function_content}} 
-     {{ product_dispos}} 
-      {{ product_serving}} 
-    {{product_storage_method}} 
-     {{ product.product_caution }} 
-    </li> 
-  </div>
+<h2><strong> 영양제 추천 목록 </strong></h2>
+<h3>우리가족을 위해 맞춤 추천된 제품입니다 </h3>
 
+<body> 
+  {% for product in products_list %}
+ 
+     <ul> <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image"></ul>
+     <li>제품명: <a href="{% url 'products:products_detail' product.pk profile.pk %}" class ='click_word'> {{ product.product_name }}</a></li>
+     <li>제조사: {{product.product_company}}</li>
+     <li>섭취방법: {{ product.product_instruction }}</li>
+     <li>소비기한: {{product.product_serving}}</li>
+     <li>제품형태: {{product.product_dispos}}</li>
+     <li>보관방법: {{product.product_storage_method}}</li>
+     <li>주의사항: {{product.product_caution}}</li>
+     <li>주된기능성: {{product.product_function_content}}</li>
+   
+  <br>
+  <br>
 
+  {% endfor %}
 
-{% endfor %}
+</body>
 {% endblock content %}
