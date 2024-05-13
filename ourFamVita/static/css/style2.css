@@ -482,7 +482,7 @@ input:-webkit-autofill:active {
   margin: 20px 40%;
   text-align: center;
   padding: 10px 0 10px 0;
-
+  
   display: flex;
   flex-direction: column;
   align-items: center;
