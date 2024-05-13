@@ -1,10 +1,10 @@
 from flask import Blueprint, url_for # render_template
 # from werkzeug.utils import redirect
 from flask import redirect, request, jsonify
-from dotenv import load_dotenv
+# from dotenv import load_dotenv  ####################################### 여기 주석해주세요!
 import os
 
-load_dotenv()
+# load_dotenv()    ##################################################### 여기도 주석해주세요!!!
 bp = Blueprint('main', __name__, url_prefix='/')
 @bp.route('/', methods=['get', 'post'])
 def flask_index():
