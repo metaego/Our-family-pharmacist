@@ -1,13 +1,65 @@
 <!-- menu: ai 영양제 추천받기 > 영양 성분 리포트 > 영양제 추천 목록 -->
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<style>
+    .profile_image {
+        width: 100px; 
+        height: auto; 
+    }
+    .product_image {
+        width: 100px; 
+        height: auto; 
+    }
+</style>
 <h1>영양제 추천 목록</h1>
-
-<h3>{{ profile.profile_name }}님을 위해 맞춤 추천한 제품입니다</h3>
+<div>
+    <li>나이: 만 {{ age }} 세</li>
+    <li>성별: {{ survey.survey_sex }}</li>  
+    <li>키: {% if survey.survey_height != '미입력' %}
+              {{ survey.survey_height }}cm
+            {% else %}
+              {{ survey.survey_height }}
+            {% endif %}
+    </li> 
+    <li>몸무게: {% if survey.survey_weight != '미입력' %}
+                  {{ survey.survey_weight }}kg
+                {% else %}
+                  {{ survey.survey_weight }}
+                {% endif %}
+    </li>  
+    <li>임신상태: {{ pregnancy }}</li>  
+    <li>알레르기 여부: {{ allergy|join:', ' }}</li>  
+    <li>기저질환: {{ disease|join:', ' }}</li>  
+    <li>흡연여부: {{ survey.survey_smoke }}</li> 
+    <li>음주여부: {{ alcohol }}</li>   
+</div>
+<br><br>
+{% if page_flag == '추천 영양 성분 기반' %}
+    <h3>{{ recommend_ingredient.ingredient_name }} 개선하는데 좋은 제품이에요</h3><br>
+{% elif page_flag == '영양 성분 리포트' %}
+    <h3>{{ profile.profile_name }}님을 위해 추천된 제품입니다</h3>
+{% elif page_flag == '연령 및 성별 기반' %}
+    <h3>{{ survey.survey_age_group}} {{survey.survey_sex}}에게 인기있는 제품입니다</h3>
+{% endif %}
 <!-- rending page: product_detail.html -->
 <!-- /products/product-id/profile-id -->
-영양제 제품 리스트가 출력될 예정
-<form action="{% url "products:products_detail" product.product_id profile.profile_id %}" method='get'>
-    <button>product1</button>
-</form>
+{% for product in popular_products %}
+    <div>
+        <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
+            {% if product.product_image == '0' %}
+                <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% else %}
+                <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% endif %}
+        </a>
+        <ul>
+            <li>제품명: {{ product.product_name }}</li>
+            <li>제조사:{{ product.product_company }}</li>
+            <li>제품 기능: {{ product.product_function_content }}</li>
+            <li>제품 평점: {{ product.product_rating_avg }}/5</li>
+        </ul>
+    </div>
+    <hr>
+{% endfor %}
 {% endblock content %}
