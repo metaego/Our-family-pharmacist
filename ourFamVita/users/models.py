@@ -254,9 +254,13 @@ class ProductIngredient(models.Model):
 class ProductReview(models.Model):
     product_review_id = models.AutoField(primary_key=True)
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+<<<<<<< HEAD
+=======
+    # survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id') 20240510 - 삭제
+>>>>>>> 3300efb91495ec126ee41bb6c0c0ef6c41566d29
     profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
-    product_review_rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
-    product_review_content = models.CharField(max_length=200)
+    product_review_rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, default=0)
+    product_review_content = models.CharField(max_length=200, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
