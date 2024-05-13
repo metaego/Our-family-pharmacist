@@ -1,9 +1,12 @@
-<nav>
-    <div>서비스명</div>
+
+<nav class="navbar" style="width: 100%">
     <div>
+        <h2 style="font-size: 20px; font-weight: 600;">PillSoGood</h2>
+    </div>
+    <div style="font-size: 15px; font-weight: 600;">
         <a href="{% url "home:home_main" profile.profile_id %}">Home</a>  
         <a href="{% url "recommends:profile_info" profile.profile_id %}">AI영양제추천받기</a>  
         <a href="{% url "mypages:main" profile.profile_id %}">Mypage</a> 
-        <a href="{% url "groups:group_main" profile.profile_id %}">GroupPage</a> 
+        <a href="{% url "groups:group_main" profile.profile_id %}">GroupPage</a>     
     </div>
 </nav>

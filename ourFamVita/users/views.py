@@ -1,6 +1,5 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from users.forms import LoginForm, SignupForm
 from users.models import User

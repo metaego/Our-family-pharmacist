@@ -3,13 +3,21 @@
 <html lang="ko">
 <head>
     <title>프로필 수정</title>
-    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
-    <link rel="stylesheet" href="{% static "css/survey.css" %}">
+    {% comment %} <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}"> {% endcomment %}
+    <link rel="stylesheet" href="{% static "css/survey2.css" %}">
+    <style>
+        * {
+            font-family: "Noto Sans KR";
+            font-weight: 400;
+        }    
+    </style>
 </head>
 
 <body>
     <div>
-        <nav class="navbar"><span>프로필 수정</span></nav>
+        <nav class="navbar" style="font-size: 24px; width: 100%;">
+            <span>프로필 수정</span>
+        </nav>
     </div>
 
     <div id="survey">
@@ -17,12 +25,12 @@
             {% csrf_token %}
             {{ form.as_p }}
 
-            <p style="text-align: right">
+            <div style="text-align: center">
                 <button class='btn btn-secondary'>
                     <a href="{% url "profiles:profile" %}">이전</a>
                 </button>
                 <button class='btn btn-primary' type=submit>저장</button>
-            </p>
+            </div>
 
         </form>
         <!-- AI 추천받기 페이지에서 이전 버튼 눌렀을 때의 IF문 추가 필요 -->

@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PillSoGood</title>
+    
+    <link rel="stylesheet" href="{% static "css/style2.css" %}">
+    <style>
+        * {
+            font-family: "Noto Sans KR";
+            font-weight: 400;
+            {% comment %} background-color: #fbf3ff {% endcomment %}
+        }    
+    </style>
+
+</head>
+<body>
+    {% include "base_menu.html" %}
+
+    {% block content %}
+    {% endblock content %}
+
+    {% include "base_footer.html" %}
+</body>
+</html>
