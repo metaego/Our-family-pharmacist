@@ -35,7 +35,13 @@
     <li>음주여부: {{ alcohol }}</li>   
 </div>
 <br><br>
-<h3>{{ recommend_ingredient.ingredient_name }} 개선하는데 좋은 제품이에요</h3><br>
+{% if page_flag == '추천 영양 성분 기반' %}
+    <h3>{{ recommend_ingredient.ingredient_name }} 개선하는데 좋은 제품이에요</h3><br>
+{% elif page_flag == '영양 성분 리포트' %}
+    <h3>{{ profile.profile_name }}님을 위해 추천된 제품입니다</h3>
+{% elif page_flag == '연령 및 성별 기반' %}
+    <h3>{{ survey.survey_age_group}} {{survey.survey_sex}}에게 인기있는 제품입니다</h3>
+{% endif %}
 <!-- rending page: product_detail.html -->
 <!-- /products/product-id/profile-id -->
 {% for product in popular_products %}
@@ -56,7 +62,4 @@
     </div>
     <hr>
 {% endfor %}
-{% comment %} <form action="{% url "products:products_detail" product.product_id profile.profile_id %}" method='get'>
-    <button>product1</button>
-</form> {% endcomment %}
 {% endblock content %}
