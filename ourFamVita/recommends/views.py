@@ -21,6 +21,10 @@ def recom_info(request, profile_id):
     # ai 영양제 추천받기 전 나의 프로필 정보 확인 페이지
     # /recommends/{profile-id}/info
 
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+
     # 프로필 및 survey 데이터 가져오기
     profile = Profile.objects.get(pk=profile_id)
     survey = Survey.objects.filter(profile_id=profile.pk).latest('-created_at')
@@ -149,6 +153,11 @@ def recom_info(request, profile_id):
 def request_flask_recom_model(request, profile_id, survey_id):
     # post로 요청이 들어오면 건강고민 설문을 DB에 저장
     # flask 추천 알고리즘 request
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+
     if request.method == 'POST':
         # selected_functions = [unquote(code) for code in request.POST.getlist('checkbox[]')]
 
@@ -212,6 +221,11 @@ def request_flask_recom_model(request, profile_id, survey_id):
 
 
 def recom_profile_total_report(request, profile_id, survey_id):
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+
     # AI추천받기: 영양 성분 리포트
     # menu: ai 영양제 추천받기> 영양 성분 리포트
     # /recommends/{profile-id}/surveys/{survey-id}
@@ -349,6 +363,11 @@ def recom_profile_total_report(request, profile_id, survey_id):
 
 
 def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
+    
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+    
     # AI추천받기: 영양제 추천 목록(영양 성분 기반)
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(영양 성분 기반)
     # /recommends/{profile-id}/surveys/{survey-id}/rec-nut-products/{nutri-num}
@@ -464,6 +483,11 @@ def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
 
 
 def recom_products_profile_base(request, profile_id, survey_id):
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+
     # AI추천받기: 영양제 추천 목록(영양 성분 리포트 기반)
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(영양 성분 리포트 기반)
     # /recommends/{profile-id}/surveys/{survey-id}/rec-total-products/
@@ -571,6 +595,11 @@ def recom_products_profile_base(request, profile_id, survey_id):
 
 
 def recom_products_collabo_base(request, profile_id):
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+
     # AI추천받기: 영양제 추천 목록
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(나이 & 성별 기반)
     # menu: home main(나이 & 성별 기반) > 영양제 추천 목록

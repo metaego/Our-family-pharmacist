@@ -18,7 +18,7 @@
 </div>
 
 <body> 
-<div class="profile-container" style="margin: 40px 10%;">
+<div class="profile-container" style="margin: 40px 10%; padding: 30px">
   <div style="display: inline-block;">
   {% for ingredient in ingredients_list %}
     <div style="display: inline-block; float: left; margin: 0 50px">
@@ -26,7 +26,7 @@
         <strong style="color: #BC55EF">{{ingredient.2.created_at}}</strong> 추천 영양 성분 리포트
       </a>
     </div>
-    <div style="display: inline-block;">
+    <div style="display: inline-block; text-align:left">
       <li> 영양성분이름: 
         {% for ingredient_indi in ingredient.0 %}
           {{ ingredient_indi.ingredient_name }} 

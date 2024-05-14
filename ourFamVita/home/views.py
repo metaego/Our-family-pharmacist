@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from users.models import (Profile, Product
                           , Survey, SurveyAllergy
                           , ComCode, AllergyCode 
@@ -6,6 +6,11 @@ from users.models import (Profile, Product
                           )
 # Create your views here.
 def home_main(request, profile_id):
+    
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+    
     # profile 데이터 가져오기
     profile = Profile.objects.get(profile_id=profile_id)
     
