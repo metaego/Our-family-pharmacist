@@ -4,35 +4,43 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static "css/style2.css" %}">
+<style>
+  *{
+    .product_image {
+      width: 200px;
+      height: auto;
+    }
+  }
+</style>
 
-
-<div class='previous'>
-  <a href="{% url 'mypages:main' profile.profile_id %}">
-    <button>이전</button>
+<div style="margin: 80px 62% 10px 10%">
+  <a href="{% url "mypages:main" profile.profile_id %}">
+    <button class="btn btn-secondary">이전</button>
   </a>
+</div> 
+
+<div style="text-align: center; ">
+  <h2 style="font-size: 24px; font-weight: 500">
+    최근 조회 제품
+  </h2>
 </div>
 
-<div>
-  <h2><strong> 최근 조회 제품 </strong></h2>
-</div>
+{% for product in products %}
+  <div style="margin: 40px 15%;">
+    <div style="display: inline-block; margin-right: 10px; float: left">
+      <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
+    </div>
+    <div style="display: inline-block; width: 850px">
+      <li> 제품명: <a href="{% url 'products:products_detail' product.pk profile.pk %}" class ='click_word'>{{ product.product_name }}</a></li> 
+      <li> 제조사: {{product.product_company}}</li> 
+      <li> 섭취 방법: {{ product.product_instruction }}</li> 
+      <li> 소비기한: {{product.product_serving}}</li> 
+      <li> 제품 형태: {{product.product_dispos}}</li> 
+      <li> 보관 방법: {{product.product_storage_method}}</li> 
+      <li> 주의사항: <br> {{product.product_caution}}</li> 
+      <li> 주된 기능성: <br> {{product.product_function_content}}</li> 
+    </div>
+  </div>
+{% endfor %}
 
-<body> 
-    {% for product in products %}
-        
-    <ul> <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image"></ul>
-          <li> 제품명: <a href="{% url 'products:products_detail' product.pk profile.pk %}" class ='click_word'>{{ product.product_name }}</a></li> 
-          <li> 제조사: {{product.product_company}}</li> 
-          <li> 섭취방법: {{ product.product_instruction }}</li> 
-          <li> 소비기한: {{product.product_serving}}</li> 
-          <li> 제품형태: {{product.product_dispos}}</li> 
-          <li> 보관방법: {{product.product_storage_method}}</li> 
-          <li> 주의사항: {{product.product_caution}}</li> 
-          <li> 주된기능성: {{product.product_function_content}}</li> 
-        
-      <br>
-      <br>
-    {% endfor %}
-
-</body>
-
-  {% endblock content %}
+{% endblock content %}

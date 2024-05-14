@@ -2,31 +2,61 @@
 <!-- menu: home -->
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/style2.css" %}">
+<style>
+    * {
+        font-family: "Noto Sans KR";
+        font-weight: 400;
+        .profile_image {
+          width: 55px; 
+          height: auto; 
+        }
+        .product_image {
+            width: 200px;
+            height: auto;
+        }
+        .recommend_title {
+            font-size: 18px; 
+            font-weight: 500; 
+            margin-bottom: 20px;
+        }
+        .product_info {
+            width: 800px; 
+            text-align: left;
+            font-size: 15px;
+        }
+        .product_title {
+            font-weight: 500;
+            font-size: 15px;
+        }
+      }
+</style>
 
-<br>
-<br>
-<br>
+<div style="text-align: center; margin-top: 80px">
+  <h1 style="font-size: 24px; font-weight: 500">영양제 추천 목록</h1>
+</div>
 
-<h2><strong> 영양제 추천 목록 </strong></h2>
-<h3>우리가족을 위해 맞춤 추천된 제품입니다 </h3>
-
-<body> 
-  {% for product in products_list %}
- 
-     <ul> <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image"></ul>
-     <li>제품명: <a href="{% url 'products:products_detail' product.pk profile.pk %}" class ='click_word'> {{ product.product_name }}</a></li>
-     <li>제조사: {{product.product_company}}</li>
-     <li>섭취방법: {{ product.product_instruction }}</li>
-     <li>소비기한: {{product.product_serving}}</li>
-     <li>제품형태: {{product.product_dispos}}</li>
-     <li>보관방법: {{product.product_storage_method}}</li>
-     <li>주의사항: {{product.product_caution}}</li>
-     <li>주된기능성: {{product.product_function_content}}</li>
-   
-  <br>
-  <br>
-
-  {% endfor %}
-
-</body>
+<div style="margin: 40px 15%;">
+  <h3 class="recommend_title">
+    우리가족을 위해 맞춤 추천된 제품입니다
+  </h3>
+  <div style="display: inline-block;">
+    {% for product in products_list %}
+    <div style="display: inline-block; margin-right: 20px; float:left; ">
+      <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
+    </div>
+    <div style="display: inline-block; width: 820px; margin-bottom: 40px">
+      <li>제품명: <a href="{% url 'products:products_detail' product.pk profile.pk %}" class ='click_word'> {{ product.product_name }}</a></li>
+      <li>제조사: {{product.product_company}}</li>
+      <li>섭취 방법: {{ product.product_instruction }}</li>
+      <li>소비기한: {{product.product_serving}}</li>
+      <li>제품 형태: {{product.product_dispos}}</li>
+      <li>보관 방법: {{product.product_storage_method}}</li>
+      <li>주의사항: <br> {{product.product_caution}}</li>
+      <li>주된 기능성: <br> {{product.product_function_content}}</li>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock content %}

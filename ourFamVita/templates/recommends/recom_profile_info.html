@@ -146,17 +146,17 @@
           <img src = "{% static 'home/profile_temp_image_240506.png' %}" alt = "프로필 사진" class="profile_image">
       </div>
       <div style="display: inline-block;">
-          <table style="width:800px">
+          <table style="width:800px; table-layout: fixed">
               <tr>
-                  <td>나이</td>
-                  <td>성별</td>
-                  <td>키</td>
-                  <td>몸무게</td>
-                  <td>임신상태</td>
-                  <td>알레르기 여부</td>
-                  <td>기저질환</td>
-                  <td>흡연 여부</td>
-                  <td>음주 여부</td>
+                  <td style="font-weight: 600">나이</td>
+                  <td style="font-weight: 600">성별</td>
+                  <td style="font-weight: 600">키</td>
+                  <td style="font-weight: 600">몸무게</td>
+                  <td style="font-weight: 600">임신상태</td>
+                  <td style="word-wrap: break-word; width: 100px; font-weight: 600">알레르기 여부</td>
+                  <td style="word-wrap: break-word; width: 100px; font-weight: 600">기저질환</td>
+                  <td style="font-weight: 600">흡연 여부</td>
+                  <td style="font-weight: 600">음주 여부</td>
               </tr>
               <tr>
                   <td>만 {{ age }}세</td>
@@ -176,8 +176,8 @@
                     {% endif %}
                   </td>
                   <td>{{ pregnancy }}</td>
-                  <td>{{ allergy|join:', ' }}</td>
-                  <td>{{ disease|join:', ' }}</td>
+                  <td style="word-wrap: break-word">{{ allergy|join:', ' }}</td>
+                  <td style="word-wrap: break-word">{{ disease|join:', ' }}</td>
                   <td>{{ survey.survey_smoke }}</td>
                   <td>{{ alcohol }}</td>
               </tr>
@@ -196,17 +196,17 @@
   <h2 style="font-size: 18px; font-weight: 500;">
     건강고민 순위를 선택하시면 더 자세한 추천이 가능해요!(최대 5개)
   </h2>
-  <div class="profile-container" style="margin: 30px 20%; padding: 20px 58px; height: 200px; justify-content: space-around;">
+  <div class="profile-container" style="margin: 30px 20%; padding: 20px 65px; height: 200px; justify-content: space-around;">
     <form id="checkbox-form" action="{% url "recommends:request_flask_recom_model" profile.profile_id survey.survey_id %}" method="post">
       {% csrf_token %}
       {% for code in function_code_list %}
       <input type="checkbox" class="ui-checkbox" name="checkbox[]" value={{ code|urlencode }}> {{ code }}
-      {% endfor %} 
+      {% endfor %}
+      <button class="btn btn-recommendation" style="font-size: 15px; width: 500px; height: 30px; margin-top: 30px">
+        나에게 맞는 영양제 추천받기
+      </button> 
     </form>
   </div>
-  <button class="btn btn-recommendation" style="font-size: 15px; width: 500px; height: 30px;">
-    나에게 맞는 영양제 추천받기
-  </button>
 </div>
 
 <div style="text-align: center; margin: 5px">

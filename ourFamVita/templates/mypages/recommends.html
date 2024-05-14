@@ -5,35 +5,45 @@
 {% load static %}
 <link rel="stylesheet" href="{% static "css/style2.css" %}">
 
-<div class='previous'>
-    <a href="{% url "mypages:main" profile.profile_id %}">
-      <button>이전</button>
-    </a>
+<div style="margin: 80px 62% 10px 10%">
+  <a href="{% url "mypages:main" profile.profile_id %}">
+    <button class="btn btn-secondary">이전</button>
+  </a>
+</div> 
+
+<div style="text-align: center; ">
+  <h2 style="font-size: 24px; font-weight: 500">
+    영양성분 AI 추천 기록
+  </h2>
 </div>
 
-<h2><strong> 영양성분 AI 추천 기록 </strong></h2>
-
 <body> 
-
+<div class="profile-container" style="margin: 40px 10%;">
+  <div style="display: inline-block;">
   {% for ingredient in ingredients_list %}
-    <div><a href="{% url "recommends:profile_total_report" profile.profile_id ingredient.2.survey_id.survey_id  %}"  class ='click_word'> <strong>{{ingredient.2.created_at}}</strong> 추천 영양 성분 리포트 </a></div>
-
-    <li> 영양성분이름: 
-      {% for ingredient_indi in ingredient.0 %}
-        {{ ingredient_indi.ingredient_name }} 
+    <div style="display: inline-block; float: left; margin: 0 50px">
+      <a href="{% url "recommends:profile_total_report" profile.profile_id ingredient.2.survey_id.survey_id  %}">        
+        <strong style="color: #BC55EF">{{ingredient.2.created_at}}</strong> 추천 영양 성분 리포트
+      </a>
+    </div>
+    <div style="display: inline-block;">
+      <li> 영양성분이름: 
+        {% for ingredient_indi in ingredient.0 %}
+          {{ ingredient_indi.ingredient_name }} 
+            {% if not forloop.last %},  {% endif %}
+        {% endfor %} 
+      </li>   
+      <li> 선택한 건강고민:
+        {% for ingredient_func in  ingredient.1 %}
+          {{ ingredient_func.function_code_name }}
           {% if not forloop.last %},  {% endif %}
-      {% endfor %} 
-    </li>   
-    <li> 선택한 건강고민:
-      {% for ingredient_func in  ingredient.1 %}
-        {{ ingredient_func.function_code_name }}
-        {% if not forloop.last %},  {% endif %}
-      {% endfor %} 
-    </li> 
-    <br>
-    <br>
-
+        {% endfor %} 
+      </li>
+    </div>
   {% endfor %}
+  </div>
+</div>
+
 
 </body> 
-  {% endblock content %}
+{% endblock content %}

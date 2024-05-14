@@ -29,6 +29,7 @@
         .product_title {
             font-weight: 500;
             font-size: 15px;
+            
         }
         {% comment %} background-color: #fbf3ff {% endcomment %}
     }    
@@ -45,16 +46,16 @@
             <img src = "{% static 'home/profile_temp_image_240506.png' %}" alt = "프로필 사진" class="profile_image">
         </div>
         <div style="display: inline-block;">
-            <table style="width:500px">
+            <table style="width:500px; table-layout: fixed">
                 <tr>
                     <td><form action="{% url "profiles:profile" %}" method="get">
                             <button class="btn btn-secondary">프로필 전환</button>
                         </form>
                     </td>
-                    <td>연령대</td>
-                    <td>성별</td>
-                    <td>임신상태</td>
-                    <td>알레르기 여부</td>
+                    <td style="font-weight: 600">연령대</td>
+                    <td style="font-weight: 600">성별</td>
+                    <td style="font-weight: 600">임신상태</td>
+                    <td style="word-wrap: break-word; width: 100px; font-weight: 600">알레르기 여부</td>
                 </tr>
                 <tr>
                     <td>{{ profile.profile_name }}  </td>
@@ -66,7 +67,7 @@
                         {% endif %}
                     </td>
                     <td>{{ pregnancy }}</td>
-                    <td>{{ allergys|join:', ' }}</td>
+                    <td style="word-wrap: break-word">{{ allergys|join:', ' }}</td>
                 </tr>
             </table>
         </div>
