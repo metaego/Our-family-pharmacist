@@ -552,7 +552,6 @@ def recom_products_profile_base(request, profile_id, survey_id):
 
     # 추천 영양제 리스트
     popular_products = []
-
     page_flag = '영양 성분 리포트'
     return render(request, 'recommends/recom_profile_product_list.html', {
         'profile': profile,
@@ -564,7 +563,7 @@ def recom_products_profile_base(request, profile_id, survey_id):
         'alcohol': profile_alcohol.com_code_name,
         'pregnancy': profile_pregnancy.com_code_name,
         'popular_products': popular_products,
-        'page_flage': page_flag,
+        'page_flag': page_flag,
     })
 
 
