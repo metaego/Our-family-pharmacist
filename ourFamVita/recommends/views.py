@@ -117,11 +117,12 @@ def recom_info(request, profile_id):
     for items in survey_function_codes:
         function_code_list.append(items['function_code'])
     ## 누락된 건강코드 추가
-    all_function_code = FunctionCode.objects.exclude(function_code='HF00').values_list('function_code', flat=True)
+    all_function_code = FunctionCode.objects.exclude(function_code__in=['HF00', 'HF26']).values_list('function_code', flat=True)
     all_function_code = list(all_function_code)
     for code in all_function_code:
         if code not in function_code_list:
             function_code_list.append(code)
+    print(f'function_code_list: {function_code_list}')
     ## 코드명을 한글명으로 변환
     kr_function_code_list = []
     for code in function_code_list:

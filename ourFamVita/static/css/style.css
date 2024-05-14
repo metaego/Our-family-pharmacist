@@ -1,4 +1,4 @@
-@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+/* @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css); */
 ul, ol {
   list-style: none;
   padding: 0;
@@ -78,7 +78,7 @@ body {
   width: 66px;
   height: 30px;
   line-height: 25px;
-  background-color: #fff;
+  background-color: #BC55EF;
   border-radius: 15px;
   transition-duration: 0.3s;
   transition-timing-function: ease;
@@ -1175,6 +1175,7 @@ body {
   font-size: 1.3rem;
   height: 59px;
   border-bottom: 1px solid #ddd;
+  margin: 30
 }
 .navbar img {
   height: 29.5px;
@@ -1247,4 +1248,20 @@ input:-webkit-autofill:active {
   margin-bottom: 10px;
 }
 
+
+
+.button.button_1 {
+  background-color:white;
+  color: #BC55EF; /* 텍스트 색상을 흰색으로 지정 */
+  border: none; /* 테두리 제거 */
+  padding: 5px 10px; /* 버튼 내부 여백 설정 */
+  cursor: pointer; /* 커서를 포인터로 변경하여 클릭 가능한 상태 표시 */
+}
+
+.button.button_1:hover {
+  background-color: #9B30F5; /* 버튼에 마우스를 올렸을 때 배경색 변경 */
+}
+.navbar a {
+  margin-right: 50px; /* 각 링크 사이의 간격 조정 */
+}
 /*# sourceMappingURL=style.css.map */

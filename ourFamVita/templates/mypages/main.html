@@ -1,61 +1,92 @@
 
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/style2.css" %}">
 
-<div>
+<style>
+    .profile_image {
+        width: 55px; 
+        height: auto; 
+    }
+    .product_image {
+        width: 180px;
+        height: auto;
+    }
+    font-family: "Noto Sans KR";
+    font-weight: 400;
+    .recommend_title {
+        font-size: 18px; 
+        font-weight: 500; 
+        margin-bottom: 20px;
+    }
+    .product_info {
+        width: 170px; 
+        text-align: left;
+        font-size: 12px;
+    }
+    .product_title {
+        font-weight: 500;
+        font-size: 15px;
+    }
+</style>
+
+<div style="margin: 80px 10% 10px 62%">    
     <a href="{% url "users:logout" %}">
-    <button>로그아웃</button>
-</a>
-</div>
-
-<div>
+        <button class="btn btn-secondary">로그아웃</button>
+    </a>
     <a href="{% url "users:acc_info" %}">
-    <button>계정 관리</button>
-</a>
+        <button class="btn btn-secondary">계정 관리</button>
+    </a>    
 </div> 
 
-<h1>{{ profile.profile_name }}님의 프로필</h1>
-<p>오늘도 PillGood 하세요</p>
-
- <div>
-    <a href="{% url "profiles:profile_info" profile.profile_id %}">
-    <button>현재 프로필 수정</button>
-</a>
+<div style="text-align: center; margin-top: 30px">
+    <h2 style="font-size: 24px; font-weight: 500;">
+        {{ profile.profile_name }}님의 프로필
+    </h2>
+    <h3 style="margin-bottom: 20px">오늘도 필소굿 !</h3>
 </div>
 
 
-<div>
-    
-    <a href="/profiles/">
-    <button>다른 프로필로 전환</button>
-</a>
-</div> 
+<div style="text-align: center; margin: 5px">
+    <div style="display: inline-block;">
+        <a href="{% url "profiles:profile_info" profile.profile_id %}">
+            <button class="btn btn-primary" style="width: 248px; height: 30px;">현재 프로필 수정</button>
+        </a>
+    </div>
+    <div style="display: inline-block;">
+        <a href="/profiles/">
+            <button class="btn btn-primary" style="width: 248px; height: 30px;">다른 프로필로 전환</button>
+        </a>
+    </div>
+</div>
 
-<h3>{{ profile.profile_name }}님의 활동</h3>
-
- <div>
-    <a href="{% url "mypages:recommends" profile.profile_id %}">
-    <button>추천받은 영양성분</button>
-</a>
+<div class="profile-container" style="margin: 20px 27%;">
+    <h3 style="font-size: 18px; font-weight: 500; margin-bottom: 10px">{{ profile.profile_name }}님의 활동</h3>
+    <div style="margin: 2px">
+        <a href="{% url "mypages:recommends" profile.profile_id %}">
+            <button class="btn btn-primary" style="width: 600px; height: 35px;">추천받은 영양성분</button>
+        </a>
+    </div>
+    <div style="margin: 2px">
+        <a href="{% url "mypages:views" profile.profile_id %}">
+            <button class="btn btn-primary" style="width: 600px; height: 35px;">최근 조회한 제품</button>
+        </a>
+    </div>
+    <div style="margin: 2px">
+        <a href="{% url "mypages:likes" profile.profile_id %}">
+            <button class="btn btn-primary" style="width: 600px; height: 35px;">좋아요 표시한 영양제</button>
+        </a>
+    </div>
+    <div style="margin: 2px">
+        <a href="{% url "mypages:reviews" profile.profile_id %}">
+            <button class="btn btn-primary" style="width: 600px; height: 35px;">리뷰 작성한 영양제</button>
+        </a>
+    </div>     
 </div>
 
 
-<div>
-    <a href="{% url "mypages:views" profile.profile_id %}">
-    <button>최근 조회한 제품</button>
-</a>
-</div>
 
-<div>
-    <a href="{% url "mypages:likes" profile.profile_id %}">
-    <button>좋아요 표시한 영양제</button>
-</a>
-</div>
 
-<div>
-    <a href="{% url "mypages:reviews" profile.profile_id %}">
-    <button>리뷰 작성한 영양제</button>
-</a>
-</div> 
 
 {% endblock content %}

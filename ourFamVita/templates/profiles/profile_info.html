@@ -4,7 +4,7 @@
 <head>
     <title>프로필 수정</title>
     {% comment %} <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}"> {% endcomment %}
-    <link rel="stylesheet" href="{% static "css/survey2.css" %}">
+    <link rel="stylesheet" href="{% static "css/survey.css" %}">
     <style>
         * {
             font-family: "Noto Sans KR";
@@ -21,10 +21,9 @@
     </div>
 
     <div id="survey">
-        <form action="{% url "profiles:profile" %}" method="POST" autocomplete="off">
+        <form method="POST" autocomplete="off">
             {% csrf_token %}
             {{ form.as_p }}
-
             <div style="text-align: center">
                 <button class='btn btn-secondary'>
                     <a href="{% url "profiles:profile" %}">이전</a>
@@ -33,7 +32,32 @@
             </div>
 
         </form>
-        <!-- AI 추천받기 페이지에서 이전 버튼 눌렀을 때의 IF문 추가 필요 -->
+        
     </div>
+
+<script>
+    // <!-- AI 추천받기 페이지에서 이전 버튼 눌렀을 때의 IF문 추가 필요 -->
+    // 현재 페이지의 url을 가져오는 함수
+    function getCurrentUrl() {
+        return window.location.href;
+    }
+
+    function onSaveButtonClick() {
+        var currentUrl = getCurrentUrl();
+        var saveButton = document.getElementById("save-button");
+    
+        // 현재 URL에 따라 다른 경로로 이동
+        if (currentUrl.includes("/profiles/")) {
+            saveButton.href = "/profiles/";
+        } else if (currentUrl.includes("recommends/<int:profile_id>/info/")) {
+            saveButton.href = "recommends/<int:profile_id>/info/";
+        }
+    }
+</script>
+
+
+
+
+
 </body>
 </html>

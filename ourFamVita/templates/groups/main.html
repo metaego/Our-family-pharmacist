@@ -2,68 +2,110 @@
 <!-- menu: home -->
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/style2.css" %}">
 
-<h1>공통 영양 성분 리포트 </h1>
-<h2>우리가족이 함께 고민하는 건강 문제예요 </h2>
-{% for survey_function in survey_functions %}
-<li>
-건강고민: {{ survey_function.function_code.function_code }}
-</li> 
-{% endfor %}
+<br>
+<br>
+<br>
 
+<div>
+      <h2><strong>공통 영양 성분 리포트 </strong></h2>
+</div>
 
-<h2>우리가족에게 추천하는 영양성분이에요 </h2>
+<div>
+      <h3> 우리가족이 최근에 고민하는 건강 문제예요 </h3>
+</div>
 
-<ul> 
-  
-    {% for ingredient in ingredients %}
-                 
-          <li>          
-            <p>
-             추천영양성분: {{ ingredient.ingredient_name }} |   {{ ingredient.ingredient_instruction }} 
-            <a href="{% url "groups:group_individual" profile.profile_id ingredient.ingredient_id %}">
-            <button> 추천 영양제 보기</button> </a>
-          </p>
-          
-           </li> 
+<body>  
+      <div>
+            건강고민:
+            {% for function in functions_list %}            
+                  {{ function.function_code_name }}
+                  {% if not forloop.last %},{% endif %}
+            {% endfor %}     
+            
+      </div>
+</body> 
 
-      {% endfor %}
-</ul>  
+<br>
 
-<h2>영양제 추천 </h2>
-<h3>우리가족에게 추천할 수 있는 영양제에요!</h3>
-<ul> 
-  
-    {% for product in products %}
-                 
-          <li>          
-            <p>
-             추천영양성분: {{ product.product_name }} |  {{ product.product_instruction }} 
-            <a href="{% url "groups:group_detail" profile.profile_id %}">
-            <button> 더보기</button> </a>
-          </p>
-          
-           </li> 
+<div>
+      <h3>우리가족에게 추천하는 영양성분이에요 </h3>
+</div>
 
-      {% endfor %}
-</ul>  
+<body>        
+      <div>
+            {% for ingredient in ingredients_list %} 
+                  <li> 추천영양성분: {{ ingredient.ingredient_name }}</li>
+                  <li> 주된 기능성: {{ingredient.ingredient_function_content }}</li>
+                  <li> 섭취 시 주의사항: {{ ingredient.ingredient_caution}} </li>
+                  <li> 일일섭취량 상한: {{ ingredient.ingredient_limit_high }} {{ingredient.ingredient_unit}}</li>
 
-<h2>가족 좋아요 영양제</h2>
-<h3>최근 우리가족이 좋아요를 눌렀어요!</h3>
+                  <div class = "more_content"> 
+                        <a href="{% url "groups:group_individual" profile.profile_id ingredient.ingredient_id %}" >
+                              <button> 추천 영양제 보기</button> 
+                        </a>
+                  </div> 
+            {% endfor %}     
+      </div>
+</body> 
 
-<ul> 
-  
-    {% for product_like in product_likes %}
-                 
-          <li>          
-            <p>
-             추천영양성분: {{ product_like.product_name }} |  {{ product_like.product_instruction }} 
-            <a href="{% url "groups:group_detail" profile.profile_id %}">
-            <button> 더보기</button> </a>
-          </p>
-          
-           </li> 
+<br> 
 
-      {% endfor %}
-</ul>  
+<div>
+      <h2><strong>영양제 추천</strong></h2>
+</div>
+
+<div>
+      <h3>우리가족에게 추천하는 영양제에요 </h3>
+</div>
+
+<body>    
+      <div>
+            {% for product in products_list %}           
+                  <ul> <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image"></ul> 
+                  <li> 제품명: <a href="{% url 'products:products_detail' product.pk profile.pk %}" class ='click_word'>{{ product.product_name }}</a></li>  
+                  <li> 제조사: {{product.product_company}}</li> 
+                  <li> 섭취방법: {{ product.product_instruction }}</li> 
+                  <li> 소비기한: {{product.product_serving}}</li> 
+                  <li> 제품형태: {{product.product_dispos}}</li> 
+                  <li> 보관방법: {{product.product_storage_method}}</li> 
+                  <li> 주의사항: {{product.product_caution}}</li> 
+                  <li> 주된기능성: {{product.product_function_content}}</li> 
+                  <br>
+            {% endfor %}      
+                  <div class ="more_content">
+                        <a href="{% url "groups:group_detail" profile.profile_id %}">
+                              <button> 더보기</button>
+                        </a>
+                  </div>      
+            
+      </div>
+</body>
+<br>
+<div>
+      <h2><strong>가족 좋아요 영양제</strong></h2>
+</div>
+
+<div>
+      <h3>최근 우리가족이 좋아요를 눌렀어요</h3>
+</div>
+
+<body>   
+      {% for product_like in product_like_list %}         
+    
+            <ul> <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image"></ul>
+            <li> 제품명: <a href="{% url 'products:products_detail' product_like.pk profile.pk %}" class ='click_word'>{{ product_like.product_name }}</a></li>  
+            <li> 제조사: {{product_like.product_company}}</li> 
+            <li> 섭취방법: {{ product_like.product_instruction }}</li> 
+            <li> 소비기한: {{product_like.product_serving}}</li> 
+            <li> 제품형태: {{product_like.product_dispos}}</li> 
+            <li> 보관방법: {{product_like.product_storage_method}}</li> 
+            <li> 주의사항: {{product_like.product_caution}}</li> 
+            <li> 주된기능성: {{product_like.product_function_content}}</li> 
+            <br>
+
+      {% endfor %}  
+</body> 
   {% endblock content %}

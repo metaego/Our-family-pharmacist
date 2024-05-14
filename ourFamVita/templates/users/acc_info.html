@@ -1,26 +1,43 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원정보</title>
+    <link rel="stylesheet" href="{% static "css/style2.css" %}">
+    <style>
+        * {
+            font-family: "Noto Sans KR";
+            font-weight: 400;
+        }    
+        .button {
+            border: none; 
+            border-radius: 4px;
+            width: 165px;
+            background-color: #BC55EF;
+            color: white;
+            margin-top: 10px;
+            font-size: 13px;
+            height: 27px
+        }
+    </style>
 </head>
+
 <body>
-    <div id="account_info">
+    <div id="signup">
         <!-- 마이페이지로 action -->
         <form method="POST" autocomplete="off">
             {% csrf_token %}
             <h1>회원정보 수정</h1>
             {{ form.as_p }}
-            <button>이전</button>
-            <button>저장</button> 
-        </form>
-    </div>
-    <div>
-        <form action="{% url "users:signout" %}" method="POST">
-            {% csrf_token %}
-            <button type=summit onclick="alert('멀티 프로필의 모든 내용이 삭제되어 기존 서비스를 사용할 수 없습니다.
-            정말 회원 탈퇴하시겠습니까?')">회원탈퇴</button>
+            <div style="display: inline-block;">
+                <button class="button">이전</button>
+                <button class="button">저장</button>     
+            </div>
+            <form action="{% url "users:signout" %}" method="POST">
+                {% csrf_token %}
+                <button type='submit' class='btn btn-login' style='background-color: #bbb' onclick="alert('멀티 프로필의 모든 내용이 삭제되어 기존 서비스를 사용할 수 없습니다.
+                정말 회원 탈퇴하시겠습니까?')">회원탈퇴</button>
+            </form>
         </form>
         {% comment %} <a href="{% url "users:signout" %}" onclick="return confirm(
             '멀티 프로필의 모든 내용이 삭제되어 기존 서비스를 사용할 수 없습니다. 정말 회원 탈퇴하시겠습니까?')">

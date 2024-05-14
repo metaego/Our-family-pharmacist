@@ -25,6 +25,25 @@
             font-weight: 500;
             font-size: 15px;
         }
+        .comment {
+            border: 1px solid #b2afaf;
+            width: 1050px;
+        }
+        .flex-container{
+            display: flex;
+            justify-content: center;
+        }
+        .flex-item{
+            border-radius: 20px;
+            box-shadow: 0.6px 0.6px 8px 0.6px rgba(0, 0, 0, 0.2);
+            max-width: 1500px;
+            width: 520px;
+            height: 200px;
+            margin: 10px;
+            box-sizing: border-box;
+            text-align: center;
+            padding: 20px;
+        }
     }
 </style>
 <div style="text-align: center; margin-top: 80px">
@@ -55,7 +74,7 @@
             <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
         {% endif %}
     </div>
-    <div style="display: inline-block; width: 1000px">
+    <div style="display: inline-block;">
         <li>제품명: {{ product.product_name }}</li>
         <li>제품평점: {{ product.product_rating_avg }}/5</li>
         <li>제조사명: {{ product.product_company }}</li>
@@ -72,8 +91,8 @@
     </div>
 </div>
 
-<div>
-    <div class="profile-container" style="text-align: center;">
+<div class="flex-container">
+    <div class="flex-item">
         <h3 class="recommend_title">
             추천 성분 분석
         </h3>
@@ -82,8 +101,7 @@
             {% if not forloop.last %},{% endif %}
         {% endfor %}
     </div>
-    
-    <div class="profile-container" style="text-align: center;">
+    <div class="flex-item">
         <h3 class="recommend_title">
             주요 건강 기능
         </h3>
@@ -95,9 +113,10 @@
 </div>
 
 
-
-<div>
-    <strong>리뷰</strong>
+<div style="margin: 40px 15%;">
+    <h3 class="recommend_title">
+        리뷰
+    </h3>
     {% if review == False %}
     <!-- profile의 등록된 댓글이 없는 경우 -->
         <form id="comment-form" action="{% url 'products:product_review' product.product_id profile.profile_id %}" method="post">
