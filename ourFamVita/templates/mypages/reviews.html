@@ -1,7 +1,8 @@
 
 {% extends "base.html" %}
 {% block content %}
-
+{% load static %}
+<link rel="stylesheet" href="{% static "css/style2.css" %}">
 
 <div class='previous'>
   <a href="{% url 'mypages:main' profile.profile_id %}">

@@ -59,9 +59,9 @@ def mypage_likes(request, profile_id):
         products = Product.objects.get(product_id = product_like.product_id.product_id)
         products_list.append(products)
     
-    context = {'profile': profile, 'products':products, 'products_list':products_list,                                
+        context = {'profile': profile, 'products':products, 'products_list':products_list,                                
                   }
-    return render(request, 'mypages/likes.html', context)    
+        return render(request, 'mypages/likes.html', context)    
      
 
 def mypage_reviews(request, profile_id):
