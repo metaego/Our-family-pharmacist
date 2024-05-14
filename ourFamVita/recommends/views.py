@@ -333,6 +333,7 @@ def recom_profile_total_report(request, profile_id, survey_id):
 
     product_id = 200400150395
     product = Product.objects.get(product_id=product_id)
+    print('recom_profile_total_report 실행')
     return render(request, 'recommends/recom_profile_report.html', {
         'profile': profile,
         'survey':survey,
