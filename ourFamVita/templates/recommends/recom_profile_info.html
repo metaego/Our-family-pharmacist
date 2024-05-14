@@ -201,7 +201,7 @@
       {% csrf_token %}
       {% for code in function_code_list %}
       <input type="checkbox" class="ui-checkbox" name="checkbox[]" value={{ code|urlencode }}> {{ code }}
-      {% endfor %}
+      {% endfor %} <br>
       <button class="btn btn-recommendation" style="font-size: 15px; width: 500px; height: 30px; margin-top: 30px">
         나에게 맞는 영양제 추천받기
       </button> 
