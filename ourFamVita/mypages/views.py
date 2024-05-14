@@ -5,6 +5,11 @@ from users.models import Profile, ProductLog, Product, Recommendation, Recommend
 # Create your views here.
 
 def mypage_main(request, profile_id):
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+    
     profile = get_object_or_404(Profile, profile_id=profile_id)
     context = {'profile': profile,
                   }
@@ -13,6 +18,11 @@ def mypage_main(request, profile_id):
 
 
 def mypage_views(request, profile_id):
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+    
     profile = get_object_or_404(Profile, profile_id=profile_id)
     productlogs = ProductLog.objects.filter(profile_id=profile_id).order_by('-visited_at')
     products = Product.objects.all()[:5] 
@@ -22,6 +32,11 @@ def mypage_views(request, profile_id):
 
 
 def mypage_recommends(request, profile_id):
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+    
     profile = get_object_or_404(Profile, profile_id=profile_id)     
     recommendations_info = Recommendation.objects.filter(profile_id=profile_id).order_by('-created_at')[:5]
     ingredients_list = []
@@ -52,6 +67,11 @@ def mypage_recommends(request, profile_id):
 
 
 def mypage_likes(request, profile_id):
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+    
     profile = get_object_or_404(Profile, profile_id=profile_id) 
     product_likes = ProductLike.objects.filter(profile_id=profile_id).order_by('-created_at')[:5]
     products_list = []
@@ -65,6 +85,11 @@ def mypage_likes(request, profile_id):
      
 
 def mypage_reviews(request, profile_id):
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+    
     profile = get_object_or_404(Profile, profile_id=profile_id) 
     product_reviews = ProductReview.objects.filter(profile_id=profile_id).order_by('-created_at')[:5]
     products_list = []

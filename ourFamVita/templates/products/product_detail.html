@@ -121,7 +121,7 @@
     <!-- profile의 등록된 댓글이 없는 경우 -->
         <form id="comment-form" action="{% url 'products:product_review' product.product_id profile.profile_id %}" method="post">
             {% csrf_token %}
-            별점:
+            평점:
             <select name="rating">
                 <option value="0">0점</option>
                 <option value="1">1점</option>

@@ -7,6 +7,11 @@ from users.models import (Profile
 
 # Create your views here.
 def product_detail(request, product_id, profile_id):
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+    
     # AI추천받기:영양제 상세보기
     # menu: 영양제 추천받기 > 영양 성분 리포트 > 영양제 추천 목록 > 영양제 상세보기
     # /products/{product-id}/{profile-id}
