@@ -17,13 +17,13 @@
     <li>나이: 만 {{ age }} 세</li>
     <li>성별: {{ survey.survey_sex }}</li>  
     <li>키: {% if survey.survey_height != '미입력' %}
-              {{ survey.survey_height }}cm
+              {{ survey.survey_height }} cm
             {% else %}
               {{ survey.survey_height }}
             {% endif %}
     </li> 
     <li>몸무게: {% if survey.survey_weight != '미입력' %}
-                  {{ survey.survey_weight }}kg
+                  {{ survey.survey_weight }} kg
                 {% else %}
                   {{ survey.survey_weight }}
                 {% endif %}
@@ -41,7 +41,7 @@
         <ul>
             <li>영양 성분명: {{ r_ingredient.ingredient_name }}</li>
             <li>주요 건강 기능: {{ r_ingredient.ingredient_function_content }}</li>
-            <li>일일 섭취량 상하한: 최대 {{ r_ingredient.ingredient_limit_high }} {{ r_ingredient.ingredient_unit }} / 최소{{ r_ingredient.ingredient_limit_low }} {{ r_ingredient.ingredient_unit }}</li>
+            <li>일일 섭취량: 최대 {{ r_ingredient.ingredient_limit_high }} {{ r_ingredient.ingredient_unit }} / 최소{{ r_ingredient.ingredient_limit_low }} {{ r_ingredient.ingredient_unit }}</li>
             <!-- rending page: recom_profile_product_list.html -->
             <form action="{% url "recommends:products_nutri_base" profile.profile_id survey.survey_id r_ingredient.ingredient_id %}" method='get'>
                 <button>추천 영양제 보기</button>

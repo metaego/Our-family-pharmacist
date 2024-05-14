@@ -18,16 +18,22 @@ def product_detail(request, product_id, profile_id):
     product_ingredients = ProductIngredient.objects.filter(product_id=product_id).values_list('ingredient_id', flat=True)
     product_ingredients = list(product_ingredients)
     product_ingredients = Ingredient.objects.filter(ingredient_id__in=product_ingredients)
+
+
+
+    # profile의 댓글 데이터
     review = ProductReview.objects.filter(product_id=product_id, profile_id=profile_id).exists()
     if review:
         review = ProductReview.objects.filter(product_id=product_id, profile_id=profile_id).get()
-    print(f'review: {review}')
+        print(f'review: {review}')
+    
 
+    
     return render(request, 'products/product_detail.html', {
-        'product': product, 
-        'review':review,
         'profile': profile,
+        'product': product, 
         'product_ingredients': product_ingredients,
+        'review': review,
     })
 
 

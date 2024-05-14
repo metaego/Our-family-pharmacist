@@ -12,18 +12,26 @@
         height: auto; 
     }
 </style>
+<div>
+    <!-- 영양 성분 리포트 페이지로 가기 -->
+    <!-- render: recommends/recom_profile_report.html -->
+    <form action="{% url "recommends:profile_total_report" profile.profile_id survey.survey_id %}" method='get'>
+        {% csrf_token %}
+          <button>이전</button>
+    </form>
+</div>
 <h1>영양제 추천 목록</h1>
 <div>
     <li>나이: 만 {{ age }} 세</li>
     <li>성별: {{ survey.survey_sex }}</li>  
     <li>키: {% if survey.survey_height != '미입력' %}
-              {{ survey.survey_height }}cm
+              {{ survey.survey_height }} cm
             {% else %}
               {{ survey.survey_height }}
             {% endif %}
     </li> 
     <li>몸무게: {% if survey.survey_weight != '미입력' %}
-                  {{ survey.survey_weight }}kg
+                  {{ survey.survey_weight }} kg
                 {% else %}
                   {{ survey.survey_weight }}
                 {% endif %}
@@ -55,14 +63,14 @@
         </a>
         <ul>
             <li>제품명: {{ product.product_name }}</li>
-            <li>제조사:{{ product.product_company }}</li>
-            <li>제품 기능: {{ product.product_function_content }}</li>
-            <li>제품 평점: {% if product.product_rating_avg = 0.00 %}
+            <li>평점: {% if product.product_rating_avg == 0.00 %}
                                 {{ 0 }}/5
-                           {% elif %}
+                           {% else %}
                                 {{ product.product_rating_avg }}/5
                            {% endif %}
             </li>
+            <li>제조사:{{ product.product_company }}</li>
+            {% comment %} <li>제품 기능: {{ product.product_function_content }}</li> {% endcomment %}
         </ul>
     </div>
     <hr>

@@ -456,7 +456,8 @@ def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
         'pregnancy': profile_pregnancy.com_code_name,
         'recommend_ingredient': recommend_ingredient,
         'popular_products': popular_products,
-        'page_flag': page_flag
+        'page_flag': page_flag,
+        'nutri_num': nutri_num,
     })
 
 
