@@ -117,11 +117,12 @@ def recom_info(request, profile_id):
     for items in survey_function_codes:
         function_code_list.append(items['function_code'])
     ## 누락된 건강코드 추가
-    all_function_code = FunctionCode.objects.exclude(function_code='HF00').values_list('function_code', flat=True)
+    all_function_code = FunctionCode.objects.exclude(function_code__in=['HF00', 'HF26']).values_list('function_code', flat=True)
     all_function_code = list(all_function_code)
     for code in all_function_code:
         if code not in function_code_list:
             function_code_list.append(code)
+    print(f'function_code_list: {function_code_list}')
     ## 코드명을 한글명으로 변환
     kr_function_code_list = []
     for code in function_code_list:
@@ -332,6 +333,7 @@ def recom_profile_total_report(request, profile_id, survey_id):
 
     product_id = 200400150395
     product = Product.objects.get(product_id=product_id)
+    print('recom_profile_total_report 실행')
     return render(request, 'recommends/recom_profile_report.html', {
         'profile': profile,
         'survey':survey,
@@ -456,7 +458,8 @@ def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
         'pregnancy': profile_pregnancy.com_code_name,
         'recommend_ingredient': recommend_ingredient,
         'popular_products': popular_products,
-        'page_flag': page_flag
+        'page_flag': page_flag,
+        'nutri_num': nutri_num,
     })
 
 
@@ -552,7 +555,6 @@ def recom_products_profile_base(request, profile_id, survey_id):
 
     # 추천 영양제 리스트
     popular_products = []
-
     page_flag = '영양 성분 리포트'
     return render(request, 'recommends/recom_profile_product_list.html', {
         'profile': profile,
@@ -564,7 +566,7 @@ def recom_products_profile_base(request, profile_id, survey_id):
         'alcohol': profile_alcohol.com_code_name,
         'pregnancy': profile_pregnancy.com_code_name,
         'popular_products': popular_products,
-        'page_flage': page_flag,
+        'page_flag': page_flag,
     })
 
 

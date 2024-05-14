@@ -32,6 +32,15 @@
       }
 </style>
 
+<div>
+    <!-- 영양 성분 리포트 페이지로 가기 -->
+    <!-- render: recommends/recom_profile_report.html -->
+    <form action="{% url "recommends:profile_total_report" profile.profile_id survey.survey_id %}" method='get'>
+        {% csrf_token %}
+          <button>이전</button>
+    </form>
+</div>
+
 <div style="text-align: center; margin-top: 80px">
     <h1 style="font-size: 24px; font-weight: 500">영양제 추천 목록</h1>
     <br>
@@ -92,10 +101,9 @@
 {% elif page_flag == '영양 성분 리포트' %}
     <h3>{{ profile.profile_name }}님을 위해 추천된 제품입니다</h3>
 {% elif page_flag == '연령 및 성별 기반' %}
-    <h3>{{ survey.survey_age_group}} {{survey.survey_sex}}에게 인기있는 제품입니다</h3>
+    <h3>{{ survey.survey_age_group}} {{survey.survey_sex}}에게 인기있는 제품입니다</h3> 
 {% endif %}
-<!-- rending page: product_detail.html -->
-<!-- /products/product-id/profile-id -->
+
 {% for product in popular_products %}
     <div>
         <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
@@ -107,9 +115,14 @@
         </a>
         <ul>
             <li>제품명: {{ product.product_name }}</li>
+            <li>평점: {% if product.product_rating_avg == 0.00 %}
+                                {{ 0 }}/5
+                           {% else %}
+                                {{ product.product_rating_avg }}/5
+                           {% endif %}
+            </li>
             <li>제조사:{{ product.product_company }}</li>
-            <li>제품 기능: {{ product.product_function_content }}</li>
-            <li>제품 평점: {{ product.product_rating_avg }}/5</li>
+            {% comment %} <li>제품 기능: {{ product.product_function_content }}</li> {% endcomment %}
         </ul>
     </div>
     <hr>

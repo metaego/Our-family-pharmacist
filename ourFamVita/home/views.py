@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from users.models import (Profile, Survey, ComCode, SurveyAllergy, 
-                          AllergyCode, Recommendation, RecommendationProduct
-                          , Product)
+from users.models import (Profile, Product
+                          , Survey, SurveyAllergy
+                          , ComCode, AllergyCode 
+                          , Recommendation, RecommendationProduct
+                          )
 # Create your views here.
 def home_main(request, profile_id):
     # profile 데이터 가져오기
@@ -19,7 +21,7 @@ def home_main(request, profile_id):
     
     
     
-    # 알레르기 여부
+    # 알레르기 : 전체 알레르기 보여주는 것이 아닌 여부만 노출
     ## profile allergy 가져오기
     profile_allergys = SurveyAllergy.objects.filter(survey_id=survey.survey_id).values_list('allergy_code', flat=True)
     profile_allergys = list(profile_allergys)

@@ -91,7 +91,7 @@
         <ul>
             <li>영양 성분명: {{ r_ingredient.ingredient_name }}</li>
             <li>주요 건강 기능: {{ r_ingredient.ingredient_function_content }}</li>
-            <li>일일 섭취량 상하한: 최대 {{ r_ingredient.ingredient_limit_high }} {{ r_ingredient.ingredient_unit }} / 최소{{ r_ingredient.ingredient_limit_low }} {{ r_ingredient.ingredient_unit }}</li>
+            <li>일일 섭취량: 최대 {{ r_ingredient.ingredient_limit_high }} {{ r_ingredient.ingredient_unit }} / 최소{{ r_ingredient.ingredient_limit_low }} {{ r_ingredient.ingredient_unit }}</li>
             <!-- rending page: recom_profile_product_list.html -->
             <form action="{% url "recommends:products_nutri_base" profile.profile_id survey.survey_id r_ingredient.ingredient_id %}" method='get'>
                 <button>추천 영양제 보기</button>

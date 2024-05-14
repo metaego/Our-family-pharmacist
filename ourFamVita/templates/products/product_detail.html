@@ -46,7 +46,6 @@
         }
     }
 </style>
-
 <div style="text-align: center; margin-top: 80px">
     <h2 style="font-size: 24px; font-weight: 500">
         {{ profile.profile_name }}님에게 추천하는 영양제
@@ -119,23 +118,24 @@
         리뷰
     </h3>
     {% if review == False %}
+    <!-- profile의 등록된 댓글이 없는 경우 -->
         <form id="comment-form" action="{% url 'products:product_review' product.product_id profile.profile_id %}" method="post">
             {% csrf_token %}
-            <div>
-                별점:
-                <select name="rating">
-                    <option value="1">1점</option>
-                    <option value="2">2점</option>
-                    <option value="3">3점</option>
-                    <option value="4">4점</option>
-                    <option value="5">5점</option>
-                </select>
-                <button class="btn btn-secondary" type="submit" style="float: right; margin-bottom: 5px">댓글 등록</button>    
-                <textarea class="comment" name="comment" rows="4" cols="50" maxlength="200" placeholder="댓글을 입력하세요(최대 200자)"></textarea><br>
-            </div>
+            별점:
+            <select name="rating">
+                <option value="0">0점</option>
+                <option value="1">1점</option>
+                <option value="2">2점</option>
+                <option value="3">3점</option>
+                <option value="4">4점</option>
+                <option value="5">5점</option>
+            </select><br>
+            <textarea id="comment" name="comment" rows="4" cols="50" maxlength="200" placeholder="댓글을 입력하세요(최대 200자)"></textarea><br>
+            <input type="submit" value="댓글 등록">
         </form>
     {% else %}
-        <li>{{ review.product_review_rating }} 점 | {{ review.product_review_content }} </li>
+        <li>{{ review.product_review_rating }} 점 | {{ review.created_at|date:"Y-m-d H:i:s"|slice:":16" }}</li>
+        <li>{{ review.product_review_content }}</li> 
     {% endif %}
 </div>
 <script>
