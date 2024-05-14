@@ -13,6 +13,10 @@ import requests
 from django.http import HttpResponse
 from django.middleware.csrf import get_token
 import json
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # Create your views here.
 
@@ -199,6 +203,8 @@ def request_flask_recom_model(request, profile_id, survey_id):
             'profile_id': profile_id,
             'survey_id': survey_id
         }
+        if client_ip == os.environ.get('CLIENT_IP'):
+            client_ip = os.environ.get('AWS_PUBLIC_IP')
         csrf_token = get_token(request)
         response = requests.post('http://' + client_ip + ':5000/', 
                                  data=json.dumps(content), 
