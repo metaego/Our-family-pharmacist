@@ -63,7 +63,7 @@
 </div>
 
 
-<div style="margin: 40px 15%;">
+<div style="margin: 40px 230px;">
     <div style="display: inline-block; margin-right: 20px">
         <h3 class="recommend_title">
             제품 상세
@@ -76,18 +76,18 @@
     </div>
     <div style="display: inline-block; width: 820px">
         <span style="color:#BC55EF; font-weight: 500; font-size: 15px">{{ product.product_name }}</span>
-        <li>제품 평점: {{ product.product_rating_avg }}/5</li>
-        <li>제조사명: {{ product.product_company }}</li>
-        <li>제품 효능: {{ product.product_fuction_content }}</li>
+        <li>평점: {{ product.product_rating_avg }}/5</li>
+        <li>제조사: {{ product.product_company }}</li>
         <li>섭취 방법: {{ product.product_instruction }}</li>
-        <li>제품 형태: {{ product.product_dispose }}</li>
-        <li>섭취 시 주의사항: {{ product.product_caution }}</li>
-        <li>보관 방법: {% if product.product_storage_method == None %}
-                            {{ '습기가 적고 직사광선을 밪지 않는 실온에 보관하시고, 어린이의 손에 닿지 않도록 주의하시기 바랍니다.' }}
-                    {% else %}
-                            {{ product.product_storage_method }}
-                    {% endif %}</li>
         <li>소비기한: {{ product.product_serving }}</li>    
+        <li>제품 형태: {{ product.product_dispose }}</li>
+        <li>보관 방법: {% if product.product_storage_method == None %}
+            {{ '습기가 적고 직사광선을 밪지 않는 실온에 보관하시고, 어린이의 손에 닿지 않도록 주의하시기 바랍니다.' }}
+            {% else %}
+                    {{ product.product_storage_method }}
+            {% endif %}</li>
+        <li>주의사항: {{ product.product_caution }}</li>
+        <li>주된 기능성: {{ product.product_fuction_content }}</li>
     </div>
 </div>
 

@@ -48,6 +48,7 @@
     </div>
     <div style="display: inline-block; width: 820px; margin-bottom: 40px">
       <a href="{% url 'products:products_detail' product.pk profile.pk %}" style="color:#BC55EF; font-weight: 500">{{ product.product_name }}</a></li> 
+      <li> 평점: {{ product.product_rating_avg }}/5</li>
       <li> 제조사: {{product.product_company}}</li> 
       <li> 섭취 방법: {{ product.product_instruction }}</li> 
       <li> 소비기한: {{product.product_serving}}</li> 
