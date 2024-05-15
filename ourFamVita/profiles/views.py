@@ -390,14 +390,14 @@ def profile_info(request, profile_id):
 
             survey_id = request.session.get('survey_id')
             
-            survey = Survey.objects.get(pk=survey_id)
-            survey.survey_sex = form.cleaned_data['sex']
-            survey.survey_height = form.cleaned_data['height']
-            survey.survey_weight = form.cleaned_data['weight']
-            survey.survey_smoke = form.cleaned_data['smoke']
-            survey.survey_alcohol_code = form.cleaned_data['alcohol']
-            survey.survey_operation_code = form.cleaned_data['operation']
-            survey.save()
+            # survey = Survey.objects.get(pk=survey_id)
+            # survey.survey_sex = form.cleaned_data['sex']
+            # survey.survey_height = form.cleaned_data['height']
+            # survey.survey_weight = form.cleaned_data['weight']
+            # survey.survey_smoke = form.cleaned_data['smoke']
+            # survey.survey_alcohol_code = form.cleaned_data['alcohol']
+            # survey.survey_operation_code = form.cleaned_data['operation']
+            # survey.save()
 
             return redirect('/profiles')
     else:

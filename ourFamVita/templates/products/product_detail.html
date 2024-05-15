@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static "css/style2.css" %}">
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 <style>
     * {
         font-family: "Noto Sans KR";
@@ -48,7 +48,7 @@
 </style>
 <div style="text-align: center; margin-top: 80px">
     <h2 style="font-size: 24px; font-weight: 500">
-        {{ profile.profile_name }}님에게 추천하는 영양제
+        <span style="color:#BC55EF;">{{ profile.profile_name }}</span>님에게 추천하는 영양제
     </h2>
 </div>
 
@@ -75,7 +75,7 @@
         {% endif %}
     </div>
     <div style="display: inline-block; width: 820px">
-        <li>제품명: {{ product.product_name }}</li>
+        <span style="color:#BC55EF; font-weight: 500; font-size: 15px">{{ product.product_name }}</span>
         <li>제품 평점: {{ product.product_rating_avg }}/5</li>
         <li>제조사명: {{ product.product_company }}</li>
         <li>제품 효능: {{ product.product_fuction_content }}</li>
@@ -130,8 +130,8 @@
                 <option value="4">4점</option>
                 <option value="5">5점</option>
             </select><br>
-            <textarea id="comment" name="comment" rows="4" cols="50" maxlength="200" placeholder="댓글을 입력하세요(최대 200자)"></textarea><br>
-            <input type="submit" value="댓글 등록">
+            <button class="btn btn-secondary" type="submit" style="float: right; margin-bottom: 5px">댓글 등록</button>    
+            <textarea class="comment" name="comment" rows="4" cols="50" maxlength="200" placeholder="댓글을 입력하세요(최대 200자)"></textarea><br>
         </form>
     {% else %}
         <li>{{ review.product_review_rating }} 점 | {{ review.created_at|date:"Y-m-d H:i:s"|slice:":16" }}</li>

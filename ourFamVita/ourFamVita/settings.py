@@ -95,8 +95,8 @@ WSGI_APPLICATION = 'ourFamVita.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ourFamVitaDBNew',
         # 'NAME': 'testDB',
+        'NAME': 'ourFamVitaDBNew',
         'USER': os.environ.get('MYSQL_USER'),
         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
         'HOST': os.environ.get('MYSQL_HOST'),

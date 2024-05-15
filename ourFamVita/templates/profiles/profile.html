@@ -5,7 +5,7 @@
     <title>프로필 선택</title>
     <!-- 두 개의 css 파일을 동시 적용할 때 같은 아이디나 클래스의 경우 뒤에 있는 파일의 규칙이 적용됨 -->
     <!-- <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}"> -->
-    <link rel="stylesheet" href="{% static "css/style2.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
     <style>
         * {
             font-family: "Noto Sans KR";
@@ -20,7 +20,7 @@
             <div class="btn">
                 <form action="{% url "users:logout" %}" method="POST">
                     {% csrf_token %}
-                    <button class="btn btn-primary">Logout</button>
+                    <button class="btn btn-primary">로그아웃</button>
                 </form>
             </div>
         </nav>
@@ -28,7 +28,7 @@
 
 
     <div style="text-align: center; margin-top: 80px">
-        <h2>{{ user.custom_user_email }}님의 프로필 목록입니다.</h2>
+        <h2>프로필을 선택해 주세요!</h2>
     </div>
     
     <div>

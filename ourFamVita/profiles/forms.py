@@ -73,6 +73,11 @@ class ProfileInfo(forms.Form):
                                                   ("HF13", "전립선"), ("HF14", "남성 건강"), ("HF15", "여성 갱년기"), ("HF16", "여성 건강"), ("HF17", "운동 능력"), ("HF18", "체지방 감소"), 
                                                   ("HF19", "스트레스/수면"), ("HF20", "두뇌 활동"), ("HF21", "어린이 성장"), ("HF22", "혈당"), ("HF23", "혈압"), ("HF24", "혈관/혈액순환"),
                                                   ("HF25", "임산/태아건강")])
+    disease = forms.MultipleChoiceField(label="기저질환 상태 (최대 5개 선택)", widget=forms.CheckboxSelectMultiple, required=False, 
+                                        choices=[("DI01", "위 및 장 관련 질환"), ("DI02", "간 관련 질환"), ("DI03", "심장/혈관 관련 질환"), ("DI04", "신장/콩팥 관련 질환"), ("DI05", "당뇨"), 
+                                                ("DI06", "고혈압"), ("DI07", "고지혈증"), ("DI08", "혈액응고장애"), ("DI09", "갑상선 관련 질환"), ("DI10", "천식"), 
+                                                ("DI11", "담당/쓸개 관련 질환"), ("DI12", "자가면역 및 면역 억제제 복용"), ("DI13", "신경 및 정신계 질환"), ("DI14", "암"), ("DI15", "단장증후군 및 유당불내증"), 
+                                                ("DI16", "피부 광과민성"), ("DI17", "호르몬제(경구 피임약) 복용"), ])
     height = forms.DecimalField(label="키", required=False,
                                 widget=forms.TextInput(attrs={"placeholder": "cm로 입력하세요"}))
     weight = forms.DecimalField(label="몸무게", required=False,
@@ -84,11 +89,6 @@ class ProfileInfo(forms.Form):
                                 required=False)
     operation = forms.ChoiceField(label="수술 상태", required=False,
                                   choices=[(None, "선택"), ("O3", "수술 전"), ("O2", "수술 후"), ("O1", "수술 예정"), ("O0", "해당 사항 없음")])
-    disease = forms.MultipleChoiceField(label="기저질환 상태 (최대 5개 선택)", widget=forms.CheckboxSelectMultiple, required=False, 
-                                        choices=[("DI01", "위 및 장 관련 질환"), ("DI02", "간 관련 질환"), ("DI03", "심장/혈관 관련 질환"), ("DI04", "신장/콩팥 관련 질환"), ("DI05", "당뇨"), 
-                                                ("DI06", "고혈압"), ("DI07", "고지혈증"), ("DI08", "혈액응고장애"), ("DI09", "갑상선 관련 질환"), ("DI10", "천식"), 
-                                                ("DI11", "담당/쓸개 관련 질환"), ("DI12", "자가면역 및 면역 억제제 복용"), ("DI13", "신경 및 정신계 질환"), ("DI14", "암"), ("DI15", "단장증후군 및 유당불내증"), 
-                                                ("DI16", "피부 광과민성"), ("DI17", "호르몬제(경구 피임약) 복용"), ])
 
 
     # class Meta:

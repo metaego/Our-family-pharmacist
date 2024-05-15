@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static "css/style2.css" %}">
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 
 <style>
     .profile_image {
@@ -31,20 +31,26 @@
     }
 </style>
 
-<div style="margin: 80px 10% 10px 62%">    
-    <a href="{% url "users:logout" %}">
-        <button class="btn btn-secondary">로그아웃</button>
-    </a>
-    <a href="{% url "users:acc_info" %}">
-        <button class="btn btn-secondary">계정 관리</button>
-    </a>    
+<div style="display: inline-block; margin: 80px 10% 10px 62%">
+    <div style="display: inline-block;">
+        <form action="{% url "users:logout" %}" method="POST">
+            {% csrf_token %}
+            <button class="btn btn-secondary">로그아웃</button>
+        </form>
+    </div>
+    <div style="display: inline-block;">
+        <form action="{% url "users:acc_info" %}" method="POST">
+            {% csrf_token %}
+            <button class="btn btn-secondary">계정 관리</button>
+        </form>
+    </div>
 </div> 
 
 <div style="text-align: center; margin-top: 30px">
     <h2 style="font-size: 24px; font-weight: 500;">
-        {{ profile.profile_name }}님의 프로필
+        <span style="color:#BC55EF">{{ profile.profile_name }}</span>님의 프로필
     </h2>
-    <h3 style="margin-bottom: 20px">오늘도 필소굿 !</h3>
+    <h3 style="margin-bottom: 20px">오늘도 Pill So Good!</h3>
 </div>
 
 
@@ -75,7 +81,7 @@
     </div>
     <div style="margin: 2px">
         <a href="{% url "mypages:likes" profile.profile_id %}">
-            <button class="btn btn-primary" style="width: 600px; height: 35px;">좋아요 표시한 영양제</button>
+            <button class="btn btn-primary" style="width: 600px; height: 35px;">찜한 영양제</button>
         </a>
     </div>
     <div style="margin: 2px">

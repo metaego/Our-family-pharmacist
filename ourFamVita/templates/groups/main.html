@@ -3,11 +3,10 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static "css/style2.css" %}">
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 
 <style>
-  *{
-      font-family: "Noto Sans KR";
+  *{  font-family: "Noto Sans KR";
       font-weight: 400;
       .product_image {
       width: 150px;
@@ -20,7 +19,7 @@
       }
       .recommend_title {
       font-size: 18px; 
-      font-weight: 500; 
+      font-weight: 400; 
       margin-bottom: 20px;
       text-align: center; 
       }
@@ -55,16 +54,16 @@
 </style>
 
 <div style="text-align: center; margin-top: 80px">
-      <h2 style="font-weight: 500">
+      <h2 style="font-weight: 600">
             공통 영양 성분 리포트
       </h2>
 </div>
 
 <div class="recommend_title" style="margin-top: 30px">
-      우리가족이 최근에 고민하는 건강 문제예요
+      우리가족이 최근에 고민하는 <span style="color:#BC55EF">건강 문제</span>예요
 </div>
 
-<div class="profile-container" style="margin: 20px 30% 20px 30%;">
+<div class="profile-container" style="margin: 20px 30% 50px 30%;">
       <h3>
             {% for function in functions_list %}            
             {{ function.function_code_name }}
@@ -74,19 +73,21 @@
 </div>
 
 <div class="recommend_title" style="margin-top: 30px">
-      우리가족에게 추천하는 영양성분이에요
+      우리가족에게 추천하는 <span style="color:#BC55EF">영양성분</span>이에요
 </div>
        
 <div class="flex-container" style="margin: 0 10%">
       {% for ingredient in ingredients_list %} 
       <div class="flex-item">
-            <li> 추천 영양 성분: {{ ingredient.ingredient_name }}</li>
-            <li> 주된 기능성: {{ingredient.ingredient_function_content }}</li>
-            <li> 섭취 시 주의사항: {{ ingredient.ingredient_caution}} </li>
-            <li> 일일섭취량 상한: {{ ingredient.ingredient_limit_high }} {{ingredient.ingredient_unit}}</li>      
-            <div style="text-align:center; margin-top: 10px">
+            <div style="height: 200px">
+                  <span style="color:#BC55EF;">{{ ingredient.ingredient_name }}</span>
+                  <li> 주된 기능성: {{ingredient.ingredient_function_content }}</li>
+                  <li> 섭취 시 주의사항: {{ ingredient.ingredient_caution}} </li>
+                  <li> 일일섭취량 상한: {{ ingredient.ingredient_limit_high }} {{ingredient.ingredient_unit}}</li>            
+            </div>
+            <div style="text-align: center; margin-top: 10px; align-items: end;">
                   <a href="{% url "groups:group_individual" profile.profile_id ingredient.ingredient_id %}" >
-                        <button class="btn btn-primary" style="width: 200px"> 추천 영양제 보기</button> 
+                        <button class="btn btn-primary" style="width: 200px;">추천 영양제 보기</button> 
                   </a>      
             </div>
       </div>
@@ -94,19 +95,20 @@
 </div>
 
 <div style="text-align: center; margin-top: 80px">
-      <h2 style="font-weight: 500">
+      <h2 style="font-weight: 600">
             영양제 추천
       </h2>
 </div>
   
 <div class="profile-container" style="margin: 40px 10%">
       <div class="recommend_title">
-            우리가족에게 추천하는 영양제에요
+            <span style="color:#BC55EF">우리가족</span>에게 추천하는 영양제에요
       </div>
       <div style="display: inline-block">
             {% for product in products_list %}
             <div style="display: inline-block;">
                   <div style="display: inline-block;">
+                        <a href="{% url 'products:products_detail' product.pk profile.pk %}">
                         <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
                   </div> 
                   <div style="display: inline-block;">
@@ -156,13 +158,15 @@
 
 <div class="profile-container" style="margin: 40px 10%">
       <div class="recommend_title">
-            최근 우리가족이 좋아요 누른 영양제에요
+            최근 <span style="color:#BC55EF">우리가족</span>이 찜한 영양제에요
       </div>
       <div style="display: inline-block; margin: 10px">
             {% for product_like in product_like_list %}
             <div style="display: inline-block;">
                   <div style="display: inline-block;">
+                        <a href="{% url 'products:products_detail' product_like.pk profile.pk %}">
                         <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
+                        </a>
                   </div> 
                   <div style="display: inline-block;">
                         <table class="product_info">

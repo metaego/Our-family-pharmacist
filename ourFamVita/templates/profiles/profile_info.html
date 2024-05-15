@@ -24,11 +24,11 @@
         <form method="POST" autocomplete="off">
             {% csrf_token %}
             {{ form.as_p }}
-            <div style="text-align: center">
-                <button class='btn btn-secondary'>
+            <div style="text-align: center; margin-top: 10%">
+                <button class='btn btn-secondary' style="width: 20%">
                     <a href="{% url "profiles:profile" %}">이전</a>
                 </button>
-                <button class='btn btn-primary' type=submit>저장</button>
+                <button class='btn btn-primary' style="width: 20%" type=submit>저장</button>
             </div>
 
         </form>
