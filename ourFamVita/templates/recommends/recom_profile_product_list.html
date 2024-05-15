@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static "css/style2.css" %}">
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 <style>
     * {
         font-family: "Noto Sans KR";
@@ -97,11 +97,14 @@
 <div style="text-align: center; margin-top: 80px">
     <div class="recommend_title">
         {% if page_flag == '추천 영양 성분 기반' %}
-            {{ recommend_ingredient.ingredient_name }} 개선하는데 좋은 제품이에요
+            <span style="color:#BC55EF">{{ recommend_ingredient.ingredient_name }}</span>
+            개선하는데 좋은 제품이에요
         {% elif page_flag == '영양 성분 리포트' %}
-            {{ profile.profile_name }}님을 위해 추천된 제품입니다
+            <span style="color:#BC55EF">{{ profile.profile_name }}</span>
+            님을 위해 추천된 제품입니다
         {% elif page_flag == '연령 및 성별 기반' %}
-            {{ survey.survey_age_group}} {{survey.survey_sex}}에게 인기있는 제품입니다
+            <span style="color:#BC55EF">{{ survey.survey_age_group}} {{survey.survey_sex}}</span>
+            에게 인기있는 제품입니다
         {% endif %}
     </div>
     <div style="display: inline-block;">

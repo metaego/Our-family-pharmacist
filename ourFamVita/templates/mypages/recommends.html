@@ -3,7 +3,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static "css/style2.css" %}">
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 
 <div style="margin: 80px 62% 10px 10%">
   <a href="{% url "mypages:main" profile.profile_id %}">
@@ -27,7 +27,7 @@
       </a>
     </div>
     <div style="display: inline-block; text-align:left">
-      <li> 영양성분이름: 
+      <li> 영양성분 이름: 
         {% for ingredient_indi in ingredient.0 %}
           {{ ingredient_indi.ingredient_name }} 
             {% if not forloop.last %},  {% endif %}

@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/style2.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 <style>
     * {
@@ -29,14 +29,15 @@
         .product_title {
             font-weight: 500;
             font-size: 15px;
-            
         }
         {% comment %} background-color: #fbf3ff {% endcomment %}
     }    
 </style>
 
 <div style="text-align: center; margin-top: 80px">
-    <h2 style="font-size: 24px; font-weight: 500">{{ profile.profile_name }}님의 프로필</h2>
+    <h2 style="font-size: 24px; font-weight: 500">
+        <span style="color:#BC55EF">{{ profile.profile_name }}</span>님의 프로필
+    </h2>
 </div>
 
 <!-- 마진 상쇄 주의 (ex. 하기 div에서 inline-block을 하면 안 먹힘) -->
@@ -86,7 +87,7 @@
 
 <div class="profile-container" style="text-align: center; margin: 40px 10%">
     <h3 class="recommend_title">
-        {{ profile.profile_name }}님을 위한 맞춤 영양제 추천
+        <span style="color:#BC55EF">{{ profile.profile_name }}</span>님을 위한 맞춤 영양제 추천
     </h3>
     {% if survey_base_recom_products == None %}
         <!-- rending page: recom_profile_info.html -->
@@ -135,13 +136,19 @@
     {% endif %}
 </div>
 
+
 <div class="profile-container" style="text-align: center; margin: 40px 10%">
-    <h3 class="recommend_title">{{ survey.survey_age_group }}  
-        {%if survey.survey_sex == 'f' %}
-            {{ '여성' }}에게
-        {% else %}
-            {{ '남성' }}에게
-        {% endif %}인기 많은 영양제를 확인해보세요</h3>
+    <h3 class="recommend_title">
+        <span style="color:#BC55EF">
+        {{ survey.survey_age_group }}  
+            {%if survey.survey_sex == 'f' %}
+                {{ '여성' }}
+            {% else %}
+                {{ '남성' }}
+            {% endif %}
+        </span> 
+        에게 인기 많은 영양제를 확인해보세요
+    </h3>
     <!-- rending page: recom_profile_product_list.html -->
     <!-- 이미지 클릭 시 해당 영양제 제품 상세 페이지로 이동하는 기능 구현할 예정 -->
     <div style="display: inline-block;">

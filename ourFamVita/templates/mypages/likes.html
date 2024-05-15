@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static "css/style2.css" %}">
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 <style>
   *{
     .product_image {
@@ -19,7 +19,7 @@
 
 <div style="text-align: center; ">
   <h2 style="font-size: 24px; font-weight: 500">
-    좋아요 표시 영양제 목록
+    찜한 영양제 목록
   </h2>
 </div>
 
@@ -29,7 +29,7 @@
     <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
   </div>
   <div style="display: inline-block; width: 850px">
-    <li> 제품명: <a href="{% url 'products:products_detail' product.pk profile.pk %}" class ='click_word'>{{ product.product_name }}</a></li> 
+    <a href="{% url 'products:products_detail' product.pk profile.pk %}" style="color:#BC55EF; font-weight: 500">{{ product.product_name }}</a>
     <li> 제조사: {{product.product_company}}</li>
     <li> 섭취 방법: {{ product.product_instruction }}</li>
     <li> 소비기한: {{product.product_serving}}</li>

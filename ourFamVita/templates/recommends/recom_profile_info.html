@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static "css/style2.css" %}">
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 <style>
   * {
     font-family: "Noto Sans KR";
@@ -136,7 +136,9 @@
 <div style="text-align: center; margin-top: 80px">
   <h1 style="font-size: 24px; font-weight: 500">AI 영양제 추천받기</h1>
   <br>
-  <h2 style="font-size: 18px; font-weight: 500">{{ profile.profile_name }}님의 프로필 정보 확인</h2>
+  <h2 style="font-size: 18px; font-weight: 500; margin: 7px">
+    <span style="color:#BC55EF">{{ profile.profile_name }}</span>님의 프로필 정보 확인
+  </h2>
   <h3>아래 내용으로 추천해 드릴까요?</h3>
 </div>
 
@@ -194,7 +196,7 @@
   <!-- rending page: recom_personal_report.html -->
 <div style="text-align: center; margin-top: 60px">
   <h2 style="font-size: 18px; font-weight: 500;">
-    건강고민 순위를 선택하시면 더 자세한 추천이 가능해요!(최대 5개)
+    건강고민 순위를 선택하시면 <span style="color:#BC55EF">더 자세한 추천</span>이 가능해요! (최대 5개)
   </h2>
   <div class="profile-container" style="margin: 30px 20%; padding: 20px 65px; height: 200px; justify-content: space-around;">
     <form id="checkbox-form" action="{% url "recommends:save_survey_data" profile.profile_id survey.survey_id %}" method="post">
