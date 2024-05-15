@@ -199,7 +199,7 @@
     건강고민 순위를 선택하시면 <span style="color:#BC55EF">더 자세한 추천</span>이 가능해요! (최대 5개)
   </h2>
   <div class="profile-container" style="margin: 30px 20%; padding: 20px 65px; height: 200px; justify-content: space-around;">
-    <form id="checkbox-form" action="{% url "recommends:request_flask_recom_model" profile.profile_id survey.survey_id %}" method="post">
+    <form id="checkbox-form" action="{% url "recommends:save_survey_data" profile.profile_id survey.survey_id %}" method="post">
       {% csrf_token %}
       {% for code in function_code_list %}
       <input type="checkbox" class="ui-checkbox" name="checkbox[]" value={{ code|urlencode }}> {{ code }}

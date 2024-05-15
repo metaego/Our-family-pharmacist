@@ -10,17 +10,19 @@ from django.db.models import Count
 from django.utils import timezone
 from urllib.parse import unquote
 import requests
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.middleware.csrf import get_token
 import json
 from dotenv import load_dotenv
 import os
+import time
 
 load_dotenv()
 
 # Create your views here.
 
 def recom_info(request, profile_id):
+    start_time = time.time()
     # ai 추천받기: 나의 프로필 정보 확인
     # ai 영양제 추천받기 전 나의 프로필 정보 확인 페이지
     # /recommends/{profile-id}/info
@@ -31,8 +33,8 @@ def recom_info(request, profile_id):
 
     # 프로필 및 survey 데이터 가져오기
     profile = Profile.objects.get(pk=profile_id)
-    survey = Survey.objects.filter(profile_id=profile.pk).latest('-created_at')
-    # print("survey_id: ", survey.survey_id)
+    survey = Survey.objects.filter(profile_id=profile.pk).latest('created_at')
+    # print("survey_id(recom_info): ", survey.survey_id)
 
 
     
@@ -139,7 +141,11 @@ def recom_info(request, profile_id):
         kr_function_code_list.append(kr_code)
     # print(f'kr_function_code_list: {kr_function_code_list}')
 
-
+    end_time = time.time()
+    execution_time_seconds = end_time - start_time
+    execution_minutes = int(execution_time_seconds // 60)
+    execution_seconds = int(execution_time_seconds % 60)
+    print("recom_info Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
 
     return render(request, 'recommends/recom_profile_info.html', {
         'profile': profile,
@@ -154,79 +160,101 @@ def recom_info(request, profile_id):
 
     
 
-def request_flask_recom_model(request, profile_id, survey_id):
-    # post로 요청이 들어오면 건강고민 설문을 DB에 저장
-    # flask 추천 알고리즘 request
+def save_survey_data(request, profile_id, survey_id):
+    start_time = time.time()
 
     user_id = request.session.get('user')
     if not user_id:
         return redirect('/')
 
     if request.method == 'POST':
-        # selected_functions = [unquote(code) for code in request.POST.getlist('checkbox[]')]
+        selected_functions = [unquote(code) for code in request.POST.getlist('checkbox[]')]
 
-        # # 새로운 survey 데이터 생성
-        # survey = Survey.objects.get(survey_id=survey_id)
-        # survey.pk = None
-        # survey.created_at = timezone.now()
-        # survey.save()
+        # 새로운 survey 데이터 생성
+        survey = Survey.objects.get(survey_id=survey_id)
+        survey.pk = None
+        survey.created_at = timezone.now()
+        survey.save()
 
-        # survey = Survey.objects.get(survey_id=survey.survey_id)
-
-        # # 새로운 survey_disease 데이터 생성
-        # survey_diseases = SurveyDisease.objects.filter(survey_id=survey_id).values_list('disease_code', flat=True)
-        # survey_diseases = list(survey_diseases)  # ['DI01', 'DI02', 'DI03', 'DI04', 'DI05']
-        # for d_code in survey_diseases:
-        #     disease_code = DiseaseCode.objects.get(disease_code=d_code)
-        #     SurveyDisease.objects.create(survey_id=survey, disease_code=disease_code)
+        survey = Survey.objects.get(survey_id=survey.survey_id)
+        # print(f'save_survey_data(survey.survey_id): {survey.survey_id}')
+        # 새로운 survey_disease 데이터 생성
+        survey_diseases = SurveyDisease.objects.filter(survey_id=survey_id).values_list('disease_code', flat=True)
+        survey_diseases = list(survey_diseases)  # ['DI01', 'DI02', 'DI03', 'DI04', 'DI05']
+        for d_code in survey_diseases:
+            disease_code = DiseaseCode.objects.get(disease_code=d_code)
+            SurveyDisease.objects.create(survey_id=survey, disease_code=disease_code)
            
 
 
-        # # 새로운 survey_allergy 데이터 생성
-        # survey_allerges = SurveyAllergy.objects.filter(survey_id=survey_id).values_list('allergy_code', flat=True)
-        # survey_allerges = list(survey_allerges)
-        # for a_code in survey_allerges:
-        #     allergy_code = AllergyCode.objects.get(allergy_code=a_code)
-        #     SurveyAllergy.objects.create(survey_id=survey, allergy_code=allergy_code)
+        # 새로운 survey_allergy 데이터 생성
+        survey_allerges = SurveyAllergy.objects.filter(survey_id=survey_id).values_list('allergy_code', flat=True)
+        survey_allerges = list(survey_allerges)
+        for a_code in survey_allerges:
+            allergy_code = AllergyCode.objects.get(allergy_code=a_code)
+            SurveyAllergy.objects.create(survey_id=survey, allergy_code=allergy_code)
 
 
 
-        # # 새로운 survey_function 데이터 생성
-        # for kr_f_code in selected_functions:
-        #     function_code = FunctionCode.objects.get(function_code_name=kr_f_code)
-        #     SurveyFunction.objects.create(survey_id=survey, function_code=function_code)
-        # print('survey, survey_disease, survey_allergey, survey_function data 신규 생성...!')
+        # 새로운 survey_function 데이터 생성
+        if not selected_functions:
+            function_code = FunctionCode.objects.get(function_code='HF00')
+            SurveyFunction.objects.create(survey_id=survey, function_code=function_code)
+            # print('건강기능 고민을 아무것도 선택하지 않았을 때')
+        else:
+            for kr_f_code in selected_functions:
+                function_code = FunctionCode.objects.get(function_code_name=kr_f_code)
+                SurveyFunction.objects.create(survey_id=survey, function_code=function_code)
+            # print('survey, survey_disease, survey_allergey, survey_function data 신규 생성...!')
 
-        client_ip = request.META.get('REMOTE_ADDR', None)
-        print(f'client_ip: {client_ip}')
-        content = {
-            'profile_id': profile_id,
-            'survey_id': survey_id
-        }
-        if client_ip == os.environ.get('CLIENT_IP'):
-            client_ip = os.environ.get('AWS_PUBLIC_IP')
-        csrf_token = get_token(request)
-        response = requests.post('http://' + client_ip + ':5000/', 
-                                 data=json.dumps(content), 
-                                 headers={'X-CSRFToken': csrf_token,
-                                          'Content-Type': 'application/json'})
-        
-        response_data = json.loads(response.text)
-        print(f'flask에서 응답 받은 내용 출력: {response_data}')
-        print(type(response_data))
-        print(f'response_data.profile_id: {response_data["profileid"]}, {type(response_data["profileid"])}')
-        profile = Profile.objects.get(profile_id=profile_id)
-        survey = Survey.objects.get(survey_id=survey_id)
+    end_time = time.time()
+    execution_time_seconds = end_time - start_time
+    execution_minutes = int(execution_time_seconds // 60)
+    execution_seconds = int(execution_time_seconds % 60)
+    print("save_survey_data function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
 
-        return redirect('recommends:profile_total_report', profile.profile_id, survey.survey_id)
-        # return render(request, 'recommends/recom_profile_report.html', {
-        # 'profile': profile,
-        # 'survey':survey,
-    # })
+    return redirect('recommends:request_flask_recom_model', profile_id, survey.survey_id)
+
+
+def request_flask_recom_model(request, profile_id, survey_id):
+
+    start_time = time.time()
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+    
+    client_ip = request.META.get('REMOTE_ADDR', None)
+
+    if client_ip == os.environ.get('CLIENT_IP'):
+        client_ip = os.environ.get('AWS_PUBLIC_IP')
+    csrf_token = get_token(request)
+    survey = Survey.objects.filter(profile_id=profile_id).latest('created_at')
+    # print(f'최근 survey_id: {survey.survey_id}')
+    response = requests.post('http://' + client_ip + f':5000/ai-total-recom/{survey.survey_id}/', 
+                                headers={'X-CSRFToken': csrf_token,
+                                        'Content-Type': 'application/json'})
+    
+    contents = json.loads(response.text)
+    request.session['contents'] = contents
+    # print(f'contents(플라스크 토탈 추천): {contents}')
+    # print(type(contents))
+    profile = Profile.objects.get(profile_id=profile_id)
+
+    end_time = time.time()
+    execution_time_seconds = end_time - start_time
+    execution_minutes = int(execution_time_seconds // 60)
+    execution_seconds = int(execution_time_seconds % 60)
+    print("request_flask_recom_model function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
+
+    return redirect('recommends:profile_total_report', profile.profile_id, survey.survey_id)
+
 
 
 
 def recom_profile_total_report(request, profile_id, survey_id):
+
+    start_time = time.time()
 
     user_id = request.session.get('user')
     if not user_id:
@@ -235,22 +263,28 @@ def recom_profile_total_report(request, profile_id, survey_id):
     # AI추천받기: 영양 성분 리포트
     # menu: ai 영양제 추천받기> 영양 성분 리포트
     # /recommends/{profile-id}/surveys/{survey-id}
-    # profile = Profile.objects.get(profile_id=profile_id)
-    # survey = Survey.objects.filter(survey_id=survey_id).get()
-    profile_id = 2
-    survey_id = 14146
+    profile = Profile.objects.get(profile_id=profile_id)
+    survey = Survey.objects.get(survey_id=survey_id)
+    # print(profile_id)
+    # print(f'profile_id(recom_profile_total_report): {profile.profile_id}')
+    # print(survey_id)
+    # print(f'survey_id(recom_profile_total_report): {survey.survey_id}')
+   
+    # 세션에서 contents 가져오기
+    contents = request.session.get('contents', {})
+
 
     # 1) 추천 영양 성분 가져오기
     ## 영양 성분명, 주요건강기능, 일일 섭취량 상하한
     recommendation = Recommendation.objects.get(survey_id=survey_id)
     recommendation_ingredients = RecommendationIngredient.objects.filter(recommendation_id=recommendation.recommendation_id).values_list('ingredient_id', flat=True)
     recommendation_ingredients = list(recommendation_ingredients)
-    print(f'recommendation_ingredients: {recommendation_ingredients}') # [150, 362]
-    print()
+    # print(f'recommendation_ingredients: {recommendation_ingredients}') # [150, 362]
+    # print()
 
     recommend_ingredients = Ingredient.objects.filter(ingredient_id__in=recommendation_ingredients)
-    print(recommend_ingredients) # <QuerySet [<Ingredient: Ingredient object (150)>, <Ingredient: Ingredient object (362)>]>
-    print()
+    # print(recommend_ingredients) # <QuerySet [<Ingredient: Ingredient object (150)>, <Ingredient: Ingredient object (362)>]>
+    # print()
 
 
 
@@ -258,22 +292,21 @@ def recom_profile_total_report(request, profile_id, survey_id):
     ## recommendation_product에서 데이터 가져오기
     recommendation_products = RecommendationProduct.objects.filter(recommendation_id=recommendation.recommendation_id).values_list('product_id', flat=True)
     recommendation_products = list(recommendation_products)
-    print(f'recommendation_products: {recommendation_products}') # [200400150831149, 200400200072802]
-    print()
+    # print(f'recommendation_products: {recommendation_products}') # [200400150831149, 200400200072802]
+    # print()
 
     recommend_products = Product.objects.filter(product_id__in=recommendation_products)
-    print(f'products: {recommend_products}') # <QuerySet [<Product: Product object (200400150831149)>, <Product: Product object (200400200072802)>]>
-    print()
+    # print(f'products: {recommend_products}') # <QuerySet [<Product: Product object (200400150831149)>, <Product: Product object (200400200072802)>]>
+    # print()
 
     
     
     # 3) 성별*연령 기반 영양제 추천
     ## 성별*연령별 기반 영양제
+    collabo_recomm_product_list = contents['recom_product_sex_age_list']
+    collabo_recommendation_products = Product.objects.filter(product_id__in=collabo_recomm_product_list)
 
-    # return HttpResponse('pass')
-    profile = Profile.objects.get(profile_id=profile_id)
-    survey = Survey.objects.get(survey_id=survey_id)
-
+    
     # 만나이 계산
     profile_birth = str(profile.profile_birth)
     birth = datetime.strptime(profile_birth, '%Y-%m-%d').date()
@@ -351,32 +384,38 @@ def recom_profile_total_report(request, profile_id, survey_id):
     else:
         survey.survey_smoke = '비흡연'
 
-    product_id = 200400150395
-    product = Product.objects.get(product_id=product_id)
-    print('recom_profile_total_report 실행')
+
+    end_time = time.time()
+    execution_time_seconds = end_time - start_time
+    execution_minutes = int(execution_time_seconds // 60)
+    execution_seconds = int(execution_time_seconds % 60)
+    print("recom_profile_total_report function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
+
     return render(request, 'recommends/recom_profile_report.html', {
         'profile': profile,
         'survey':survey,
         'recommend_ingredients': recommend_ingredients,
-        'recommend_products': recommend_products,
+        'recommend_products': recommend_products[:3], # 영양 성분 리포트 바탕 추천 product
+        'collabo_recommendation_products' : collabo_recommendation_products[:3], # 연령*성별 기반 추천
         'age': age,
         'allergy': kr_allergy_codes,
         'disease': kr_disease_codes,
         'alcohol': profile_alcohol.com_code_name,
         'pregnancy': profile_pregnancy.com_code_name,
-        'product' : product,
     })
 
 
 def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
     
+    start_time = time.time()
+
+    # AI추천받기: 영양제 추천 목록(영양 성분 기반)
+    # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(영양 성분 기반)
+    # /recommends/{profile-id}/surveys/{survey-id}/rec-nut-products/{nutri-num}
     user_id = request.session.get('user')
     if not user_id:
         return redirect('/')
     
-    # AI추천받기: 영양제 추천 목록(영양 성분 기반)
-    # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(영양 성분 기반)
-    # /recommends/{profile-id}/surveys/{survey-id}/rec-nut-products/{nutri-num}
     # 프로필 및 survey 데이터 가져오기
     profile = Profile.objects.get(profile_id=profile_id)
     survey = Survey.objects.get(survey_id=survey_id)
@@ -473,6 +512,13 @@ def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
     
 
     page_flag = '추천 영양 성분 기반'
+
+    end_time = time.time()
+    execution_time_seconds = end_time - start_time
+    execution_minutes = int(execution_time_seconds // 60)
+    execution_seconds = int(execution_time_seconds % 60)
+    print("recom_products_nutri_base function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
+
     return render(request, 'recommends/recom_profile_product_list.html', {
         'profile': profile,
         'survey': survey,
@@ -490,19 +536,26 @@ def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
 
 def recom_products_profile_base(request, profile_id, survey_id):
 
+    start_time = time.time()
+    # AI추천받기: 영양제 추천 목록(영양 성분 리포트 기반)
+    # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(영양 성분 리포트 기반)
+    # /recommends/{profile-id}/surveys/{survey-id}/rec-total-products/
     user_id = request.session.get('user')
     if not user_id:
         return redirect('/')
 
-    # AI추천받기: 영양제 추천 목록(영양 성분 리포트 기반)
-    # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(영양 성분 리포트 기반)
-    # /recommends/{profile-id}/surveys/{survey-id}/rec-total-products/
     profile = Profile.objects.get(profile_id=profile_id)
     survey = Survey.objects.get(survey_id=survey_id)
+    # print(f'profile_id(recom_products_profile_base): {profile_id}')
+    # print(f'survey_id(recom_products_profile_base): {survey_id}')
 
     # ai 추천 받은 후 추천해주는 제품의 product_id가 필요
-    product_id = 200400150395
-    product = Product.objects.get(product_id=product_id)
+    recommendation = Recommendation.objects.get(survey_id=survey_id)
+    recom_product_list = RecommendationProduct.objects.filter(recommendation_id=recommendation.recommendation_id).values_list('product_id', flat=True)
+    recom_product_list = list(recom_product_list)
+
+    popular_products = Product.objects.filter(product_id__in=recom_product_list)
+    print(f'popular_products(영양성분리포트기반): {popular_products}')
 
     # 만나이 계산
     profile_birth = str(profile.profile_birth)
@@ -584,12 +637,17 @@ def recom_products_profile_base(request, profile_id, survey_id):
 
 
     # 추천 영양제 리스트
-    popular_products = []
     page_flag = '영양 성분 리포트'
+
+    end_time = time.time()
+    execution_time_seconds = end_time - start_time
+    execution_minutes = int(execution_time_seconds // 60)
+    execution_seconds = int(execution_time_seconds % 60)
+    print("recom_products_profile_base function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
+
     return render(request, 'recommends/recom_profile_product_list.html', {
         'profile': profile,
         'survey': survey,
-        'product': product,
         'age': age,
         'allergy': kr_allergy_codes,
         'disease': kr_disease_codes,
@@ -600,25 +658,67 @@ def recom_products_profile_base(request, profile_id, survey_id):
     })
 
 
-def recom_products_collabo_base(request, profile_id):
+
+def request_flask_collabo_recom_model(request, profile_id):
+
+    start_time = time.time()
 
     user_id = request.session.get('user')
     if not user_id:
         return redirect('/')
+    
+    profile = Profile.objects.get(profile_id=profile_id)
+    survey = Survey.objects.filter(profile_id=profile.pk).latest('created_at')
+    
+    # flask 요청 
+    client_ip = request.META.get('REMOTE_ADDR', None)
+
+    if client_ip == os.environ.get('CLIENT_IP'):
+        client_ip = os.environ.get('AWS_PUBLIC_IP')
+    csrf_token = get_token(request)
+    response = requests.post('http://' + client_ip + f':5000/ai-collabo-recom/{survey.survey_id}', 
+                            #  data=json.dumps(content), 
+                                headers={'X-CSRFToken': csrf_token,
+                                        'Content-Type': 'application/json'})
+    
+    contents = json.loads(response.text)
+    print(f'flask에서 응답 받은 내용 출력: {contents}')
+    print(type(contents))
+
+    request.session['contents'] = contents
+    
+    end_time = time.time()
+    execution_time_seconds = end_time - start_time
+    execution_minutes = int(execution_time_seconds // 60)
+    execution_seconds = int(execution_time_seconds % 60)
+    print("request_flask_collabo_recom_model function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
+
+    return redirect('recommends:products_collabo_base', profile.profile_id)
+
+
+
+def recom_products_collabo_base(request, profile_id):
+    
+    start_time = time.time()
 
     # AI추천받기: 영양제 추천 목록
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(나이 & 성별 기반)
     # menu: home main(나이 & 성별 기반) > 영양제 추천 목록
     # /recommends/{profile-id}/rec-products/
-    # 해당 함수는 flask 서버와 연결 필요
-    profile = Profile.objects.get(pk=profile_id)
 
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+
+    # 세션에서 contents 가져오기
+    contents = request.session.get('contents', {})
+    # print(f'contents: {contents}')
     profile = Profile.objects.get(profile_id=profile_id)
-    survey = Survey.objects.filter(profile_id=profile_id).latest('-created_at')
+    survey = Survey.objects.get(survey_id=contents['survey_id'])
 
     # ai 추천 받은 후 추천해주는 제품의 product_id가 필요
-    product_id = 200400150395
-    product = Product.objects.get(product_id=product_id)
+    collabo_product_list = contents['recom_product_sex_age_list']
+    popular_products = Product.objects.filter(product_id__in=collabo_product_list)
 
     # 만나이 계산
     profile_birth = str(profile.profile_birth)
@@ -697,14 +797,16 @@ def recom_products_collabo_base(request, profile_id):
     else:
         survey.survey_smoke = '비흡연'
 
-    # 추천받은 product가 없어서 임의로 넣음
-    # 협업필터링 ML 후 업뎃 예정 
-    product = Product.objects.get(pk=1)
-
 
 
     page_flag = '연령 및 성별 기반'
-    popular_products = []
+
+    end_time = time.time()
+    execution_time_seconds = end_time - start_time
+    execution_minutes = int(execution_time_seconds // 60)
+    execution_seconds = int(execution_time_seconds % 60)
+    print("recom_products_collabo_base function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
+
     return render(request, 'recommends/recom_profile_product_list.html', {
         'profile': profile,
         'survey': survey,
@@ -713,8 +815,6 @@ def recom_products_collabo_base(request, profile_id):
         'disease': kr_disease_codes,
         'alcohol': profile_alcohol.com_code_name,
         'pregnancy': profile_pregnancy.com_code_name,
-        'product': product,
-        'page_flag': page_flag,
         'popular_products': popular_products,
-
+        'page_flag': page_flag,
     })
