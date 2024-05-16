@@ -113,10 +113,8 @@
             <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
                 {% if product.product_image == '0' %}
                     <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
-                    {{ "   " }} <br><br><br>
                 {% else %}
                     <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
-                    {{ "   " }} <br><br><br>
                 {% endif %}
             </a>
         </div>
