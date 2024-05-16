@@ -8,9 +8,10 @@ def create_app():
     # db.init_app(app)
     # from .views import main_views, question_views, answer_views
     # app.register_blueprint(main_views.bp)
-    from .views import main_views, total_recom_views
+    from .views import main_views, total_recom_views, total_recom_old_views
 
     app.register_blueprint(main_views.bp)
     app.register_blueprint(total_recom_views.bp)
+    app.register_blueprint(total_recom_old_views.bp)
     
     return app
