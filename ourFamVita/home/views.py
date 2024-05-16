@@ -63,13 +63,15 @@ def home_main(request, profile_id):
     # 연령*성별 기반 추천받은 영양제
     # flask 요청 
     client_ip = request.META.get('REMOTE_ADDR', None)
-    # print(f'client_ip: {client_ip}')
+    print(f'client_ip: {client_ip}')
     # content = {
     #     'profile_id': profile_id,
     #     'survey_id': survey_id
     # }
-    if client_ip != os.environ.get('AWS_PUBLIC_IP'):
-        client_ip = os.environ.get('AWS_PUBLIC_IP')
+    if client_ip == '127.0.0.1':
+        pass
+    elif client_ip != os.environ.get('AWS_PUBLIC_IP'):
+         client_ip = os.environ.get('AWS_PUBLIC_IP')
     csrf_token = get_token(request)
     response = requests.post('http://' + client_ip + f':5000/ai-collabo-recom/{survey.survey_id}', 
                             #  data=json.dumps(content), 
