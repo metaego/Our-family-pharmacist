@@ -131,9 +131,14 @@
             <li>섭취 방법: {{ product.product_instruction }}</li>
             <li>소비기한: {{product.product_serving}}</li>
             <li>제품 형태: {{product.product_dispos}}</li>
-            <li>보관 방법: {{product.product_storage_method}}</li>
+            <li>보관 방법: {% if product.product_storage_method == None %}
+                             {{ '없음' }}
+                           {% else %}
+                             {{product.product_storage_method}}
+                           {% endif %}
+            </li>
             <li>주의사항: <br> {{product.product_caution}}</li>
-            <li>주된 기능성: <br> {{product.product_function_content}}</li>
+            <li>주된 기능성: <br> {{product.product_function_content}}</li> 
             {% comment %} <li>제품 기능: {{ product.product_function_content }}</li> {% endcomment %}
         </div>
         
