@@ -9,7 +9,7 @@
   *{  font-family: "Noto Sans KR";
       font-weight: 400;
       .product_image {
-      width: 150px;
+      width: 180px;
       height: auto;
       }
       .product_info {
@@ -19,7 +19,7 @@
       }
       .recommend_title {
       font-size: 18px; 
-      font-weight: 400; 
+      font-weight: 500; 
       margin-bottom: 20px;
       text-align: center; 
       }
@@ -65,10 +65,17 @@
 
 <div class="profile-container" style="margin: 20px 30% 50px 30%;">
       <h3>
-            {% for function in functions_list %}            
-            {{ function.function_code_name }}
-            {% if not forloop.last %},{% endif %}
-            {% endfor %}
+            {% if functions_list == '[]' %}
+             <div>아직 건강고민이 없습니다!</div>
+
+            {% else %}
+
+                  {% for function in functions_list %}            
+                        {{ function.function_code_name }}
+                        {% if not forloop.last %},{% endif %}
+                  {% endfor %}
+
+            {% endif %}
       </h2>
 </div>
 
@@ -77,21 +84,25 @@
 </div>
        
 <div class="flex-container" style="margin: 0 10%">
-      {% for ingredient in ingredients_list %} 
-      <div class="flex-item">
-            <div style="height: 200px">
-                  <span style="color:#BC55EF;">{{ ingredient.ingredient_name }}</span>
-                  <li> 주된 기능성: {{ingredient.ingredient_function_content }}</li>
-                  <li> 섭취 시 주의사항: {{ ingredient.ingredient_caution}} </li>
-                  <li> 일일섭취량 상한: {{ ingredient.ingredient_limit_high }} {{ingredient.ingredient_unit}}</li>            
+      {% if ingredients_list == '[]' %}
+            <div>아직 추천받은 기록이 없습니다!</div>
+      {% else %}
+            {% for ingredient in ingredients_list %} 
+            <div class="flex-item">
+                  <div style="height: 200px">
+                        <span style="color:#BC55EF;">{{ ingredient.ingredient_name }}</span>
+                        <li> 주된 기능성: {{ingredient.ingredient_function_content }}</li>
+                        <li> 섭취 시 주의사항: {{ ingredient.ingredient_caution}} </li>
+                        <li> 일일섭취량 상한: {{ ingredient.ingredient_limit_high }} {{ingredient.ingredient_unit}}</li>            
+                  </div>
+                  <div style="text-align: center; margin-top: 10px; align-items: end;">
+                        <a href="{% url "groups:group_individual" profile.profile_id ingredient.ingredient_id %}" >
+                              <button class="btn btn-primary" style="width: 200px;">추천 영양제 보기</button> 
+                        </a>      
+                  </div>
             </div>
-            <div style="text-align: center; margin-top: 10px; align-items: end;">
-                  <a href="{% url "groups:group_individual" profile.profile_id ingredient.ingredient_id %}" >
-                        <button class="btn btn-primary" style="width: 200px;">추천 영양제 보기</button> 
-                  </a>      
-            </div>
-      </div>
-      {% endfor %}     
+            {% endfor %} 
+      {% endif %}    
 </div>
 
 <div style="text-align: center; margin-top: 80px">
@@ -105,49 +116,53 @@
             <span style="color:#BC55EF">우리가족</span>에게 추천하는 영양제에요
       </div>
       <div style="display: inline-block">
-            {% for product in products_list %}
-            <div style="display: inline-block;">
+            {% if products_list == '[]' %}
+                  <div> 아직 추천받은 기록이 없습니다! </div>
+            {% else %}
+                  {% for product in products_list %}
                   <div style="display: inline-block;">
-                        <a href="{% url 'products:products_detail' product.pk profile.pk %}">
-                        <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
-                  </div> 
-                  <div style="display: inline-block;">
-                        <table class="product_info">
-                            <tr>
-                                <th>{{ product.product_company }}</th>
-                            </tr>
-                            <tr>
-                                <th class="product_title">
-                                    <a href="{% url 'products:products_detail' product.pk profile.pk %}">
-                                          {{ product.product_name }}
-                                    </a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>{{ product.product_rating_avg }}</th>
-                            </tr>
-                        </table>
+                        <div style="display: inline-block;">
+                              <a href="{% url 'products:products_detail' product.pk profile.pk %}">
+                              <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
+                        </div> 
+                        <div style="display: inline-block;">
+                              <table class="product_info">
+                              <tr>
+                                    <th>{{ product.product_company }}</th>
+                              </tr>
+                              <tr>
+                                    <th class="product_title">
+                                          <a href="{% url 'products:products_detail' product.pk profile.pk %}">
+                                                {{ product.product_name }}
+                                          </a>
+                                    </th>
+                              </tr>
+                              <tr>
+                                    <th>{{ product.product_rating_avg }}</th>
+                              </tr>
+                              </table>
+                        </div>
                   </div>
-            </div>
-                  <!--
-                  <div class="word" style="display: inline-block; ">
-                        <li> 제품명: <a href="{% url 'products:products_detail' product.pk profile.pk %}" class ='click_word'>{{ product.product_name }}</a></li>  
-                        <li> 제조사: {{product.product_company}}</li> 
-                        <li> 섭취방법: {{ product.product_instruction }}</li> 
-                        <li> 소비기한: {{product.product_serving}}</li> 
-                        <li> 제품형태: {{product.product_dispos}}</li> 
-                        <li> 보관방법: {{product.product_storage_method}}</li> 
-                        <li> 주의사항: {{product.product_caution}}</li> 
-                        <li> 주된기능성: {{product.product_function_content}}</li> 
-                  </div>
-                  -->
-            {% endfor %}
+                        <!--
+                        <div class="word" style="display: inline-block; ">
+                              <li> 제품명: <a href="{% url 'products:products_detail' product.pk profile.pk %}" class ='click_word'>{{ product.product_name }}</a></li>  
+                              <li> 제조사: {{product.product_company}}</li> 
+                              <li> 섭취방법: {{ product.product_instruction }}</li> 
+                              <li> 소비기한: {{product.product_serving}}</li> 
+                              <li> 제품형태: {{product.product_dispos}}</li> 
+                              <li> 보관방법: {{product.product_storage_method}}</li> 
+                              <li> 주의사항: {{product.product_caution}}</li> 
+                              <li> 주된기능성: {{product.product_function_content}}</li> 
+                        </div>
+                        -->
+                  {% endfor %}
       </div>
       <div>
             <a href="{% url "groups:group_detail" profile.profile_id %}">
                   <button class="btn btn-primary" style="margin-top: 15px"> 더보기</button>
             </a>
       </div>      
+            {% endif %}
 </div>
 
 {% comment %} <div style="text-align: center; margin-top: 80px">
@@ -161,42 +176,49 @@
             최근 <span style="color:#BC55EF">우리가족</span>이 찜한 영양제에요
       </div>
       <div style="display: inline-block; margin: 10px">
-            {% for product_like in product_like_list %}
-            <div style="display: inline-block;">
+            {% if product_like_list  == '[]' %} 
+                  <div> 아직 찜한 기록이 없습니다! </div>
+            
+            {% else %}
+      
+                  {% for product_like in product_like_list %}
                   <div style="display: inline-block;">
-                        <a href="{% url 'products:products_detail' product_like.pk profile.pk %}">
-                        <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
-                        </a>
-                  </div> 
-                  <div style="display: inline-block;">
-                        <table class="product_info">
-                        <tr>
-                              <th>{{product_like.product_company}}</th>
-                        </tr>
-                        <tr>
-                              <th class="product_title">
-                                    <a href="{% url 'products:products_detail' product_like.pk profile.pk %}">
-                                          {{ product_like.product_name }}
-                                    </a>
-                              </th>
-                        </tr>
-                        <tr>
-                              <th>{{ product.product_rating_avg }}</th>
-                        </tr>
-                        </table>
+                        <div style="display: inline-block;">
+                              <a href="{% url 'products:products_detail' product_like.pk profile.pk %}">
+                              <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
+                              </a>
+                        </div> 
+                        <div style="display: inline-block;">
+                              <table class="product_info">
+                              <tr>
+                                    <th>{{product_like.product_company}}</th>
+                              </tr>
+                              <tr>
+                                    <th class="product_title">
+                                          <a href="{% url 'products:products_detail' product_like.pk profile.pk %}">
+                                                {{ product_like.product_name }}
+                                          </a>
+                                    </th>
+                              </tr>
+                              <tr>
+                                    <th>{{ product.product_rating_avg }}</th>
+                              </tr>
+                              </table>
+                        </div>
                   </div>
-            </div>
-            {% comment %} <div class="word" style="display: inline-block; ">
-                  <li> 제품명: <a href="{% url 'products:products_detail' product_like.pk profile.pk %}" class ='click_word'>{{ product_like.product_name }}</a></li>  
-                  <li> 제조사: {{product_like.product_company}}</li> 
-                  <li> 섭취방법: {{ product_like.product_instruction }}</li> 
-                  <li> 소비기한: {{product_like.product_serving}}</li> 
-                  <li> 제품형태: {{product_like.product_dispos}}</li> 
-                  <li> 보관방법: {{product_like.product_storage_method}}</li> 
-                  <li> 주의사항: {{product_like.product_caution}}</li> 
-                  <li> 주된기능성: {{product_like.product_function_content}}</li> 
-            </div> {% endcomment %}
-      {% endfor %}
+                  {% comment %} <div class="word" style="display: inline-block; ">
+                        <li> 제품명: <a href="{% url 'products:products_detail' product_like.pk profile.pk %}" class ='click_word'>{{ product_like.product_name }}</a></li>  
+                        <li> 제조사: {{product_like.product_company}}</li> 
+                        <li> 섭취방법: {{ product_like.product_instruction }}</li> 
+                        <li> 소비기한: {{product_like.product_serving}}</li> 
+                        <li> 제품형태: {{product_like.product_dispos}}</li> 
+                        <li> 보관방법: {{product_like.product_storage_method}}</li> 
+                        <li> 주의사항: {{product_like.product_caution}}</li> 
+                        <li> 주된기능성: {{product_like.product_function_content}}</li> 
+                  </div> {% endcomment %}
+                  {% endfor %}
       </div>
+      
+            {% endif %}
 </div>
 {% endblock content %}

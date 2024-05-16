@@ -41,12 +41,19 @@
   <h3 class="recommend_title">
     우리가족을 위해 <span style="color:#BC55EF">맞춤 추천</span>된 제품입니다
   </h3>
+  {% if products_list  == '[]' %} 
   <div style="display: inline-block;">
-    {% for product in products_list %}
-    <div style="display: inline-block; margin-right: 20px; float:left; ">
+    아직 추천받은 기록이 없습니다!
+  </div>
+  
+  {% else %}
+
+  {% for product in products_list %}
+  <div>
+    <div style="margin-right: 20px; float:left; ">
       <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
     </div>
-    <div style="display: inline-block; width: 820px; margin-bottom: 40px">
+    <div style="width: auto; margin-bottom: 40px">
       <a href="{% url 'products:products_detail' product.pk profile.pk %}" style="color:#BC55EF; font-weight: 500"> {{ product.product_name }}</a>
       <li>평점: {{ product.product_rating_avg }}/5</li>
       <li>제조사: {{product.product_company}}</li>
@@ -57,7 +64,8 @@
       <li>주의사항: <br> {{product.product_caution}}</li>
       <li>주된 기능성: <br> {{product.product_function_content}}</li>
     </div>
-    {% endfor %}
   </div>
+  {% endfor %}
+  {% endif %}
 </div>
 {% endblock content %}

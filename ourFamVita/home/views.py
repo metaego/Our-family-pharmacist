@@ -68,8 +68,10 @@ def home_main(request, profile_id):
     #     'profile_id': profile_id,
     #     'survey_id': survey_id
     # }
-    if client_ip != os.environ.get('AWS_PUBLIC_IP'):
-        client_ip = os.environ.get('AWS_PUBLIC_IP')
+    if client_ip == '127.0.0.1':
+        pass
+    elif client_ip != os.environ.get('AWS_PUBLIC_IP'):
+         client_ip = os.environ.get('AWS_PUBLIC_IP')
     csrf_token = get_token(request)
     response = requests.post('http://' + client_ip + f':5000/ai-collabo-recom/{survey.survey_id}', 
                             #  data=json.dumps(content), 

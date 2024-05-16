@@ -56,7 +56,7 @@
                     <td style="font-weight: 600">연령대</td>
                     <td style="font-weight: 600">성별</td>
                     <td style="font-weight: 600">임신상태</td>
-                    <td style="word-wrap: break-word; width: 100px; font-weight: 600">알레르기 여부</td>
+                    <td style="word-wrap: break-word; width: 90px; font-weight: 600">알레르기 여부</td>
                 </tr>
                 <tr>
                     <td>{{ profile.profile_name }}  </td>
@@ -77,7 +77,7 @@
 
 <!-- rending page: recom_profile_info.html -->
 {% comment %} <form action="/recommends/{{ profile_id }}/info/"  method='get'> {% endcomment %}
-<div style="text-align: center">
+<div style="text-align: center">    
     <form action="{% url "recommends:profile_info" profile_id %}"  method='get'>
         <button class="btn btn-recommendation" style="font-size: 15px; width: 500px; height: 30px;">
             건강설문하고 영양제 추천 받기
@@ -85,7 +85,7 @@
     </form>    
 </div>
 
-<div class="profile-container" style="text-align: center; margin: 40px 10%">
+<div class="profile-container" style="text-align: center; margin: 40px 10%;">
     <h3 class="recommend_title">
         <span style="color:#BC55EF">{{ profile.profile_name }}</span>님을 위한 맞춤 영양제 추천
     </h3>
@@ -93,7 +93,7 @@
         <!-- rending page: recom_profile_info.html -->
         영양제를 추천받아보신 적이 없으시군요!
         <form action="{% url "recommends:profile_info" profile_id %}" method='get'>
-            <button class="btn btn-primary" style="width: 300px">
+            <button class="btn btn-primary" style="width: 300px; margin-top: 30px">
                 나의 맞춤 영양제 추천을 위한 건강 설문하러 가기
             </button>
         </form>
@@ -121,7 +121,11 @@
                         <th>{{ s_recom_product.product_company }}</th>
                     </tr>
                     <tr>
-                        <th class="product_title">{{ s_recom_product.product_name }}</th>
+                        <th class="product_title">
+                            <a href="{% url "products:products_detail" s_recom_product.product_id profile.profile_id %}">
+                                {{ s_recom_product.product_name }}
+                            </a>
+                        </th>
                     </tr>
                     <tr>
                         <th>{{ s_recom_product.product_rating_avg }}</th>
@@ -137,7 +141,7 @@
 </div>
 
 
-<div class="profile-container" style="text-align: center; margin: 40px 10%">
+<div class="profile-container" style="text-align: center; margin: 40px 10%;">
     <h3 class="recommend_title">
         <span style="color:#BC55EF">
         {{ survey.survey_age_group }}  
@@ -146,8 +150,8 @@
             {% else %}
                 {{ '남성' }}
             {% endif %}
-        </span> 
-        에게 인기 많은 영양제를 확인해보세요
+        </span>
+        에게 인기 많은 영양제를 확인해 보세요
     </h3>
     <!-- rending page: recom_profile_product_list.html -->
     <!-- 이미지 클릭 시 해당 영양제 제품 상세 페이지로 이동하는 기능 구현할 예정 -->
@@ -168,7 +172,11 @@
                         <th>{{ sa_recom_product.product_company }}</th>
                     </tr>
                     <tr>
-                        <th class="product_title">{{ sa_recom_product.product_name }}</th>
+                        <th class="product_title">
+                            <a href="{% url "products:products_detail" sa_recom_product.product_id profile.profile_id %}">
+                                {{ sa_recom_product.product_name }}
+                            </a>
+                        </th>
                     </tr>
                     <tr>
                         <th>{{ sa_recom_product.product_rating_avg }}</th>
