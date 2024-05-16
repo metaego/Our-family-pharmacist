@@ -22,7 +22,7 @@ def ai_total_recom(survey_df):
        # 추천 알고리즘에 필요한 데이터프레임 피클파일 저장 경로 설정
        # 상위 디렉토리
        parent_directory = r'flask_ml_app/views/data/'
-       ingredient_df_path = parent_directory + r'recom_ingredient_dataset_fin_240510_v2.pkl' 
+       ingredient_df_path = parent_directory + r'recom_ingredient_dataset_fin_240515_v3.pkl' 
        product_df_path = parent_directory + r'product_df_preprocessed.pkl'
        dummy_survey_df_path = parent_directory + r'dummy_add_recom_ingredients_240513_v4.pkl'
        review_df_path = parent_directory + r'dummy_review_240510_vector_240512_v2.pkl'

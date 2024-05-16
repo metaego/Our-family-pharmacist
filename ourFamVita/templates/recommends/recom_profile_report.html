@@ -135,7 +135,7 @@
                 {{ c_product.product_name}} | {{ c_product.product_rating_avg }} / 5
             </a>
         {% endfor %}
-        <form action="{% url "recommends:request_flask_collabo_recom_model" profile.profile_id %}"  method='get'>
+        <form action="{% url 'recommends:request_flask_collabo_recom_model' profile.profile_id %}"  method='get'>
             {% csrf_token %}
             <button>더보기</button>
         </form>

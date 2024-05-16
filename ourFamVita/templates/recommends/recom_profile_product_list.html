@@ -35,7 +35,7 @@
 {% comment %} <div>
     <!-- 영양 성분 리포트 페이지로 가기 -->
     <!-- render: recommends/recom_profile_report.html -->
-    <form action="{% url "recommends:profile_total_report" profile.profile_id survey.survey_id %}" method='get'>
+    <form action="{% url 'recommends:profile_total_report' profile.profile_id survey.survey_id %}" method='get'>
         {% csrf_token %}
           <button>이전</button>
     </form>
@@ -113,8 +113,10 @@
             <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
                 {% if product.product_image == '0' %}
                     <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+                    {{ "   " }} <br><br><br>
                 {% else %}
                     <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+                    {{ "   " }} <br><br><br>
                 {% endif %}
             </a>
         </div>

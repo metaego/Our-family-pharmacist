@@ -25,7 +25,7 @@ class DataLoad():
 
         if self.ingredient_df_path:
             with open(self.ingredient_df_path, 'rb') as f:
-                obj = loaded_data.append(pickle.load(f)) #(open(f)), encoding='cp949'))
+                loaded_data.append(pickle.load(f)) 
                 
                 
         if self.product_df_path:
