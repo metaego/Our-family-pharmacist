@@ -33,14 +33,18 @@ def product_detail(request, product_id, profile_id):
         print(f'review: {review}')
     
 
-    # 영양제 로그 데이터
+
+    # 영양제 로그 데이터 생성 및 저장
     survey = Survey.objects.filter(profile_id=profile_id).latest('created_at')
     ProductLog.objects.create(survey_id=survey, 
                               profile_id=profile, 
                               product_id=product,
                               visited_at=timezone.now(),
-                              product_log_id=None)
-
+                              product_log_id=None,
+                              leaved_at=None,
+                              product_log_duration=1)
+    
+    
     
     return render(request, 'products/product_detail.html', {
         'profile': profile,
