@@ -128,7 +128,12 @@
                         </th>
                     </tr>
                     <tr>
-                        <th>{{ s_recom_product.product_rating_avg }}</th>
+                        <th>평점: {% if s_recom_product.product_rating_avg == 0.00 %}
+                                    {{ '0' }}
+                                  {% else %}
+                                    {{ s_recom_product.product_rating_avg }}
+                            {% endif %}
+                        </th>
                     </tr>
                 </table>
             </div>
@@ -179,7 +184,12 @@
                         </th>
                     </tr>
                     <tr>
-                        <th>{{ sa_recom_product.product_rating_avg }}</th>
+                        <th>평점: {% if sa_recom_product.product_rating_avg == 0.00 %}
+                                    {{ '0' }}
+                                  {% else %}
+                                    {{ sa_recom_product.product_rating_avg }}
+                                  {% endif %}
+                        </th>
                     </tr>
                 </table>
             </div>

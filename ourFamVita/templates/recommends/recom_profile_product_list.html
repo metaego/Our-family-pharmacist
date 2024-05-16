@@ -122,18 +122,23 @@
         <div style="width: auto; margin-bottom: 40px">
             <span style="color:#BC55EF; font-weight: 500">{{ product.product_name }}</span>
             <li>평점: {% if product.product_rating_avg == 0.00 %}
-                                {{ 0 }}/5
+                                {{ 0 }}
                         {% else %}
-                                {{ product.product_rating_avg }}/5
+                                {{ product.product_rating_avg }}
                         {% endif %}
             </li>
             <li>제조사: {{ product.product_company }}</li>
             <li>섭취 방법: {{ product.product_instruction }}</li>
             <li>소비기한: {{product.product_serving}}</li>
             <li>제품 형태: {{product.product_dispos}}</li>
-            <li>보관 방법: {{product.product_storage_method}}</li>
+            <li>보관 방법: {% if product.product_storage_method == None %}
+                             {{ '없음' }}
+                           {% else %}
+                             {{product.product_storage_method}}
+                           {% endif %}
+            </li>
             <li>주의사항: <br> {{product.product_caution}}</li>
-            <li>주된 기능성: <br> {{product.product_function_content}}</li>
+            <li>주된 기능성: <br> {{product.product_function_content}}</li> 
             {% comment %} <li>제품 기능: {{ product.product_function_content }}</li> {% endcomment %}
         </div>
         

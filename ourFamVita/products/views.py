@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.db.models import Sum, Count
-from users.models import (Profile
-                        , Product, ProductReview, ProductIngredient
+from users.models import (Profile, Survey
+                        , Product, ProductReview, ProductIngredient, ProductLog
                         , Ingredient)
 
 # Create your views here.
@@ -32,6 +32,14 @@ def product_detail(request, product_id, profile_id):
         review = ProductReview.objects.filter(product_id=product_id, profile_id=profile_id).get()
         print(f'review: {review}')
     
+
+    # 영양제 로그 데이터
+    survey = Survey.objects.filter(profile_id=profile_id).latest('created_at')
+    ProductLog.objects.create(survey_id=survey, 
+                              profile_id=profile, 
+                              product_id=product,
+                              visited_at=timezone.now(),
+                              product_log_id=None)
 
     
     return render(request, 'products/product_detail.html', {
