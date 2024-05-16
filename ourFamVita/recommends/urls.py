@@ -38,5 +38,8 @@ urlpatterns = [
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록 
     # menu: home main(나이 & 성별 기반) > 영양제 추천 목록
     # /recommends/{profile-id}/rec-collabo-products/
-    path('<int:profile_id>/rec_collabo_products/', views.recom_products_collabo_base, name='products_collabo_base')
+    path('<int:profile_id>/rec_collabo_products/', views.recom_products_collabo_base, name='products_collabo_base'),
+
+    # flask에 데이터 신규 생성하지 않고 추천받기
+    path('request_flask/old/<int:profile_id>/<int:survey_id>/', views.request_flask_recom_model_old, name='request_flask_recom_model_old')
 ]

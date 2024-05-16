@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.db.models import Sum, Count
-from users.models import (Profile, Survey
-                        , Product, ProductReview, ProductIngredient, ProductLog
-                        , Ingredient)
+from users.models import (Profile
+                        , Survey, SurveyFunction
+                        , Product, ProductReview, ProductIngredient, ProductFunction, ProductLog
+                        , Ingredient, FunctionCode)
 
 # Create your views here.
 def product_detail(request, product_id, profile_id):
@@ -20,9 +21,21 @@ def product_detail(request, product_id, profile_id):
     if product.product_rating_avg == 0.00:
         product.product_rating_avg = 0
 
+
+
+    # 제품 영양 성분
     product_ingredients = ProductIngredient.objects.filter(product_id=product_id).values_list('ingredient_id', flat=True)
     product_ingredients = list(product_ingredients)
     product_ingredients = Ingredient.objects.filter(ingredient_id__in=product_ingredients)
+
+
+
+    # 제품 기능
+    product_function_list = ProductFunction.objects.filter(product_id=product_id).values_list('function_code', flat=True)
+    product_function_list = list(product_function_list)
+    product_functions = FunctionCode.objects.filter(function_code__in=product_function_list)
+    product_functions = product_functions.exclude(function_code__in=['HF00', 'HF26']).values_list('function_code_name', flat=True)
+    product_functions = list(product_functions)
 
 
 
@@ -30,23 +43,38 @@ def product_detail(request, product_id, profile_id):
     review = ProductReview.objects.filter(product_id=product_id, profile_id=profile_id).exists()
     if review:
         review = ProductReview.objects.filter(product_id=product_id, profile_id=profile_id).get()
-        print(f'review: {review}')
     
 
-    # 영양제 로그 데이터
+
+    # 영양제 로그 데이터 생성 및 저장
     survey = Survey.objects.filter(profile_id=profile_id).latest('created_at')
     ProductLog.objects.create(survey_id=survey, 
                               profile_id=profile, 
                               product_id=product,
                               visited_at=timezone.now(),
-                              product_log_id=None)
+                              product_log_id=None,
+                              leaved_at=None,
+                              product_log_duration=1)
+    
 
+
+    # 건강설문에서 선택한 건강기능 고민 import
+    survey_function_list = SurveyFunction.objects.filter(survey_id=survey.survey_id)
+    survey_function_list = survey_function_list.exclude(function_code__in=['HF00', 'HF26']).values_list('function_code', flat=True)
+    survey_function_list = list(survey_function_list)
+    survey_functions = FunctionCode.objects.filter(function_code__in=survey_function_list).values_list('function_code_name', flat=True)
+    survey_functions = list(survey_functions)
+
+    
     
     return render(request, 'products/product_detail.html', {
         'profile': profile,
         'product': product, 
         'product_ingredients': product_ingredients,
         'review': review,
+        'product_functions': product_functions,
+        'survey_function_list': survey_function_list,
+        'survey_functions': survey_functions,
     })
 
 
@@ -77,4 +105,3 @@ def product_review(request, product_id, profile_id):
 
         
     return redirect('products:products_detail', product.product_id, profile.profile_id)
-# return redirect('recommends:profile_total_report', profile.profile_id, survey.survey_id)
