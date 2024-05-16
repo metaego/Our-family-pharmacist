@@ -1,30 +1,194 @@
 <!-- menu: ai 영양제 추천받기 > 영양 성분 리포트 > 영양제 추천 목록 > 영양제 상세보기 -->
 {% extends "base.html" %}
 {% block content %}
-
-<h1>영양제 상세보기</h1>
-<strong>{xx}을 개선하는데 좋은 제품이에요</strong>
-<li> 제품명: {{ product.product_name }}</li>
-<li> 제조사명: {{ product.product_company }}</li>
-
-<div>
-    <strong>추천 성분 분석</strong>
-
+{% load static %}
+<link rel="stylesheet" href="{% static "css/style.css" %}">
+<style>
+    * {
+        font-family: "Noto Sans KR";
+        font-weight: 400;
+        .product_image {
+            width: 200px;
+            height: auto;
+        }
+        .recommend_title {
+            font-size: 18px; 
+            font-weight: 500; 
+            margin-bottom: 20px;
+        }
+        .product_info {
+            width: 800px; 
+            text-align: left;
+            font-size: 15px;
+        }
+        .product_title {
+            font-weight: 500;
+            font-size: 15px;
+        }
+        .comment {
+            border: 1px solid #b2afaf;
+            width: 1050px;
+            
+        }
+        .flex-container{
+            display: flex;
+            justify-content: center;
+            
+        }
+        .flex-item{
+            flex-glow:1;
+            border-radius: 20px;
+            box-shadow: 0.6px 0.6px 8px 0.6px rgba(0, 0, 0, 0.2);
+            max-width: 1500px;
+            width: 520px;
+            height: auto;
+            margin: 10px;
+            box-sizing: border-box;
+            text-align: center;
+            padding: 20px;
+        }
+    }
+</style>
+<div style="text-align: center; margin-top: 80px">
+    <h2 style="font-size: 24px; font-weight: 500">
+        <span style="color:#BC55EF;">{{ profile.profile_name }}</span>님에게 추천하는 영양제
+    </h2>
 </div>
-<div>
-    <strong>주요 건강 기능</strong>
 
+
+<div class="profile-container" style="text-align: center; margin: 40px 15%; padding: 20px 0">
+    <h3 class="recommend_title">
+        아래 기능을 개선하는데 좋은 제품이에요
+    </h3>
+    {% for p_function in product_functions %}
+        {% if p_function in survey_functions %}
+            <li class="product_info" style="color:#BC55EF;"> <strong>{{ p_function }}</strong><br></li>
+        {% else %}
+            <li class="product_info">{{ p_function }}<br></li>
+        {% endif %}
+    {% endfor %}
 </div>
-<div>
-    <strong>리뷰</strong>
-    <li>{{ review.product_review_rating }} 점 | {{ review.product_review_content }} 
-        <form action="">
-            <button>리뷰 삭제</button>
+
+
+<div style="margin: 40px 15%; ">
+    <h3 class="recommend_title">
+        제품 상세
+    </h3>
+    <div style="display: inline-block">
+        <div style="display: inline-block">
+            {% if product.product_image == '0' %}
+                <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+            {% else %}
+                <img src="{% static product.product_image %}" alt="영양제 제품 이미지" class='product_image'>
+            {% endif %}
+        <div>
+        <div style="display: inline-block; margin-bottom: 40px">
+            <span style="color:#BC55EF; font-weight: 500; font-size: 15px; ">{{ product.product_name }}</span>
+            <li>평점: {{ product.product_rating_avg }}</li>
+            <li>제조사: {% if product.product_company == None %}
+                            {{ '없음' }}
+                        {% else %}
+                            {{ product.product_company }}
+                        {% endif %}
+            </li>
+            <li>섭취 방법: {% if product.product_instruction == None %}
+                                {{ '없음' }}
+                           {% else %}
+                                {{ product.product_instruction }}
+                           {% endif %} 
+            </li>
+            <li>소비기한: {% if product.product_serving == None %}
+                                {{ '없음' }}
+                          {% else %}
+                                {{ product.product_serving }}
+                          {% endif %} 
+            </li>    
+            <li>제품 형태: {% if product.product_dispos == None %}
+                                {{ '없음' }}
+                          {% else %}
+                                {{ product.product_dispose }}
+                          {% endif %}
+            </li>
+            <li>보관 방법: {% if product.product_storage_method == None %}
+                                {{ '없음' }}
+                           {% else %}
+                                {{ product.product_storage_method }}
+                           {% endif %}
+            </li>
+            <li>주의사항: {% if product.product_caution == None %}
+                                {{ '없음' }}
+                          {% else %}
+                                {{ product.product_caution }}
+                          {% endif %}
+            </li>
+            <li>주된 기능성: {% if product.product_fuction_content == None %}
+                                {{ '없음' }}
+                            {% else %}
+                                {{ product.product_fuction_content }}
+                            {% endif %}
+            </li>
+        </div> 
+    </div>
+</div>
+
+<div class="flex-container">
+    <div class="flex-item">
+        <h3 class="recommend_title">
+            추천 성분 분석
+        </h3>
+        {% for p_ingredient in product_ingredients %}
+            {{ p_ingredient.ingredient_name }}
+            {% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <div class="flex-item">
+        <h3 class="recommend_title">
+            주요 건강 기능
+        </h3>
+        {% for p_ingredient in product_ingredients %}
+            {{ p_ingredient.ingredient_function_content }}
+            {% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>    
+</div>
+
+
+<div style="margin-top: 40px">
+    <h3 class="recommend_title">
+        리뷰
+    </h3>
+    {% if review == False %}
+    <!-- profile의 등록된 댓글이 없는 경우 -->
+        <form id="comment-form" action="{% url 'products:product_review' product.product_id profile.profile_id %}" method="post">
+            {% csrf_token %}
+            평점:
+            <select name="rating">
+                <option value="0">0점</option>
+                <option value="1">1점</option>
+                <option value="2">2점</option>
+                <option value="3">3점</option>
+                <option value="4">4점</option>
+                <option value="5">5점</option>
+            </select>
+            <br><br>
+            <textarea class="comment" name="comment" rows="4" cols="100" maxlength="200" placeholder="댓글을 입력하세요(최대 200자)"></textarea><br>
+            <button class="btn btn-secondary" type="submit" style="margin-bottom: 5px">댓글 등록</button>    
         </form>
-    </li>
+    {% else %}
+        <li>{{ review.product_review_rating }} 점 | {{ review.created_at|date:"Y-m-d H:i:s"|slice:":16" }}</li>
+        <li>{{ review.product_review_content }}</li> 
+    {% endif %}
 </div>
-
-<div>
+<script>
+    document.getElementById("comment-form").addEventListener("submit", function(event) {
+        var comment = document.getElementById("comment").value;
+        if (comment.trim() === "") {
+            event.preventDefault();
+            alert("댓글을 작성하세요!");
+        }
+    });
+</script>
+{% comment %} <div>
 <strong>현재시간: </strong>
     <div id="current-time"> 
     </div>
@@ -40,5 +204,5 @@
             currentTimeElement.innerHTML = whatTimeIsIT();
         };
     </script>
-</div>
+</div> {% endcomment %}
 {% endblock content %}

@@ -24,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ea%%5i6&ill1g(s@i#4p$c0u*6n9z-kd@0&gzc$rj&hwps2@8='
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [os.environ.get('AWS_PUBLIC_IP'), '0.0.0.0', '127.0.0.1']
 
 
 # Application definition
@@ -95,8 +95,9 @@ WSGI_APPLICATION = 'ourFamVita.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'testDB',
         'NAME': 'ourFamVitaDBNew',
-        'USER': 'admin',
+        'USER': os.environ.get('MYSQL_USER'),
         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
         'HOST': os.environ.get('MYSQL_HOST'),
         'PORT': 3306,
@@ -143,7 +144,7 @@ DEFAULT_CHARSET = 'utf-8'
 STATIC_URL = '/static/'
 
 # CSS 건들 때 사용할 경로
-# STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

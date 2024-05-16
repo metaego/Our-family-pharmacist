@@ -1,26 +1,55 @@
 
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/style.css" %}">
+<style>
+  *{
+    .product_image {
+      width: 200px;
+      height: auto;
+    }
+  }
+</style>
 
-<div>
-    <a href="{% url "mypages:main" profile.profile_id%}">
-    <button>이전</button>
-    </a>
+<div style="margin: 80px 62% 10px 10%">
+  <a href="{% url "mypages:main" profile.profile_id %}">
+    <button class="btn btn-secondary">이전</button>
+  </a>
+</div> 
+
+<div style="text-align: center; ">
+  <h2 style="font-size: 24px; font-weight: 500">
+    리뷰작성 영양제 목록 조회
+  </h2>
 </div>
 
-<h1> 리뷰작성 영양제 목록 조회 </h1>
+<div style="margin: 40px 15%;">
+  {% if products_list == '[]' %} 
+  <div style="display: inline-block;">
+    아직 리뷰 작성한 영양제가 없습니다!
+  </div>
+  {% else %}
 
-  <ul> 
-    {% for product in products %}
-      <li>
-      <p>제품이미지: {{ product.product_image }} | <a href="{% url "products:products_detail" product.pk profile.pk %}">제품명: {{ product.product_name }}</a> | 
-      평점: {{ product_reviews.product_review_rating }} |
-       리뷰: {{product_reviews.product_review_content }}</p> 
-
-   
-    {% endfor %}   
-    </li> 
-</ul>
-
-
+  {% for product in products_list %}
+  <div>
+    <div style="margin-right: 20px; float: left">
+      <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
+    </div>
+    <div style="width: auto; margin-bottom: 40px">
+      <a href="{% url 'products:products_detail' product.1.pk profile.pk %}" style="color:#BC55EF; font-weight: 500">{{ product.1.product_name }}</a>
+      <li>평점: {{ product.0.product_review_rating }}</li>
+      <li>리뷰: {{product.0.product_review_content }}</li>
+      <li>제조사: {{product.1.product_company}}</li>
+      <li>섭취 방법: {{ product.1.product_instruction }}</li>
+      <li>소비기한: {{product.1.product_serving}}</li>
+      <li>제품 형태: {{product.1.product_dispos}}</li>
+      <li>보관 방법: {{product.1.product_storage_method}}</li>
+      <li>주의사항: <br> {{product.1.product_caution}}</li>
+      <li>주된 기능성: <br> {{product.1.product_function_content}}</li>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+</div> 
 {% endblock content %}

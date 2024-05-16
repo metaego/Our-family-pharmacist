@@ -1,13 +1,150 @@
 <!-- menu: ai 영양제 추천받기 > 영양 성분 리포트 > 영양제 추천 목록 -->
 {% extends "base.html" %}
 {% block content %}
-<h1>영양제 추천 목록</h1>
+{% load static %}
+<link rel="stylesheet" href="{% static "css/style.css" %}">
+<style>
+    * {
+        font-family: "Noto Sans KR";
+        font-weight: 400;
+        .profile_image {
+          width: 55px; 
+          height: auto; 
+        }
+        .product_image {
+            width: 200px;
+            height: auto;
+        }
+        .recommend_title {
+            font-size: 18px; 
+            font-weight: 500; 
+            margin-bottom: 20px;
+        }
+        .product_info {
+            width: 800px; 
+            text-align: left;
+            font-size: 15px;
+        }
+        .product_title {
+            font-weight: 500;
+            font-size: 15px;
+        }
+      }
+</style>
 
-<h3>{{ profile.profile_name }}님을 위해 맞춤 추천한 제품입니다</h3>
-<!-- rending page: product_detail.html -->
-<!-- /products/product-id/profile-id -->
-영양제 제품 리스트가 출력될 예정
-<form action="{% url "products:products_detail" product.product_id profile.profile_id %}" method='get'>
-    <button>product1</button>
-</form>
+{% comment %} <div>
+    <!-- 영양 성분 리포트 페이지로 가기 -->
+    <!-- render: recommends/recom_profile_report.html -->
+    <form action="{% url 'recommends:profile_total_report' profile.profile_id survey.survey_id %}" method='get'>
+        {% csrf_token %}
+          <button>이전</button>
+    </form>
+</div> {% endcomment %}
+
+<div style="text-align: center; margin-top: 80px">
+    <h1 style="font-size: 24px; font-weight: 500">영양제 추천 목록</h1>
+    <br>
+    <h2 style="font-size: 15px; font-weight: 400">{{ profile.profile_name }}님의 프로필 정보 확인</h2>
+</div>
+
+
+<div class="profile-container" style="margin: 20px 20% 20px 20%;">
+    <div style="display: inline-block;">
+        <div style="display: inline-block;">
+            <img src = "{% static 'home/profile_temp_image_240506.png' %}" alt = "프로필 사진" class="profile_image">
+        </div>
+        <div style="display: inline-block;">
+            <table style="width:800px; table-layout: fixed">
+                <tr>
+                    <td style="font-weight: 600">나이</td>
+                    <td style="font-weight: 600">성별</td>
+                    <td style="font-weight: 600">키</td>
+                    <td style="font-weight: 600">몸무게</td>
+                    <td style="font-weight: 600; width: 90px">임신상태</td>
+                    <td style="word-wrap: break-word; width: 90px; font-weight: 600">알레르기 여부</td>
+                    <td style="word-wrap: break-word; width: 90px; font-weight: 600">기저질환</td>
+                    <td style="font-weight: 600">흡연 여부</td>
+                    <td style="font-weight: 600">음주 여부</td>
+                </tr>
+                <tr>
+                    <td>만 {{ age }} 세</td>
+                    <td>{{ survey.survey_sex }}</td>
+                    <td>
+                      {% if survey.survey_height != '미입력' %}
+                      {{ survey.survey_height }}cm
+                      {% else %}
+                      {{ survey.survey_height }}
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if survey.survey_weight != '미입력' %}
+                      {{ survey.survey_weight }}kg
+                      {% else %}
+                      {{ survey.survey_weight }}
+                      {% endif %}
+                    </td>
+                    <td>{{ pregnancy }}</td>
+                    <td>{{ allergy|join:', ' }}</td>
+                    <td>{{ disease|join:', ' }}</td>
+                    <td>{{ survey.survey_smoke }}</td>
+                    <td>{{ alcohol }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="margin: 40px 15%;">
+    <div class="recommend_title" style="text-align: center; margin-top: 80px">
+        {% if page_flag == '추천 영양 성분 기반' %}
+            <span style="color:#BC55EF">{{ recommend_ingredient.ingredient_name }}</span>
+            개선하는데 좋은 제품이에요
+        {% elif page_flag == '영양 성분 리포트' %}
+            <span style="color:#BC55EF">{{ profile.profile_name }}</span>
+            님을 위해 추천된 제품입니다
+        {% elif page_flag == '연령 및 성별 기반' %}
+            <span style="color:#BC55EF">{{ survey.survey_age_group}} {{survey.survey_sex}}</span>
+            에게 인기있는 제품입니다
+        {% endif %}
+    </div>
+
+    {% for product in popular_products %}
+    <div>
+        <div style="margin-right: 20px; float:left;">
+            <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
+                {% if product.product_image == '0' %}
+                    <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+                {% else %}
+                    <img src="{% static product.product_image %}" alt="영양제 제품 이미지" class='product_image'>
+                {% endif %}
+            </a>
+        </div>
+        <div style="width: auto; margin-bottom: 40px">
+            <span style="color:#BC55EF; font-weight: 500">{{ product.product_name }}</span>
+            <li>평점: {% if product.product_rating_avg == 0.00 %}
+                                {{ 0 }}
+                        {% else %}
+                                {{ product.product_rating_avg }}
+                        {% endif %}
+            </li>
+            <li>제조사: {{ product.product_company }}</li>
+            <li>섭취 방법: {{ product.product_instruction }}</li>
+            <li>소비기한: {{product.product_serving}}</li>
+            <li>제품 형태: {{product.product_dispos}}</li>
+            <li>보관 방법: {% if product.product_storage_method == None %}
+                             {{ '없음' }}
+                           {% else %}
+                             {{product.product_storage_method}}
+                           {% endif %}
+            </li>
+            <li>주의사항: <br> {{product.product_caution}}</li>
+            <li>주된 기능성: <br> {{product.product_function_content}}</li> 
+            {% comment %} <li>제품 기능: {{ product.product_function_content }}</li> {% endcomment %}
+        </div>
+        
+    </div>
+    {% endfor %}
+</div>
+
+
 {% endblock content %}

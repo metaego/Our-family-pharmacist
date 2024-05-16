@@ -2,36 +2,54 @@
 <!-- menu: home -->
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 
-<div>
-    <a href="{% url "mypages:main" profile.profile_id %}">
-    <button>이전</button>
-    </a>
+<div style="margin: 80px 62% 10px 10%">
+  <a href="{% url "mypages:main" profile.profile_id %}">
+    <button class="btn btn-secondary">이전</button>
+  </a>
+</div> 
+
+<div style="text-align: center; ">
+  <h2 style="font-size: 24px; font-weight: 500">
+    영양성분 AI 추천 기록
+  </h2>
 </div>
 
-<h1>영양성분 AI 추천 기록 </h1>
+<body> 
+  {% if products_list == '[]' %} 
+  <div> 아직 추천받은 기록이 없습니다! </div>
+  
+  {% else %}
 
+    {% for ingredient in ingredients_list %}
+    <div class="profile-container" style="margin: 40px 10%; padding: 30px">
+      <div style="display: inline-block;">
 
+        <div style="display: inline-block; float: left; margin: 0 50px">
+          <a href="{% url "recommends:request_flask_recom_model_old" profile.profile_id ingredient.2.survey_id.survey_id  %}">        
+            <strong style="color: #BC55EF">{{ingredient.2.created_at}}</strong> 추천 영양 성분 리포트
+          </a>
+        </div>
+        <div style="display: inline-block; text-align:left">
+          <li> 영양성분 이름: 
+            {% for ingredient_indi in ingredient.0 %}
+              {{ ingredient_indi.ingredient_name }} 
+                {% if not forloop.last %},  {% endif %}
+            {% endfor %} 
+          </li>   
+          <li> 선택한 건강고민:
+            {% for ingredient_func in  ingredient.1 %}
+              {{ ingredient_func.function_code_name }}
+              {% if not forloop.last %},  {% endif %}
+            {% endfor %} 
+          </li>
+        </div>
 
-<ul> 
-    
-    {% for ingredient in ingredients %}
-      
-           
-          <li>
-          
-            <p><a href="{% url "recommends:profile_total_report" profile.profile_id survey_functions.survey_id.survey_id %}">{{recommendations_info.created_at}} ) 추천 영양 성분 리포트 - </a>
-           
-            영양성분이름: {{ ingredient.ingredient_name }} |         
-            
-            선택한 건강고민: {{ survey_functions.function_code.function_code }}
-          </p>
-          
-           </li> 
-
-      {% endfor %}
-   
-    
-</ul> 
-
-  {% endblock content %}
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</body> 
+{% endblock content %}
