@@ -644,6 +644,8 @@ class RecommendModel(DefinedVariable):
             'HF11', 'HF12', 'HF13', 'HF14', 'HF15', 'HF16', 'HF17', 'HF18', 'HF19', 'HF20',
             'HF21', 'HF22', 'HF23', 'HF24', 'HF25'
         ]].sum(axis=1)
+        
+        new_survey_df.loc[new_survey_df['HF_sum'] == 0, 'HF02'] = 1
 
         # Add the new user to the dataset and provide their features
         self.dataset.fit_partial(users=[profile_id, temp_id], user_features=user_feature_list)
@@ -748,8 +750,10 @@ class RecommendModel(DefinedVariable):
                         if len(recommended_product_list) + len([k for k, v in recommended_product_dict.items() if v == i]) < 100:
                             recommended_product_list += [k for k, v in recommended_product_dict.items() if v == i]
                         else:
-                            recommended_product_list += random.sample([k for k, v in recommended_product_dict.items() if v == i], 100 - len(recommended_product_list))
-
+                            # recommended_product_list += random.sample([k for k, v in recommended_product_dict.items() if v == i], 100 - len(recommended_product_list))
+                            recommended_product_list += [k for k, v in recommended_product_dict.items() if v == i] # 여기!!!!!!!!!!!!!!
+                            break
+                            
             # recommended ingredient is present (health function is already utilized during ingredient recommendation)
             else:
                 recommended_product_dict = dict.fromkeys(product_list,0)
@@ -786,7 +790,9 @@ class RecommendModel(DefinedVariable):
                     if len(recommended_product_list) + len([k for k, v in recommended_product_dict.items() if v == i]) < 100:
                         recommended_product_list += [k for k, v in recommended_product_dict.items() if v == i]
                     else:
-                        recommended_product_list += random.sample([k for k, v in recommended_product_dict.items() if v == i], 100 - len(recommended_product_list))
+                        # recommended_product_list += random.sample([k for k, v in recommended_product_dict.items() if v == i], 100 - len(recommended_product_list))
+                        recommended_product_list += [k for k, v in recommended_product_dict.items() if v == i] # 여기!!!!!!!!!!!!!!
+                        break
 
             globals()["profile_{}".format(idx)] = recommended_product_list # [:5]
 
