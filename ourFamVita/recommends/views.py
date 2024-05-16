@@ -405,6 +405,7 @@ def recom_profile_total_report(request, profile_id, survey_id):
     })
 
 
+
 def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
     
     start_time = time.time()
@@ -532,6 +533,7 @@ def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
         'page_flag': page_flag,
         'nutri_num': nutri_num,
     })
+
 
 
 def recom_products_profile_base(request, profile_id, survey_id):

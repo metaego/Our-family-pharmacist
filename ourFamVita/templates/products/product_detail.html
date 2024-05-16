@@ -60,8 +60,12 @@
     <h3 class="recommend_title">
         아래 기능을 개선하는데 좋은 제품이에요
     </h3>
-    {% for p_ingredient in product_ingredients %}
-    <li class="product_info">{{ p_ingredient.ingredient_function_content }}<br></li>
+    {% for p_function in product_functions %}
+        {% if p_function in survey_functions %}
+            <li class="product_info" style="color:#BC55EF;"> <strong>{{ p_function }}</strong><br></li>
+        {% else %}
+            <li class="product_info">{{ p_function }}<br></li>
+        {% endif %}
     {% endfor %}
 </div>
 
