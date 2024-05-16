@@ -61,8 +61,8 @@
                     <td style="font-weight: 600">키</td>
                     <td style="font-weight: 600">몸무게</td>
                     <td style="font-weight: 600; width: 90px">임신상태</td>
-                    <td style="word-wrap: break-word; width: 100px; font-weight: 600">알레르기 여부</td>
-                    <td style="word-wrap: break-word; width: 100px; font-weight: 600">기저질환</td>
+                    <td style="word-wrap: break-word; width: 90px; font-weight: 600">알레르기 여부</td>
+                    <td style="word-wrap: break-word; width: 90px; font-weight: 600">기저질환</td>
                     <td style="font-weight: 600">흡연 여부</td>
                     <td style="font-weight: 600">음주 여부</td>
                 </tr>
@@ -107,9 +107,10 @@
             에게 인기있는 제품입니다
         {% endif %}
     </div>
-    <div style="display: inline-block;">
-        {% for product in popular_products %}
-        <div style="display: inline-block; margin-right: 20px; float:left">
+
+    {% for product in popular_products %}
+    <div>
+        <div style="margin-right: 20px; float:left;">
             <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
                 {% if product.product_image == '0' %}
                     <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
@@ -118,7 +119,7 @@
                 {% endif %}
             </a>
         </div>
-        <div style="display: inline-block; width: 820px; margin-bottom: 40px">
+        <div style="width: auto; margin-bottom: 40px">
             <span style="color:#BC55EF; font-weight: 500">{{ product.product_name }}</span>
             <li>평점: {% if product.product_rating_avg == 0.00 %}
                                 {{ 0 }}/5
@@ -135,8 +136,9 @@
             <li>주된 기능성: <br> {{product.product_function_content}}</li>
             {% comment %} <li>제품 기능: {{ product.product_function_content }}</li> {% endcomment %}
         </div>
-        {% endfor %}
+        
     </div>
+    {% endfor %}
 </div>
 
 
