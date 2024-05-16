@@ -93,7 +93,7 @@
         <!-- rending page: recom_profile_info.html -->
         영양제를 추천받아보신 적이 없으시군요!
         <form action="{% url "recommends:profile_info" profile_id %}" method='get'>
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" style="width: 300px">
                 나의 맞춤 영양제 추천을 위한 건강 설문하러 가기
             </button>
         </form>
@@ -130,7 +130,7 @@
             </div>
         {% endfor %}
         <form action="{% url "recommends:products_profile_base" profile_id survey.survey_id %} " method='get'>
-            <button class="btn btn-primary" style="margin-top: 15px">더보기</button>
+            <button class="btn btn-primary" style="margin-top: 15px;">더보기</button>
         </form>
     </div>
     {% endif %}
