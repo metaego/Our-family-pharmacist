@@ -63,7 +63,7 @@ def home_main(request, profile_id):
     # 연령*성별 기반 추천받은 영양제
     # flask 요청 
     client_ip = request.META.get('REMOTE_ADDR', None)
-    # print(f'client_ip: {client_ip}')
+    print(f'client_ip: {client_ip}')
     # content = {
     #     'profile_id': profile_id,
     #     'survey_id': survey_id

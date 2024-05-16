@@ -8,17 +8,26 @@
         font-family: "Noto Sans KR";
         font-weight: 400;
         .profile_image {
+<<<<<<< HEAD
           width: 55px;
           height: auto;
         }
         .product_image {
             width: 180px;
+=======
+          width: 55px; 
+          height: auto; 
+        }
+        .product_image {
+            width: 200px;
+>>>>>>> 9714959470fddbc95407e61f464ea3ef7aec5668
             height: auto;
         }
         .recommend_title {
             font-size: 18px; 
             font-weight: 500; 
             margin-bottom: 20px;
+<<<<<<< HEAD
             text-align: center; 
         }
         .product_info {
@@ -54,6 +63,21 @@
         }
       }
 </style>
+=======
+        }
+        .product_info {
+            width: 800px; 
+            text-align: left;
+            font-size: 15px;
+        }
+        .product_title {
+            font-weight: 500;
+            font-size: 15px;
+        }
+      }
+</style>
+
+>>>>>>> 9714959470fddbc95407e61f464ea3ef7aec5668
 <div style="text-align: center; margin-top: 80px">
     <h1 style="font-size: 24px; font-weight: 500">영양 성분 리포트</h1>
     <br>
@@ -106,6 +130,7 @@
     </div>
 </div>
 
+<<<<<<< HEAD
 <div class="flex-container" style="margin: 0 10%">
     {% for r_ingredient in recommend_ingredients %}
     <div class="flex-item">
@@ -117,13 +142,25 @@
             <!-- rending page: recom_profile_product_list.html -->
         </div>
         <div style="text-align: center; margin-top: 10px; align-items: end;">
+=======
+
+<div>
+    {% for r_ingredient in recommend_ingredients %}
+        <h3>추천 영양 성분{{ forloop.counter }}</h3>
+        <ul>
+            <li>영양 성분명: {{ r_ingredient.ingredient_name }}</li>
+            <li>주요 건강 기능: {{ r_ingredient.ingredient_function_content }}</li>
+            <li>일일 섭취량: 최대 {{ r_ingredient.ingredient_limit_high }} {{ r_ingredient.ingredient_unit }} / 최소{{ r_ingredient.ingredient_limit_low }} {{ r_ingredient.ingredient_unit }}</li>
+            <!-- rending page: recom_profile_product_list.html -->
+>>>>>>> 9714959470fddbc95407e61f464ea3ef7aec5668
             <form action="{% url "recommends:products_nutri_base" profile.profile_id survey.survey_id r_ingredient.ingredient_id %}" method='get'>
-                <button class="btn btn-primary" style="width: 200px;">추천 영양제 보기</button>
+                <button>추천 영양제 보기</button>
             </form>
-        </div>
-    </div>
+        </ul>
+        <br>
     {% endfor %}
 </div>
+<<<<<<< HEAD
 
 <div style="text-align: center; margin-top: 80px">
     <h2 style="font-weight: 600">
@@ -172,6 +209,49 @@
         {% csrf_token %}
         <button class="btn btn-primary" style="margin-top: 15px">더보기</button>
     </form>
+=======
+<br>
+<div>
+    <h3>영양제 추천</h3>
+    <div>
+        영양성분 리포트를 바탕으로 추천하는 <br>
+        <!-- rending page: recom_profile_product_list.html -->
+        {% for r_product in recommend_products %}
+            <a href="{% url "products:products_detail" r_product.product_id profile.profile_id %}">
+                {% if r_product.product_image == '0' %}
+                    <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+                {% else %}
+                    <img src="{% static '{ r_product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+                {% endif %}
+                {{ r_product.product_name}} | {{ r_product.product_rating_avg }} / 5
+            </a>
+        {% endfor %}
+        <form action="{% url "recommends:products_profile_base" profile.profile_id survey.survey_id %}" method='get'>
+            {% csrf_token %}
+            <button>더보기</button>
+        </form>
+    </div>
+    <br><br>
+    <div>
+        비슷한 {{ survey.survey_age_group }} {{ survey.survey_sex }}에게 인기있는 영양제<br>
+        <!-- rending page: recom_profile_product_list.html -->
+        {% for c_product in collabo_recommendation_products %}
+            <a href="{% url "products:products_detail" c_product.product_id profile.profile_id %}">
+                {% if c_product.product_image == '0' %}
+                    <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
+                {% else %}
+                    <img src="{% static '{ c_product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+                {% endif %}
+                {{ c_product.product_name}} | {{ c_product.product_rating_avg }} / 5
+            </a>
+        {% endfor %}
+        <form action="{% url "recommends:request_flask_collabo_recom_model" profile.profile_id %}"  method='get'>
+            {% csrf_token %}
+            <button>더보기</button>
+        </form>
+    </div>
+    <br>
+>>>>>>> 9714959470fddbc95407e61f464ea3ef7aec5668
 </div>
 
 <div class="profile-container" style="margin: 40px 10%">
