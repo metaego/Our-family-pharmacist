@@ -226,7 +226,7 @@ def request_flask_recom_model(request, profile_id, survey_id):
     
     client_ip = request.META.get('REMOTE_ADDR', None)
 
-    if client_ip == os.environ.get('CLIENT_IP'):
+    if client_ip != os.environ.get('AWS_PUBLIC_IP'):
         client_ip = os.environ.get('AWS_PUBLIC_IP')
     csrf_token = get_token(request)
     survey = Survey.objects.filter(profile_id=profile_id).latest('created_at')
@@ -673,7 +673,7 @@ def request_flask_collabo_recom_model(request, profile_id):
     # flask 요청 
     client_ip = request.META.get('REMOTE_ADDR', None)
 
-    if client_ip == os.environ.get('CLIENT_IP'):
+    if client_ip != os.environ.get('AWS_PUBLIC_IP'):
         client_ip = os.environ.get('AWS_PUBLIC_IP')
     csrf_token = get_token(request)
     response = requests.post('http://' + client_ip + f':5000/ai-collabo-recom/{survey.survey_id}', 
