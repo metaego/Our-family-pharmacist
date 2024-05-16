@@ -2,21 +2,70 @@
 <!-- menu: home -->
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/style.css" %}">
+<style>
+    * {
+        font-family: "Noto Sans KR";
+        font-weight: 400;
+        .profile_image {
+          width: 55px; 
+          height: auto; 
+        }
+        .product_image {
+            width: 200px;
+            height: auto;
+        }
+        .recommend_title {
+            font-size: 18px; 
+            font-weight: 500; 
+            margin-bottom: 20px;
+        }
+        .product_info {
+            width: 800px; 
+            text-align: left;
+            font-size: 15px;
+        }
+        .product_title {
+            font-weight: 500;
+            font-size: 15px;
+        }
+      }
+</style>
 
-<h1>공통 영양 성분 리포트 </h1>
-<h2>우리가족을 위해 맞춤 추천된 제품입니다 </h2>
-{% for product in products %}
-                 
-        
-  <p>
-    <li>  
-   추천 영양제: {{ product.product_name }} | 
-    <a href="{% url "products:product_detail" product.product_id profile.profile_id %}"> {{ product.product_instruction }} 
-     </a>
-    </li> 
-</p>
+<div style="text-align: center; margin-top: 80px">
+  <h1 style="font-size: 24px; font-weight: 500">영양제 추천 목록</h1>
+</div>
 
+<div style="margin: 40px 15%;">
+  <h3 class="recommend_title">
+    우리가족을 위해 <span style="color:#BC55EF">맞춤 추천</span>된 제품입니다
+  </h3>
+  {% if products_list  == '[]' %} 
+  <div style="display: inline-block;">
+    아직 추천받은 기록이 없습니다!
+  </div>
+  
+  {% else %}
 
-
-{% endfor %}
+  {% for product in products_list %}
+  <div>
+    <div style="margin-right: 20px; float:left; ">
+      <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
+    </div>
+    <div style="width: auto; margin-bottom: 40px">
+      <a href="{% url 'products:products_detail' product.pk profile.pk %}" style="color:#BC55EF; font-weight: 500"> {{ product.product_name }}</a>
+      <li>평점: {{ product.product_rating_avg }}/5</li>
+      <li>제조사: {{product.product_company}}</li>
+      <li>섭취 방법: {{ product.product_instruction }}</li>
+      <li>소비기한: {{product.product_serving}}</li>
+      <li>제품 형태: {{product.product_dispos}}</li>
+      <li>보관 방법: {{product.product_storage_method}}</li>
+      <li>주의사항: <br> {{product.product_caution}}</li>
+      <li>주된 기능성: <br> {{product.product_function_content}}</li>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+</div>
 {% endblock content %}

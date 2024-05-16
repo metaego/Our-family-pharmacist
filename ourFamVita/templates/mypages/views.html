@@ -2,24 +2,53 @@
 <!-- menu: home -->
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/style.css" %}">
+<style>
+  *{
+    .product_image {
+      width: 200px;
+      height: auto;
+    }
+  }
+</style>
 
- <div>
+<div style="margin: 80px 62% 10px 10%">
   <a href="{% url "mypages:main" profile.profile_id %}">
-      <button>이전</button>
+    <button class="btn btn-secondary">이전</button>
   </a>
 </div> 
 
-<h1> 최근 조회 제품 </h1>
+<div style="text-align: center; ">
+  <h2 style="font-size: 24px; font-weight: 500">
+    최근 조회 제품
+  </h2>
+</div>
 
-
-<ul> 
-    {% for product in products %}
-        <li>
-          <p>{{ product.product_image }} | {{ product.product_name }} |  <a href="{% url 'products:products_detail' product.pk profile.pk %}">{{ product.product_instruction }}</a></p>
-        </li>
-      
+<body> 
+  {% if products_list == '[]' %} 
+    <p> 아직 조회한 영양제가 없습니다! </p>
+  
+  {% else %}
+    {% for product in products_list %}
+      <div style="margin: 40px 15%;">
+        <div style="display: inline-block; margin-right: 10px; float: left">
+          <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
+        </div>
+        <div style="display: inline-block; width: 850px">
+          <a href="{% url 'products:products_detail' product.pk profile.pk %}" style="color:#BC55EF; font-weight: 500">{{ product.product_name }}</a>
+          <li> 평점: {{ product.product_rating_avg }}/5</li>
+          <li> 제조사: {{product.product_company}}</li> 
+          <li> 섭취 방법: {{ product.product_instruction }}</li> 
+          <li> 소비기한: {{product.product_serving}}</li> 
+          <li> 제품 형태: {{product.product_dispos}}</li> 
+          <li> 보관 방법: {{product.product_storage_method}}</li> 
+          <li> 주의사항: <br> {{product.product_caution}}</li> 
+          <li> 주된 기능성: <br> {{product.product_function_content}}</li> 
+        </div>
+      </div>
     {% endfor %}
+  {% endif %}
+</body>
 
-</ul>
-
-  {% endblock content %}
+{% endblock content %}
