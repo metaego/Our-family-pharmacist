@@ -49,6 +49,11 @@
         }
     }
 </style>
+<script type="text/javascript">
+    function showAlert() {
+        alert("영양제를 찜했어요!");
+    }
+</script>
 <div style="text-align: center; margin-top: 80px">
     <h2 style="font-size: 24px; font-weight: 500">
         <span style="color:#BC55EF;">{{ profile.profile_name }}</span>님에게 추천하는 영양제
@@ -60,13 +65,15 @@
     <h3 class="recommend_title">
         아래 기능을 개선하는데 좋은 제품이에요
     </h3>
-    {% for p_function in product_functions %}
-        {% if p_function in survey_functions %}
-            <li class="product_info" style="color:#BC55EF;"> <strong>{{ p_function }}</strong><br></li>
-        {% else %}
-            <li class="product_info">{{ p_function }}<br></li>
-        {% endif %}
-    {% endfor %}
+    <table style="table-layout: fixed">
+        {% for p_function in product_functions %}
+            {% if p_function in survey_functions %}
+                <td style="color:#BC55EF; width: 90px"><strong>{{ p_function }}</strong></td>
+            {% else %}
+                <td style="width: 90px">{{ p_function }}</td>
+            {% endif %}
+        {% endfor %}
+    </table>
 </div>
 
 
@@ -84,6 +91,9 @@
         <div>
         <div style="display: inline-block; margin-bottom: 40px">
             <span style="color:#BC55EF; font-weight: 500; font-size: 15px; ">{{ product.product_name }}</span>
+            <div style="display: inline-block">
+                <button id="likeButton" class="btn btn-primary" type="submit" style="width: 88px" onclick="showAlert()">찜하기</button>
+            </div>
             <li>평점: {{ product.product_rating_avg }}</li>
             <li>제조사: {% if product.product_company == None %}
                             {{ '없음' }}
@@ -121,12 +131,12 @@
                                 {{ product.product_caution }}
                           {% endif %}
             </li>
-            <li>주된 기능성: {% if product.product_fuction_content == None %}
+            <!-- <li>주된 기능성: {% if product.product_fuction_content == None %}
                                 {{ '없음' }}
                             {% else %}
                                 {{ product.product_fuction_content }}
                             {% endif %}
-            </li>
+            </li> -->
         </div> 
     </div>
 </div>
