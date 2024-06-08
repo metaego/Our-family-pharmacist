@@ -12,6 +12,7 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 # from django.utils import timezone
 # decimalfield 음수 허용 불가, 리뷰 제한을 위한 MinValueValidator 임포트
@@ -19,16 +20,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 
-class User(models.Model):
-    custom_user_id = models.AutoField(primary_key=True)
-    custom_user_email = models.CharField(unique=True, max_length=50)
-    custom_user_password = models.TextField()
-    custom_user_role = models.CharField(max_length=20, default='user')
-    custom_user_status = models.CharField(max_length=10, default='activate')
-    custom_created_at = models.DateTimeField(auto_now_add=True)
-    custom_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
-    cumstom_deleted_at = models.DateTimeField(blank=True, null=True)
-    last_login = models.DateTimeField(auto_now=True, blank=True, null=True)
+class User(AbstractUser):
+    user_id = models.BigAutoField(primary_key=True, unique=True)
+    user_email = models.CharField(unique=True, max_length=50)
+    user_password = models.CharField(max_length=50)
+    user_role = models.CharField(max_length=20, default='user')
+    user_status = models.CharField(max_length=10, default='active')
+    user_created_at = models.DateTimeField(auto_now_add=True)
+    user_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    user_deleted_at = models.DateTimeField(auto_noW=True, blank=True, null=True)
+    user_last_login = models.DateTimeField(auto_now=True)
 
 
     class Meta:
@@ -38,11 +39,139 @@ class User(models.Model):
 
 
 class Profile(models.Model):
-    profile_id = models.AutoField(primary_key=True)
-    custom_user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='custom_user_id')
+    profile_id = models.AutoField(primary_key=True, unique=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     profile_name = models.CharField(max_length=20)
     profile_birth = models.DateField()
-    profile_status = models.CharField(max_length=10, default='activate')
+    profile_status = models.CharField(max_length=10, default='active')
+    profile_created_at = models.DateTimeField(auto_now_add=True)
+    profile_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    profile_deleted_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+
+    class Meta:
+        managed = True
+        db_table = 'profile'
+
+
+
+class ComCodeGrp(models.Model):
+    com_code_grp = models.CharField(primary_key=True, unique=True, max_length=20)
+    com_code_grp_name = models.CharField(max_length=50)
+    com_code_grp_desc = models.CharField(max_length=500, blank=True)
+    use_yn = models.CharField(max_length=1)
+
+
+    class Meta:
+        managed = True
+        db_table = 'com_code_grp'
+
+
+
+class ComCode(models.Model):
+    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE)
+    com_code = models.CharField(primary_key=True, unique=True, max_length=20)
+    com_code_name = models.CharField(max_length=50)
+    com_code_desc = models.CharField(max_length=500, blank=True)
+    use_yn = models.CharField(max_length=1)
+
+
+    class Meta:
+        managed = True
+        db_table = 'com_code'
+    
+
+
+class Ingredient(models.Model):
+    ingredient_id = models.AutoField(primary_key=True, unique=True)
+    ingredient_name = models.CharField(max_length=100)
+    ingredient_limit_high = models.TextField(blank=True)
+    ingredient_limit_low = models.TextField(blank=True)
+    ingredient_unit = models.CharField(max_length=10, blank=True)
+    ingredient_type = models.CharField(max_length=10, blank=True)
+    ingredient_function_content = models.JSONField(blank=True, null=True)
+    ingredient_caution_content = models.JSONField(blank=True, null=True)
+    ingredient_function_code = models.JSONField(blank=True, null=True) 
+    ingredient_caution_code = models.JSONField(blank=True, null=True)
+
+    
+    class Meta:
+        managed = True
+        db_table = 'ingredient'
+
+
+
+class Product(models.Model):
+    product_id = models.BigIntegerField(primary_key=True, unique=True)
+    product_name = models.TextField()
+    product_company = models.CharField(max_length=100)
+    product_instruction = models.TextField(blank=True)
+    product_image = models.ImageField(blank=True, null=True)
+    product_storage_method = models.TextField(blank=True)
+    product_dispos = models.CharField(max_length=20, blank=True)
+    product_serving = models.TextField(blank=True)
+    product_function_content = models.JSONField(blank=True, null=True)
+    product_caution_content = models.JSONField(blank=True, null=True) 
+    product_function_code = models.JSONField(blank=True, null=True) 
+    product_caution_code = models.JSONField(blank=True, null=True) 
+    product_ingredient_id = models.JSONField(blank=True, null=True)
+    product_rating_avg = models.DecimalField(max_digits=3, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    product_rating_cnt = models.PositiveIntegerField(default=0)
+    
+    class Meta:
+        managed = True
+        db_table = 'product'
+
+
+
+class ProductIngredient(models.Model):
+    product_ingredient_id = models.BigAutoField(primary_key=True, unique=True)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    ingredient_id = models.ForeignKey(Ingredient,  on_delete=models.CASCADE)
+
+
+    class Meta:
+        managed = True
+        db_table = 'product_ingredient'
+
+
+
+class IngredientComCode(models.Model):
+    ingredient_com_code_id = models.AutoField(primary_key=True, unique=True)
+    ingredient_id = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    com_code_grp = models.ForeignKey(ComCode, on_delete=models.CASCADE, default='FUNCTION')
+    com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE)
+
+
+    class Meta:
+        managed = True
+        db_table = 'ingredient_com_code'
+
+
+
+class ProductComCode(models.Model):
+    product_com_code_id = models.BigAutoField(primary_key=True, unique=True)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    com_code_grp = models.ForeignKey(ComCode, on_delete=models.CASCADE, default='FUNCTION')
+    com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE)
+
+
+    class Meta:
+        managed = True
+        db_table = 'product_com_code'
+
+
+
+### 상기 부분까지 수정 완료 상태 ###
+
+
+
+class ProductReview(models.Model):
+    product_review_id = models.AutoField(primary_key=True)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
+    product_review_rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, default=0)
+    product_review_content = models.CharField(max_length=200, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
@@ -50,7 +179,38 @@ class Profile(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'profile'
+        db_table = 'product_review'
+
+
+
+class ProductLike(models.Model):
+    product_like_id = models.AutoField(primary_key=True)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
+    custom_user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='custom_user_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(blank=True, null=True)
+
+
+    class Meta:
+        managed = True
+        db_table = 'product_like'
+
+
+
+class ProductLog(models.Model):
+    product_log_id = models.AutoField(primary_key=True)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
+    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id')
+    visited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    leaved_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    product_log_duration = models.PositiveIntegerField(blank=True, null=True)
+
+
+    class Meta:
+        managed = True
+        db_table = 'product_log'
 
 
 
@@ -90,63 +250,6 @@ class FunctionCode(models.Model):
     class Meta:
         managed = True
         db_table = 'function_code'
-
-
-
-class ComCodeGrp(models.Model):
-    com_code_grp = models.CharField(primary_key=True, max_length=10)
-    com_code_grp_name = models.CharField(max_length=10)
-    com_code_grp_desc = models.CharField(max_length=500, blank=True, null=True)
-    use_yn = models.CharField(max_length=1)
-
-
-    class Meta:
-        managed = True
-        db_table = 'com_code_grp'
-
-
-
-class ComCode(models.Model):
-    com_code = models.CharField(primary_key=True, max_length=10)
-    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE, db_column='com_code_grp')
-    com_code_name = models.CharField(max_length=50)
-    com_code_desc = models.CharField(max_length=500, blank=True, null=True)
-    use_yn = models.CharField(max_length=1)
-
-
-    class Meta:
-        managed = True
-        db_table = 'com_code'
-    
-
-
-class Ingredient(models.Model):
-    ingredient_id = models.AutoField(primary_key=True)
-    ingredient_name = models.CharField(max_length=100)
-    ingredient_limit_high = models.DecimalField(max_digits=15, decimal_places=10, blank=True, null=True, validators=[MinValueValidator(0)])
-    ingredient_limit_low = models.DecimalField(max_digits=15, decimal_places=10, blank=True, null=True, validators=[MinValueValidator(0)])
-    ingredient_unit = models.CharField(max_length=10, blank=True, null=True)
-    ingredient_function_content = models.TextField(blank=True, null=True)
-    ingredient_caution = models.TextField(blank=True, null=True)
-    ingredient_type = models.CharField(max_length=10, blank=True, null=True)
-    ingredient_caution_code = models.TextField(blank=True, null=True) # 영양성분 주의사항 코드 e.g.: ['AL01', 'DI02']
-
-    
-    class Meta:
-        managed = True
-        db_table = 'ingredient'
-
-
-
-class IngredientFunction(models.Model):
-    ingredient_function_id = models.AutoField(primary_key=True)
-    ingredient_id = models.ForeignKey(Ingredient, on_delete=models.CASCADE, db_column='ingredient_id')
-    function_code = models.ForeignKey(FunctionCode, on_delete=models.CASCADE, db_column='function_code')
-
-
-    class Meta:
-        managed = True
-        db_table = 'ingredient_function'
 
 
 
@@ -204,98 +307,6 @@ class SurveyFunction(models.Model):
     class Meta:
         managed = True
         db_table = 'survey_function'
-
-
-
-class Product(models.Model):
-    product_id = models.BigIntegerField(primary_key=True)
-    product_name = models.CharField(max_length=50)
-    product_company = models.CharField(max_length=50)
-    product_instruction = models.TextField(blank=True, null=True)
-    product_function_content = models.TextField(blank=True, null=True)
-    product_caution = models.TextField(blank=True, null=True) # 섭취 시 주의사항 text 필드
-    product_serving = models.TextField(blank=True, null=True)
-    product_dispos = models.CharField(max_length=20, blank=True, null=True)
-    product_storage_method = models.TextField(blank=True, null=True)
-    product_image = models.TextField(blank=True, null=True)
-    product_rating_avg = models.DecimalField(max_digits=3, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
-    product_rating_cnt = models.PositiveIntegerField(default=0)
-    product_caution_code = models.TextField(blank=True, null=True) # 영양제 주의사항 코드 필드. e.g.: ['AI01', 'DI02']
-
-    class Meta:
-        managed = True
-        db_table = 'product'
-
-
-
-class ProductFunction(models.Model):
-    product_function_id = models.BigAutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
-    function_code = models.ForeignKey(FunctionCode,  on_delete=models.CASCADE, db_column='function_code')
-
-    class Meta:
-        managed = True
-        db_table = 'product_function'
-
-
-
-class ProductIngredient(models.Model):
-    product_ingredient_id = models.BigAutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
-    ingredient_id = models.ForeignKey(Ingredient,  on_delete=models.CASCADE, db_column='ingredient_id')
-
-
-    class Meta:
-        managed = True
-        db_table = 'product_ingredient'
-
-
-
-class ProductReview(models.Model):
-    product_review_id = models.AutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
-    product_review_rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True, default=0)
-    product_review_content = models.CharField(max_length=200, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
-    deleted_at = models.DateTimeField(blank=True, null=True)
-
-
-    class Meta:
-        managed = True
-        db_table = 'product_review'
-
-
-
-class ProductLike(models.Model):
-    product_like_id = models.AutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
-    custom_user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='custom_user_id')
-    created_at = models.DateTimeField(auto_now_add=True)
-    deleted_at = models.DateTimeField(blank=True, null=True)
-
-
-    class Meta:
-        managed = True
-        db_table = 'product_like'
-
-
-
-class ProductLog(models.Model):
-    product_log_id = models.AutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id')
-    visited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
-    leaved_at = models.DateTimeField(auto_now=True, blank=True, null=True)
-    product_log_duration = models.PositiveIntegerField(blank=True, null=True)
-
-
-    class Meta:
-        managed = True
-        db_table = 'product_log'
 
 
 
