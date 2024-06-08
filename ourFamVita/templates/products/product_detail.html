@@ -49,6 +49,11 @@
         }
     }
 </style>
+<script type="text/javascript">
+    function showAlert() {
+        alert("영양제를 찜했어요!");
+    }
+</script>
 <div style="text-align: center; margin-top: 80px">
     <h2 style="font-size: 24px; font-weight: 500">
         <span style="color:#BC55EF;">{{ profile.profile_name }}</span>님에게 추천하는 영양제
@@ -60,9 +65,15 @@
     <h3 class="recommend_title">
         아래 기능을 개선하는데 좋은 제품이에요
     </h3>
-    {% for p_ingredient in product_ingredients %}
-    <li class="product_info">{{ p_ingredient.ingredient_function_content }}<br></li>
-    {% endfor %}
+    <table style="table-layout: fixed">
+        {% for p_function in product_functions %}
+            {% if p_function in survey_functions %}
+                <td style="color:#BC55EF; width: 90px"><strong>{{ p_function }}</strong></td>
+            {% else %}
+                <td style="width: 90px">{{ p_function }}</td>
+            {% endif %}
+        {% endfor %}
+    </table>
 </div>
 
 
@@ -75,23 +86,57 @@
             {% if product.product_image == '0' %}
                 <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
             {% else %}
-                <img src="{% static '{ product.product_image }' %}" alt="영양제 제품 이미지" class='product_image'>
+                <img src="{% static product.product_image %}" alt="영양제 제품 이미지" class='product_image'>
             {% endif %}
         <div>
         <div style="display: inline-block; margin-bottom: 40px">
             <span style="color:#BC55EF; font-weight: 500; font-size: 15px; ">{{ product.product_name }}</span>
-            <li>평점: {{ product.product_rating_avg }}/5</li>
-            <li>제조사: {{ product.product_company }}</li>
-            <li>섭취 방법: {{ product.product_instruction }}</li>
-            <li>소비기한: {{ product.product_serving }}</li>    
-            <li>제품 형태: {{ product.product_dispose }}</li>
+            <div style="display: inline-block">
+                <button id="likeButton" class="btn btn-primary" type="submit" style="width: 88px" onclick="showAlert()">찜하기</button>
+            </div>
+            <li>평점: {{ product.product_rating_avg }}</li>
+            <li>제조사: {% if product.product_company == None %}
+                            {{ '없음' }}
+                        {% else %}
+                            {{ product.product_company }}
+                        {% endif %}
+            </li>
+            <li>섭취 방법: {% if product.product_instruction == None %}
+                                {{ '없음' }}
+                           {% else %}
+                                {{ product.product_instruction }}
+                           {% endif %} 
+            </li>
+            <li>소비기한: {% if product.product_serving == None %}
+                                {{ '없음' }}
+                          {% else %}
+                                {{ product.product_serving }}
+                          {% endif %} 
+            </li>    
+            <li>제품 형태: {% if product.product_dispos == None %}
+                                {{ '없음' }}
+                          {% else %}
+                                {{ product.product_dispose }}
+                          {% endif %}
+            </li>
             <li>보관 방법: {% if product.product_storage_method == None %}
-                {{ '습기가 적고 직사광선을 밪지 않는 실온에 보관하시고, 어린이의 손에 닿지 않도록 주의하시기 바랍니다.' }}
-                {% else %}
-                        {{ product.product_storage_method }}
-                {% endif %}</li>
-            <li>주의사항: {{ product.product_caution }}</li>
-            <li>주된 기능성: {{ product.product_fuction_content }}</li>
+                                {{ '없음' }}
+                           {% else %}
+                                {{ product.product_storage_method }}
+                           {% endif %}
+            </li>
+            <li>주의사항: {% if product.product_caution == None %}
+                                {{ '없음' }}
+                          {% else %}
+                                {{ product.product_caution }}
+                          {% endif %}
+            </li>
+            <!-- <li>주된 기능성: {% if product.product_fuction_content == None %}
+                                {{ '없음' }}
+                            {% else %}
+                                {{ product.product_fuction_content }}
+                            {% endif %}
+            </li> -->
         </div> 
     </div>
 </div>

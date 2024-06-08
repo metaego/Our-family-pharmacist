@@ -25,8 +25,7 @@ class DataLoad():
 
         if self.ingredient_df_path:
             with open(self.ingredient_df_path, 'rb') as f:
-                obj = loaded_data.append(pickle.load(f)) #(open(f)), encoding='cp949'))
-                
+                loaded_data.append(pickle.load(f))
                 
         if self.product_df_path:
             with open(self.product_df_path, 'rb') as f:
@@ -84,7 +83,7 @@ class DefinedVariable:
     all_smoker_drop_ingredient_ids = [18, 13, 66, 74, 79, 90, 195, 289] # 흡연자에게 추천되면 안되는 ingredient_id 리스트
 
     weights = {
-        'visited_at': 0.2, # 5번 조회할 때 +1
+        'visited_at': 0.1, # 5번 조회할 때 +1
         'like_created_at': 1,
         'review_rating': 1,
         'sim_grp' : 5, # max=5
@@ -114,6 +113,14 @@ class DataPreprocessor(DefinedVariable):
     
     def preprocess_data(self):
         # 컬럼 값 수정 및 추가
+        # if self.survey_df['HF00'] == 1:
+        #     survey_row = self.survey_df
+        #     survey_df = self.dummy_survey_df
+        #     survey_row['HF00'] = 0
+        #     sim_profile_grp_function_list = RecommendModel.find_sim_grp_function_rank(self, survey_df, survey_row, top_n=5)
+        #     for function in sim_profile_grp_function_list:
+        #         survey_row[function] = 1
+        # self.survey_df = survey_row
         new_survey_df = DataPreprocessor.create_code_list_col(self.survey_df, self.function_list, 'function_code')
         new_survey_df = DataPreprocessor.create_str_col(new_survey_df, 'function_code', 'function_code_str')
         new_survey_df['HF_sum'] = new_survey_df[self.function_list].sum(axis=1)
@@ -180,7 +187,7 @@ class RecommendModel(DefinedVariable):
         self.survey_list = DefinedVariable.survey_list
         self.ingredient_caution_dict = DefinedVariable.ingredient_caution_dict
         self.all_smoker_drop_ingredient_ids = DefinedVariable.all_smoker_drop_ingredient_ids
-        # self.weights = DefinedVariable.weights
+        self.weights = DefinedVariable.weights
     
     @staticmethod
     def find_profile_id_row(survey_df, profile_id):
@@ -206,7 +213,8 @@ class RecommendModel(DefinedVariable):
         
         total_frequency = sum(freq for _, freq in function_ranking)
 
-        function_ratios = [(function_code, round(freq / total_frequency, 3)) for function_code, freq in function_ranking][:top_n]
+        # function_ratios = [(function_code, round(freq / total_frequency, 3)) for function_code, freq in function_ranking][:top_n]
+        function_ratios = [function_code for function_code, freq in function_ranking][:top_n]
 
         return function_ratios
     
@@ -276,13 +284,14 @@ class RecommendModel(DefinedVariable):
             sim_profile_grp_function_rank = RecommendModel.find_sim_grp_function_rank(self, survey_df, survey_row, top_n=5)
             sim_profile_grp_function_names = [x[0] for x in sim_profile_grp_function_rank]
             sim_profile_grp_function_freqs = [x[1] for x in sim_profile_grp_function_rank]
-            add_rating = 0
+            add_cnt = 0
             for selected_function in selected_functions:
                 for idx, grp_function in enumerate(sim_profile_grp_function_names):
                     if selected_function == grp_function:
-                        add_rating += sim_profile_grp_function_freqs[idx]
+                        # add_rating += sim_profile_grp_function_freqs[idx]
+                        add_cnt += 1
                         
-            recom_rating += ( add_rating * 0.4 ) 
+            recom_rating += ( add_cnt * 3 ) 
                 
         recom_ingredient_df['rating'] = round(recom_rating, 2)
         
@@ -330,7 +339,7 @@ class RecommendModel(DefinedVariable):
                     if (idx not in head_idx) and (idx not in tail_idx):
                         tail_idx.append(idx)
                 
-        recom_ingredient_df.loc[head_idx, 'rating'] += 5
+        recom_ingredient_df.loc[head_idx, 'rating'] += 15
         
         # 특정 영양성분 주의사항에 해당하는 영양성분 행 제거 - 코드 수정필요 - 일단 제외
 #         for idx in range(len(recom_ingredient_df)):
@@ -429,44 +438,44 @@ class RecommendModel(DefinedVariable):
         
         return sim_df
     
-    def filter_product(self, survey_df, product_df, survey_row, profile_id, recom_top5_ingredient_df): #, min_rating_avg=0, min_rating_cnt=0):
+    def filter_product(self, survey_row): #, min_rating_avg=0, min_rating_cnt=0):
             
         # survey_idx, survey_row = RecommendModel.find_profile_id_row(survey_df, profile_id)
 
         drop_caution_idx_list = []
         for allergy_disease in self.allergy_disease_list:
             if survey_row[allergy_disease] == 1:
-                drop_caution_idxs = product_df[product_df[allergy_disease] == 1].index.tolist()
+                drop_caution_idxs = self.product_df[self.product_df[allergy_disease] == 1].index.tolist()
                 drop_caution_idx_list.extend(drop_caution_idxs)
         if survey_row['survey_pregnancy'] == 1:
-            drop_caution_idxs = product_df[(product_df['P3'] == 1) | (product_df['P2'] == 1) | (product_df['P1'] == 1)].index.tolist()
+            drop_caution_idxs = self.product_df[(self.product_df['P3'] == 1) | (self.product_df['P2'] == 1) | (self.product_df['P1'] == 1)].index.tolist()
             drop_caution_idx_list.extend(drop_caution_idxs)
         if survey_row['survey_operation'] == 1:
-            drop_caution_idxs = product_df[product_df['OPERATION'] == 1].index.tolist()
+            drop_caution_idxs = self.product_df[self.product_df['OPERATION'] == 1].index.tolist()
             drop_caution_idx_list.extend(drop_caution_idxs)
         if survey_row['survey_smoking'] == 1:
-            drop_caution_idxs = product_df[product_df['SMOKE'] == 1].index.tolist()
+            drop_caution_idxs = self.product_df[self.product_df['SMOKE'] == 1].index.tolist()
             drop_caution_idx_list.extend(drop_caution_idxs)
-            for idx, ingredients in product_df.loc[product_df['ingredient_id'].notna(), 'ingredient_id'].items():
+            for idx, ingredients in self.product_df.loc[self.product_df['ingredient_id'].notna(), 'ingredient_id'].items():
                 if any(ingredient in self.all_smoker_drop_ingredient_ids for ingredient in ingredients):
                     drop_caution_idx_list.append(idx)
             if survey_row['survey_sex'] == 1:
-                drop_caution_idxs = product_df[(product_df['ingredient_id'] == 424) | (product_df['ingredient_id'] == 143)].index.tolist()
+                drop_caution_idxs = self.product_df[(self.product_df['ingredient_id'] == 424) | (self.product_df['ingredient_id'] == 143)].index.tolist()
                 drop_caution_idx_list.extend(drop_caution_idxs)
         if survey_row['survey_age_group'] == 0:
-            drop_caution_idxs = product_df[(product_df['KIDS'] == 1) & (product_df['ADULT'] == 1)].index.tolist()
+            drop_caution_idxs = self.product_df[(self.product_df['KIDS'] == 1) & (self.product_df['ADULT'] == 1)].index.tolist()
             drop_caution_idx_list.extend(drop_caution_idxs) 
         if survey_row['survey_age_group'] == 10:
-            drop_caution_idxs = product_df[(product_df['TEENAGER'] == 1) & (product_df['ADULT'] == 1)].index.tolist()
+            drop_caution_idxs = self.product_df[(self.product_df['TEENAGER'] == 1) & (self.product_df['ADULT'] == 1)].index.tolist()
             drop_caution_idx_list.extend(drop_caution_idxs)
         if survey_row['survey_sex'] == 1:
-            drop_caution_idxs = product_df[product_df['MALE'] == 1].index.tolist()
+            drop_caution_idxs = self.product_df[self.product_df['MALE'] == 1].index.tolist()
             drop_caution_idx_list.extend(drop_caution_idxs) 
         if survey_row['survey_age_group'] == 60:
-            drop_caution_idxs = product_df[product_df['OLD'] == 1].index.tolist()
+            drop_caution_idxs = self.product_df[self.product_df['OLD'] == 1].index.tolist()
             drop_caution_idx_list.extend(drop_caution_idxs)
              
-        filter_product_df = product_df.drop(index=list(set(drop_caution_idx_list)))
+        filter_product_df = self.product_df.drop(index=list(set(drop_caution_idx_list)))
         
         # print(f'1 : {len(filter_product_df)}')
         
@@ -507,27 +516,29 @@ class RecommendModel(DefinedVariable):
 
         filter_product_id_list = filter_product_df['product_id'].tolist()
         
-        return filter_product_id_list, filter_product_df
+        return filter_product_df
+
 
     def calculate_weighted_rating(self, sim_grp_review_df):
         weighted_view = self.weights['visited_at'] * sim_grp_review_df['visited_at']
         weighted_like = self.weights['like_created_at'] * sim_grp_review_df['like_created_at']
         weighted_review_rating = self.weights['review_rating'] * sim_grp_review_df['review_rating']
         weighted_sim_grp = self.weights['sim_grp'] * sim_grp_review_df['sim_grp']
-        weighted_product_function_sim = self.weights['product_function_sim'] * sim_grp_review_df['product_function_sim']
-        weighted_product_ingredient_sim = self.weights['product_ingredient_sim'] * sim_grp_review_df['product_ingredient_sim']
+        # weighted_product_function_sim = self.weights['product_function_sim'] * sim_grp_review_df['product_function_sim']
+        # weighted_product_ingredient_sim = self.weights['product_ingredient_sim'] * sim_grp_review_df['product_ingredient_sim']
     
-        sim_grp_review_df['new_rating'] = weighted_view + weighted_like + weighted_review_rating + weighted_sim_grp + weighted_product_function_sim + weighted_product_ingredient_sim
+        sim_grp_review_df['new_rating'] = weighted_view + weighted_like + weighted_review_rating + weighted_sim_grp # + weighted_product_function_sim + weighted_product_ingredient_sim
         return sim_grp_review_df
     
     def run_recommend_products_function(self, survey_row, recom_min_rating=1):
         recom_top5_ingredient_df = RecommendModel.run_recommend_ingredients_function(self)
         sim_sex_age_grp = RecommendModel.find_sim_grp(self.survey_df, self.profile_id, self.function_list, top_n_percentage=0.4)
         
-        filter_product_df = RecommendModel.filter_product(self, self.survey_df, self.product_df, survey_row, self.profile_id, recom_top5_ingredient_df) #, min_rating_avg=0, min_rating_cnt=0)
+        filter_product_df = RecommendModel.filter_product(self, survey_row) #, min_rating_avg=0, min_rating_cnt=0)
         
         sim_grp_review_df = pd.merge(sim_sex_age_grp[['profile_id', 'sim_grp']], self.review_df, how='inner', on='profile_id')
         sim_grp_review_df = pd.merge(sim_grp_review_df , filter_product_df[['product_id', 'selected_ingredient', 'selected_ingredient_cnt', 'selected_function_code', 'selected_function_code_cnt', 'product_function_sim', 'product_ingredient_sim']], how='inner', on='product_id')
+        # sim_grp_review_df = pd.merge(sim_grp_review_df , filter_product_df['product_id'], how='inner', on='product_id')
         
         sim_grp_review_df = sim_grp_review_df[sim_grp_review_df['review_rating'] >= recom_min_rating]
         
@@ -539,7 +550,7 @@ class RecommendModel(DefinedVariable):
         
         recom_product_id_list = recom_product_df['product_id'].tolist()
         
-        return recom_product_id_list
+        return recom_product_df # recom_product_id_list
     
 #     def check_recommend_products(self, recom_min_rating=1):
 #         recom_top5_ingredient_df = RecommendModel.run_recommend_ingredients_function(self)
@@ -610,7 +621,7 @@ class RecommendModel(DefinedVariable):
         new_survey_df = pd.concat([new_survey_df, pd.DataFrame({
             'profile_id': temp_id, 'survey_age_group':survey_row['survey_age_group'], 'survey_sex':survey_row['survey_sex'],
             'survey_pregnancy':0, 'survey_operation':0, 'survey_alcohol':0, 'survey_smoking':0,
-            'HF01':0, 'HF02':0, 'HF03':0, 'HF04':0, 'HF05':0, 'HF06':0, 'HF07':0, 'HF08':0, 'HF09':0, 'HF10':0,
+            'HF01':0, 'HF02':1, 'HF03':0, 'HF04':0, 'HF05':0, 'HF06':0, 'HF07':0, 'HF08':0, 'HF09':0, 'HF10':0,
             'HF11':0, 'HF12':0, 'HF13':0, 'HF14':0, 'HF15':0, 'HF16':0, 'HF17':0, 'HF18':0, 'HF19':0, 'HF20':0,
             'HF21':0, 'HF22':0, 'HF23':0, 'HF24':0, 'HF25':0,
             'DI01':0, 'DI02':0, 'DI03':0, 'DI04':0, 'DI05':0, 'DI06':0, 'DI07':0, 'DI08':0, 'DI09':0, 'DI10':0,
@@ -633,6 +644,8 @@ class RecommendModel(DefinedVariable):
             'HF11', 'HF12', 'HF13', 'HF14', 'HF15', 'HF16', 'HF17', 'HF18', 'HF19', 'HF20',
             'HF21', 'HF22', 'HF23', 'HF24', 'HF25'
         ]].sum(axis=1)
+        
+        new_survey_df.loc[new_survey_df['HF_sum'] == 0, 'HF02'] = 1
 
         # Add the new user to the dataset and provide their features
         self.dataset.fit_partial(users=[profile_id, temp_id], user_features=user_feature_list)
@@ -737,8 +750,10 @@ class RecommendModel(DefinedVariable):
                         if len(recommended_product_list) + len([k for k, v in recommended_product_dict.items() if v == i]) < 100:
                             recommended_product_list += [k for k, v in recommended_product_dict.items() if v == i]
                         else:
-                            recommended_product_list += random.sample([k for k, v in recommended_product_dict.items() if v == i], 100 - len(recommended_product_list))
-
+                            # recommended_product_list += random.sample([k for k, v in recommended_product_dict.items() if v == i], 100 - len(recommended_product_list))
+                            recommended_product_list += [k for k, v in recommended_product_dict.items() if v == i] # 여기!!!!!!!!!!!!!!
+                            break
+                            
             # recommended ingredient is present (health function is already utilized during ingredient recommendation)
             else:
                 recommended_product_dict = dict.fromkeys(product_list,0)
@@ -775,7 +790,9 @@ class RecommendModel(DefinedVariable):
                     if len(recommended_product_list) + len([k for k, v in recommended_product_dict.items() if v == i]) < 100:
                         recommended_product_list += [k for k, v in recommended_product_dict.items() if v == i]
                     else:
-                        recommended_product_list += random.sample([k for k, v in recommended_product_dict.items() if v == i], 100 - len(recommended_product_list))
+                        # recommended_product_list += random.sample([k for k, v in recommended_product_dict.items() if v == i], 100 - len(recommended_product_list))
+                        recommended_product_list += [k for k, v in recommended_product_dict.items() if v == i] # 여기!!!!!!!!!!!!!!
+                        break
 
             globals()["profile_{}".format(idx)] = recommended_product_list # [:5]
 

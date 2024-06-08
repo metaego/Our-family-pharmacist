@@ -65,7 +65,8 @@
 
 <div class="profile-container" style="margin: 20px 30% 50px 30%;">
       <h3>
-            {% if functions_list == '[]' %}
+            {{'피로개선  두뇌활동  여성건강'}}
+            <!-- {% if functions_list == '[]' %}
              <div>아직 건강고민이 없습니다!</div>
 
             {% else %}
@@ -75,7 +76,7 @@
                         {% if not forloop.last %},{% endif %}
                   {% endfor %}
 
-            {% endif %}
+            {% endif %} -->
       </h2>
 </div>
 
@@ -138,7 +139,7 @@
                                     </th>
                               </tr>
                               <tr>
-                                    <th>{{ product.product_rating_avg }}</th>
+                                    <th>평점: {{ product.product_rating_avg }}</th>
                               </tr>
                               </table>
                         </div>
@@ -201,7 +202,12 @@
                                     </th>
                               </tr>
                               <tr>
-                                    <th>{{ product.product_rating_avg }}</th>
+                                    <th>평점: {% if product.product_rating_avg == None %}
+                                                {{ '0' }}
+                                              {% else %}
+                                                {{ product.product_rating_avg }}
+                                              {% endif %} 
+                                    </th>
                               </tr>
                               </table>
                         </div>

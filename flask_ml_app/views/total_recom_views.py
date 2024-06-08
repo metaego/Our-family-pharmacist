@@ -122,11 +122,11 @@ def flask_ai_total_recom(survey_id):
     recom_ingredient_id_list, recom_product_survey_list, recom_product_sex_age_list = ai_total_recom(survey_df)
     
 
-    print(f'survey_data["survey_id"]: {survey_data["survey_id"]}')
-    print()
-    print(f'recom_product_survey_list: {recom_product_survey_list[:10]}')
-    print()
-    print(f'recom_product_sex_age_list: {recom_product_sex_age_list[:10]}')
+    # print(f'survey_data["survey_id"]: {survey_data["survey_id"]}')
+    # print()
+    # print(f'recom_product_survey_list: {recom_product_survey_list[:10]}')
+    # print()
+    # print(f'recom_product_sex_age_list: {recom_product_sex_age_list[:10]}')
 
     # 4) 실행 결과 db insert
     # 현재 날짜와 시간을 MySQL datetime 형식으로 변환
@@ -143,8 +143,8 @@ def flask_ai_total_recom(survey_id):
     cursor = db.cursor(pymysql.cursors.DictCursor)
     cursor.execute(query)
     recommendation_id = cursor.fetchone()
-    print(f'recommendation_id: {recommendation_id}')
-    print()
+    # print(f'recommendation_id: {recommendation_id}')
+    # print()
 
     # recommendation_ingredient(top5)에 데이터 insert
     query = "INSERT INTO recommendation_ingredient (recommendation_ingredient_id, ingredient_id, recommendation_id) VALUES (NULL, %s, %s)"

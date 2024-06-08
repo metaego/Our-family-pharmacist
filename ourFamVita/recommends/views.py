@@ -226,10 +226,8 @@ def request_flask_recom_model(request, profile_id, survey_id):
     
     client_ip = request.META.get('REMOTE_ADDR', None)
 
-    if client_ip == '127.0.0.1':
-        pass
-    elif client_ip != os.environ.get('AWS_PUBLIC_IP'):
-         client_ip = os.environ.get('AWS_PUBLIC_IP')
+    if client_ip != '127.0.0.1' and client_ip != os.environ.get('AWS_PUBLIC_IP'):
+        client_ip = os.environ.get('AWS_PUBLIC_IP')
     csrf_token = get_token(request)
     survey = Survey.objects.filter(profile_id=profile_id).latest('created_at')
     # print(f'최근 survey_id: {survey.survey_id}')
@@ -274,6 +272,8 @@ def recom_profile_total_report(request, profile_id, survey_id):
    
     # 세션에서 contents 가져오기
     contents = request.session.get('contents', {})
+    print(f'contents(recom_profile_total_report): {contents}')
+
 
 
     # 1) 추천 영양 성분 가져오기
@@ -407,6 +407,7 @@ def recom_profile_total_report(request, profile_id, survey_id):
     })
 
 
+
 def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
     
     start_time = time.time()
@@ -534,6 +535,7 @@ def recom_products_nutri_base(request, profile_id, survey_id, nutri_num):
         'page_flag': page_flag,
         'nutri_num': nutri_num,
     })
+
 
 
 def recom_products_profile_base(request, profile_id, survey_id):
@@ -675,10 +677,8 @@ def request_flask_collabo_recom_model(request, profile_id):
     # flask 요청 
     client_ip = request.META.get('REMOTE_ADDR', None)
 
-    if client_ip == '127.0.0.1':
-        pass
-    elif client_ip != os.environ.get('AWS_PUBLIC_IP'):
-         client_ip = os.environ.get('AWS_PUBLIC_IP')
+    if client_ip != '127.0.0.1' and client_ip != os.environ.get('AWS_PUBLIC_IP'):
+        client_ip = os.environ.get('AWS_PUBLIC_IP')
     
     csrf_token = get_token(request)
     response = requests.post('http://' + client_ip + f':5000/ai-collabo-recom/{survey.survey_id}', 
@@ -823,3 +823,40 @@ def recom_products_collabo_base(request, profile_id):
         'popular_products': popular_products,
         'page_flag': page_flag,
     })
+
+
+
+def request_flask_recom_model_old(request, profile_id, survey_id):
+    start_time = time.time()
+
+    user_id = request.session.get('user')
+    if not user_id:
+        return redirect('/')
+    
+    profile = Profile.objects.get(profile_id=profile_id)
+    survey = Survey.objects.filter(survey_id=survey_id)
+    
+    # flask 요청 
+    client_ip = request.META.get('REMOTE_ADDR', None)
+
+    if client_ip != '127.0.0.1' and client_ip != os.environ.get('AWS_PUBLIC_IP'):
+        client_ip = os.environ.get('AWS_PUBLIC_IP')
+    
+    csrf_token = get_token(request)
+    response = requests.post('http://' + client_ip + f':5000/ai-total-recom-old/{survey_id}', 
+                                headers={'X-CSRFToken': csrf_token,
+                                        'Content-Type': 'application/json'})
+    
+    contents = json.loads(response.text)
+    print(f'flask에서 응답 받은 내용 출력: {contents}')
+    print(type(contents))
+
+    request.session['contents'] = contents
+    
+    end_time = time.time()
+    execution_time_seconds = end_time - start_time
+    execution_minutes = int(execution_time_seconds // 60)
+    execution_seconds = int(execution_time_seconds % 60)
+    print("request_flask_collabo_recom_model function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
+
+    return redirect('recommends:profile_total_report', profile.profile_id, survey_id)
