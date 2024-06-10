@@ -21,7 +21,7 @@ def flask_age_sex_base_ai_recom(survey_id):
         user=os.environ.get('MYSQL_USER'),
         password=os.environ.get('MYSQL_PASSWORD'),
         # db='testDB',
-        db='ourFamVitaDBNew',
+        db='ourFamVitaDB',
         charset='utf8mb4'
     )
 
