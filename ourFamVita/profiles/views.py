@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from profiles.forms import Survey1Form, Survey2Form, Survey3Form, ProfileInfo
-from users.models import User, Profile, Survey, SurveyAllergy, SurveyDisease, SurveyFunction, AllergyCode, DiseaseCode, FunctionCode
+# from users.models import User, Profile, Survey, SurveyAllergy, SurveyDisease, SurveyFunction, AllergyCode, DiseaseCode, FunctionCode
 # from django.db import transaction
 from django.utils import timezone
 

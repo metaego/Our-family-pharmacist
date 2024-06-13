@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
-from users.models import (Profile
-                        , Survey, SurveyAllergy, SurveyDisease, SurveyFunction  
-                        , ComCode, DiseaseCode, AllergyCode, FunctionCode
-                        , RecommendationIngredient, RecommendationProduct, Recommendation
-                        , Product, Ingredient, ProductIngredient) # 코드 가독성을 위해 () 사용
+# from users.models import (Profile
+#                         , Survey, SurveyAllergy, SurveyDisease, SurveyFunction  
+#                         , ComCode, DiseaseCode, AllergyCode, FunctionCode
+#                         , RecommendationIngredient, RecommendationProduct, Recommendation
+#                         , Product, Ingredient, ProductIngredient) # 코드 가독성을 위해 () 사용
 from django.db.models import Count
 # from .cal_weight_and_height import impute_weight, impute_height 
 from django.utils import timezone

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from users.models import Profile, ProductLog, Product, Recommendation, RecommendationIngredient, Ingredient, SurveyFunction, ProductLike, ProductReview, FunctionCode
+# from users.models import Profile, ProductLog, Product, Recommendation, RecommendationIngredient, Ingredient, SurveyFunction, ProductLike, ProductReview, FunctionCode
 
 
 # Create your views here.

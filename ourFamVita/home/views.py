@@ -2,11 +2,11 @@ import os
 import requests, json
 from django.shortcuts import render, redirect
 from django.middleware.csrf import get_token
-from users.models import (Profile, Product
-                          , Survey, SurveyAllergy
-                          , ComCode, AllergyCode 
-                          , Recommendation, RecommendationProduct
-                          )
+# from users.models import (Profile, Product
+#                           , Survey, SurveyAllergy
+#                           , ComCode, AllergyCode 
+#                           , Recommendation, RecommendationProduct
+#                           )
 from dotenv import load_dotenv
 import time
 # Create your views here.

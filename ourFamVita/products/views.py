@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.db.models import Sum, Count
-from users.models import (Profile
-                        , Survey, SurveyFunction
-                        , Product, ProductReview, ProductIngredient, ProductFunction, ProductLog
-                        , Ingredient, FunctionCode)
+# from users.models import (Profile
+#                         , Survey, SurveyFunction
+#                         , Product, ProductReview, ProductIngredient, ProductFunction, ProductLog
+#                         , Ingredient, FunctionCode)
 
 # Create your views here.
 def product_detail(request, product_id, profile_id):

@@ -17,6 +17,8 @@ import os
 
 load_dotenv()
 
+AUTH_USER_MODEL = "users.User"
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,6 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    
     
 ]
 
@@ -95,8 +99,8 @@ WSGI_APPLICATION = 'ourFamVita.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'testDB',
-        'NAME': 'ourFamVitaDB',
+        # 'NAME': 'ourFamVitaDBNew',
+        'NAME': 'PillSoGood',
         'USER': os.environ.get('MYSQL_USER'),
         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
         'HOST': os.environ.get('MYSQL_HOST'),

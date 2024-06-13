@@ -21,8 +21,8 @@ def flask_ai_total_recom_old(survey_id):
         host=os.environ.get('MYSQL_HOST'),
         user=os.environ.get('MYSQL_USER'),
         password=os.environ.get('MYSQL_PASSWORD'),
-        # db='testDB',
-        db='ourFamVitaDB',
+        # db='ourFamVitaDBNew',
+        db='PillSoGood',
         charset='utf8mb4'
 )
 

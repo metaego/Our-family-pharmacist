@@ -37,9 +37,9 @@ class ComCodeGrp(models.Model):
 # ComCode class 위치를 현 위치로 이동
 class ComCode(models.Model):
     com_code = models.CharField(primary_key=True, max_length=20)
-    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE)
+    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE, db_column='com_code_grp')
     com_code_name = models.CharField(max_length=50)
-    com_code_desc = models.CharField(max_length=500, blank=True, null=True)
+    com_code_desc = models.CharField(max_length=500, blank=True)
     use_yn = models.CharField(max_length=1)
 
 
@@ -56,8 +56,8 @@ class Ingredient(models.Model):
     ingredient_name = models.CharField(max_length=100)
     ingredient_limit_high = models.TextField(blank=True)
     ingredient_limit_low = models.TextField(blank=True)
-    ingredient_unit = models.CharField(max_length=10, blank=True, null=True)
-    ingredient_type = models.CharField(max_length=10, blank=True, null=True)
+    ingredient_unit = models.CharField(max_length=10, blank=True)
+    ingredient_type = models.CharField(max_length=10, blank=True)
     ingredient_function_content = models.JSONField(blank=True, null=True)
     ingredient_caution_content = models.JSONField(blank=True, null=True)
     ingredient_function_code = models.JSONField(blank=True, null=True) 
@@ -74,8 +74,8 @@ class Ingredient(models.Model):
 class IngredientComCode(models.Model):
     ingredient_com_code_id = models.AutoField(primary_key=True)
     ingredient_id = models.ForeignKey(Ingredient, on_delete=models.CASCADE, db_column='ingredient_id')
-    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE) #, default='FUNCTION') # 외래키므로 default값은 필요없을 듯?
-    com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE)
+    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE, db_column='com_code_grp')
+    com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE, db_column='com_code')
 
 
     class Meta:
@@ -126,28 +126,48 @@ class IngredientComCode(models.Model):
 
 
 
-# User class 위치를 현 위치로 이동
+# AbstractUser 자동 생성 필드 매칭 후 (24.06.12)
 class User(AbstractUser):
     user_id = models.BigAutoField(primary_key=True)
-    user_email = models.CharField(unique=True, max_length=50)
-    user_password = models.CharField(max_length=50)
-    user_role = models.CharField(max_length=20, default='user')
-    user_status = models.CharField(max_length=10, default='active')
-    user_created_at = models.DateTimeField(auto_now_add=True)
+    # user_email = models.EmailField(unique=True, max_length=50)
+    # user_password = models.CharField(max_length=50)
+    # user_role = models.CharField(max_length=20, default='user')
+    # user_status = models.CharField(max_length=10, default='active')
+    # user_created_at = models.DateTimeField(auto_now_add=True)
     user_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
-    user_deleted_at = models.DateTimeField(auto_noW=True, blank=True, null=True)
-    user_last_login = models.DateTimeField(auto_now=True)
+    user_deleted_at = models.DateTimeField(blank=True, null=True)
+    # user_last_login = models.DateTimeField(auto_now=True)
 
 
     class Meta:
         managed = True
         db_table = 'user'
+        
+
+
+# AbstractUser 자동 생성 필드 매칭 이전 (24.06.12)
+# User class 위치를 현 위치로 이동
+# class User(AbstractUser):
+#     user_id = models.BigAutoField(primary_key=True)
+#     user_email = models.EmailField(unique=True, max_length=50)
+#     user_password = models.CharField(max_length=50)
+#     user_role = models.CharField(max_length=20, default='user')
+#     user_status = models.CharField(max_length=10, default='active')
+#     user_created_at = models.DateTimeField(auto_now_add=True)
+#     user_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+#     user_deleted_at = models.DateTimeField(blank=True, null=True)
+#     user_last_login = models.DateTimeField(auto_now=True)
+
+
+#     class Meta:
+#         managed = True
+#         db_table = 'user'
 
 
 
 class Profile(models.Model):
-    profile_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile_id = models.BigAutoField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
     profile_name = models.CharField(max_length=20)
     profile_birth = models.DateField()
     profile_status = models.CharField(max_length=10, default='active')
@@ -170,9 +190,9 @@ class Survey(models.Model):
     survey_sex = models.CharField(max_length=1)
     survey_age_group = models.CharField(max_length=20)
     survey_pregnancy_code = models.CharField(max_length=10)
-    survey_operation_code = models.CharField(max_length=10, blank=True, null=True)
-    survey_alcohol_code = models.CharField(max_length=10, blank=True, null=True)
-    survey_smoking_code = models.CharField(max_length=1, blank=True, null=True)
+    survey_operation_code = models.CharField(max_length=10, blank=True)
+    survey_alcohol_code = models.CharField(max_length=10, blank=True)
+    survey_smoking_code = models.CharField(max_length=1, blank=True)
     survey_allergy_code = models.JSONField()
     survey_disease_code = models.JSONField(blank=True, null=True)
     survey_function_code = models.JSONField(blank=True, null=True)
@@ -187,34 +207,48 @@ class Survey(models.Model):
 
 
 
-# 신규생성(2024.06.10)
-class SurveyCaution(models.Model):
-    # 해당 테이블은 survey 테이블의 survey_allergy_code, survey_disease_code 필드의 json 데이터 정합성을 위해 생성한 테이블
-    survey_caution_id = models.BigAutoField(primary_key=True)
+# 신규생성(2024.06.11)
+class SurveyComCode(models.Model):
+    survey_com_code_id = models.BigAutoField(primary_key=True)
     survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
-    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE)
-    com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE)
-
+    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE, db_column='com_code_grp')
+    com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE, db_column='com_code')
+    survey_com_code_rank = models.PositiveSmallIntegerField(blank=True, null=True)
 
     class Meta:
         managed = True
-        db_table = 'survey_caution'
+        db_table = 'survey_com_code'
 
 
 
-# 신규생성(2024.06.10)
-class SurveyFunction(models.Model):
-    # 해당 테이블은 survey 테이블의 survey_function_code 필드의 json 데이터 정합성을 위해 생성한 테이블
-    survey_function_id = models.BigAutoField(primary_key=True, unique=True)
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
-    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE)
-    com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE)
-    survey_function_rank = models.PositiveSmallIntegerField()
+# 신규생성(2024.06.10) → SurveyComCode 테이블로 병합(06.11)
+# class SurveyCaution(models.Model):
+#     # 해당 테이블은 survey 테이블의 survey_allergy_code, survey_disease_code 필드의 json 데이터 정합성을 위해 생성한 테이블
+#     survey_caution_id = models.BigAutoField(primary_key=True)
+#     survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
+#     com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE)
+#     com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE)
 
 
-    class Meta:
-        managed = True
-        db_table = 'survey_function'
+#     class Meta:
+#         managed = True
+#         db_table = 'survey_caution'
+
+
+
+# 신규생성(2024.06.10) → SurveyComCode 테이블로 병합(06.11)
+# class SurveyFunction(models.Model):
+#     # 해당 테이블은 survey 테이블의 survey_function_code 필드의 json 데이터 정합성을 위해 생성한 테이블
+#     survey_function_id = models.BigAutoField(primary_key=True, unique=True)
+#     survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, db_column='survey_id')
+#     com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE)
+#     com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE)
+#     survey_function_rank = models.PositiveSmallIntegerField()
+
+
+#     class Meta:
+#         managed = True
+#         db_table = 'survey_function'
 
 
 
@@ -262,11 +296,11 @@ class Product(models.Model):
     product_id = models.BigIntegerField(primary_key=True)
     product_name = models.TextField()
     product_company = models.CharField(max_length=100)
-    product_instruction = models.TextField(blank=True, null=True)
-    product_image = models.ImageField(blank=True, null=True)
-    product_storage_method = models.TextField(blank=True, null=True)
-    product_dispos = models.CharField(max_length=20, blank=True, null=True)
-    product_serving = models.TextField(blank=True, null=True)
+    product_instruction = models.TextField(blank=True)
+    product_image = models.TextField(blank=True, null=True)
+    product_storage_method = models.TextField(blank=True)
+    product_dispos = models.CharField(max_length=20, blank=True)
+    product_serving = models.TextField(blank=True)
     product_function_content = models.JSONField(blank=True, null=True)
     product_caution_content = models.JSONField(blank=True, null=True) 
     product_function_code = models.JSONField(blank=True, null=True) 
@@ -283,8 +317,8 @@ class Product(models.Model):
 
 class ProductIngredient(models.Model):
     product_ingredient_id = models.BigAutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
-    ingredient_id = models.ForeignKey(Ingredient,  on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+    ingredient_id = models.ForeignKey(Ingredient, on_delete=models.CASCADE, db_column='ingredient_id')
 
 
     class Meta:
@@ -295,9 +329,9 @@ class ProductIngredient(models.Model):
 
 class ProductComCode(models.Model):
     product_com_code_id = models.BigAutoField(primary_key=True)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
-    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE) #, default='FUNCTION')
-    com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+    com_code_grp = models.ForeignKey(ComCodeGrp, on_delete=models.CASCADE, db_column='com_code_grp')
+    com_code = models.ForeignKey(ComCode, on_delete=models.CASCADE, db_column='com_code')
 
 
     class Meta:
@@ -311,7 +345,7 @@ class ProductReview(models.Model):
     profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
     product_review_rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=0)
-    product_review_content = models.CharField(max_length=200, null=True)
+    product_review_content = models.CharField(max_length=200, blank=True)
     product_review_created_at = models.DateTimeField(auto_now_add=True)
     product_review_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     product_review_deleted_at = models.DateTimeField(blank=True, null=True)
@@ -328,7 +362,7 @@ class ProductLike(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
     profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
-    product_like_page = models.CharField(max_length=50, null=True)  # 신규 필드 추가 생성 제안
+    product_like_page = models.CharField(max_length=50, blank=True)  # 신규 필드 추가 생성 제안
     product_like_created_at = models.DateTimeField(auto_now_add=True)
     product_like_deleted_at = models.DateTimeField(blank=True, null=True)
 

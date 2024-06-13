@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from users.models import User, Profile, Recommendation, ProductIngredient, Product, ProductLike, RecommendationIngredient, RecommendationProduct, Ingredient, SurveyFunction, FunctionCode
+# from users.models import User, Profile, Recommendation, ProductIngredient, Product, ProductLike, RecommendationIngredient, RecommendationProduct, Ingredient, SurveyFunction, FunctionCode
 
 # Create your views here.
 def group_main(request, profile_id):
