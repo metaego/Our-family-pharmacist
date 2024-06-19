@@ -46,8 +46,8 @@
                         <button class="btn btn-primary" style="width: 180px; height: 30px; margin: 0 0 3px 0;">선택</button>
                     </form>
                     <div style="display: inline-block;">
-                        <form action="{% url "profiles:profile_info" profile.profile_id %}" method="POST">
-                            {% csrf_token %}
+                        <form action="{% url "profiles:profile_edit1" profile.profile_id %}" method="GET">
+                            <!-- {% csrf_token %} -->
                             <button class="btn btn-secondary" style="width: 88px; height: 30px;">수정</button>
                         </form>
                     </div>

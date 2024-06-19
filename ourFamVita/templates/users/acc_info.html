@@ -23,30 +23,28 @@
 </head>
 
 <body>
-    <div id="signup">
-        <!-- 마이페이지로 action -->
-        <form method="POST" autocomplete="off">
-            {% csrf_token %}
-            <h1>회원정보 수정</h1>
-            {{ form.as_p }}
-            <div style="display: inline-block;">
-                <form action="/users/signout/{{ user.user_id }}/" method="POST">
-                    {% csrf_token %}
-                    <button class="btn btn-secondary" onclick="return confirm('멀티 프로필의 모든 내용이 삭제되어 기존 서비스를 이용할 수 없습니다. 정말 회원 탈퇴하시겠습니까?')">
-                        회원탈퇴
-                    </button>
-                </form>
+    <div style="margin-top: 10%;">
+        <div id="signup">
+            <!-- 마이페이지로 action -->
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+                <h1>회원정보 수정</h1>
+                <h4>E-mail: {{ user.username }}</h4>
+                {{ form.as_p }}
                 <button class="btn btn-primary" type=submit>저장</button>
-            </div>   
-            <br>
-            <div>
-                
-            </div>
-        </form>
-        {% comment %} <a href="{% url "users:signout" %}" onclick="return confirm(
-            '멀티 프로필의 모든 내용이 삭제되어 기존 서비스를 사용할 수 없습니다. 정말 회원 탈퇴하시겠습니까?')">
-            회원탈퇴
-        </a> {% endcomment %}
+            </form>
+        </div>
+        <br>
+        <div style="text-align:center;">
+            <form action="/users/signout/{{ user.user_id }}/" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-secondary" onclick="return confirm('멀티 프로필의 모든 내용이 삭제되어 기존 서비스를 이용할 수 없습니다. 정말 회원 탈퇴하시겠습니까?')">
+                    회원탈퇴
+                </button>
+            </form>    
+        </div>    
     </div>
 </body>
 </html>
+
+

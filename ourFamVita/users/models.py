@@ -137,7 +137,11 @@ class User(AbstractUser):
     user_modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     user_deleted_at = models.DateTimeField(blank=True, null=True)
     # user_last_login = models.DateTimeField(auto_now=True)
+    first_name = None
+    last_name = None
 
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
 
     class Meta:
         managed = True
@@ -192,7 +196,7 @@ class Survey(models.Model):
     survey_pregnancy_code = models.CharField(max_length=10)
     survey_operation_code = models.CharField(max_length=10, blank=True)
     survey_alcohol_code = models.CharField(max_length=10, blank=True)
-    survey_smoking_code = models.CharField(max_length=1, blank=True)
+    survey_smoking_code = models.CharField(max_length=10, blank=True)
     survey_allergy_code = models.JSONField()
     survey_disease_code = models.JSONField(blank=True, null=True)
     survey_function_code = models.JSONField(blank=True, null=True)
