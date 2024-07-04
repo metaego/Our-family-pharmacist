@@ -54,6 +54,8 @@ class Ingredient(models.Model):
     ingredient_id = models.AutoField(primary_key=True)
     ingredient_grp_name = models.CharField(max_length=100) # 신규 추가
     ingredient_name = models.CharField(max_length=100)
+    ingredient_auth_num = models.CharField(max_length=100, blank=True, null=True)   # 신규 추가(2024.07.04)
+    ingredient_recom_name = models.CharField(max_length=100, blank=True, null=True) # 신규 추가(2024.07.04)
     ingredient_limit_high = models.TextField(blank=True)
     ingredient_limit_low = models.TextField(blank=True)
     ingredient_unit = models.CharField(max_length=10, blank=True)
@@ -366,7 +368,7 @@ class ProductLike(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
     profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, db_column='profile_id') 
-    product_like_page = models.CharField(max_length=50, blank=True)  # 신규 필드 추가 생성 제안
+    product_like_page = models.CharField(max_length=50, blank=True)  # 신규 필드 추가 
     product_like_created_at = models.DateTimeField(auto_now_add=True)
     product_like_deleted_at = models.DateTimeField(blank=True, null=True)
 
