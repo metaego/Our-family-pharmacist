@@ -1,4 +1,4 @@
-male_00_rating = {'survey_sex' : 'm', 
+male_00_rating = {'survey_sex' : '0', # 남성 
                   'survey_age_group' : 0, # '어린이', 만 6~11세 의미
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.010, # 수술 여부
@@ -70,7 +70,7 @@ male_00_rating = {'survey_sex' : 'm',
                   'DI17' : 0.000 # 호르몬제
                   }
 
-male_10_rating = {'survey_sex' : 'm', 
+male_10_rating = {'survey_sex' : '0', # 남성 
                   'survey_age_group' : 10, # '청소년', 만 12~18세 의미
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.010, # 수술 여부
@@ -143,7 +143,7 @@ male_10_rating = {'survey_sex' : 'm',
                   }
 
 
-male_20_rating = {'survey_sex' : 'm', 
+male_20_rating = {'survey_sex' : '0', # 남성 
                   'survey_age_group' : 20, # 20대 만 19세 이상 의미
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.009, # 수술 여부
@@ -215,7 +215,7 @@ male_20_rating = {'survey_sex' : 'm',
                   'DI17' : 0.000 # 호르몬제
                   }
 
-male_30_rating = {'survey_sex' : 'm', 
+male_30_rating = {'survey_sex' : '0', # 남성 
                   'survey_age_group' : 30, # 30대 
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.016, # 수술 여부
@@ -287,7 +287,7 @@ male_30_rating = {'survey_sex' : 'm',
                   'DI17' : 0.000 # 호르몬제
                   }
 
-male_40_rating = {'survey_sex' : 'm', 
+male_40_rating = {'survey_sex' : '0', # 남성 
                   'survey_age_group' : 40, # 40대 
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.016, # 수술 여부
@@ -359,7 +359,7 @@ male_40_rating = {'survey_sex' : 'm',
                   'DI17' : 0.000 # 호르몬제
                   }
 
-male_50_rating = {'survey_sex' : 'm', 
+male_50_rating = {'survey_sex' : '0', # 남성 
                   'survey_age_group' : 50, # 50대 
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.028, # 수술 여부
@@ -431,7 +431,7 @@ male_50_rating = {'survey_sex' : 'm',
                   'DI17' : 0.000 # 호르몬제
                   }
 
-male_60_rating = {'survey_sex' : 'm', 
+male_60_rating = {'survey_sex' : '0', # 남성 
                   'survey_age_group' : 60, # 60세 이상 
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.075, # 수술 여부
@@ -505,7 +505,7 @@ male_60_rating = {'survey_sex' : 'm',
 
 
 # 남성 + 어린이와 동일
-female_00_rating = {'survey_sex' : 'f', 
+female_00_rating = {'survey_sex' : '1', # 여성 
                   'survey_age_group' : 0, # '어린이', 만 6~11세 의미
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.010, # 수술 여부
@@ -577,7 +577,7 @@ female_00_rating = {'survey_sex' : 'f',
                   'DI17' : 0.000 # 호르몬제
                   }
 
-female_10_rating = {'survey_sex' : 'f', 
+female_10_rating = {'survey_sex' : '1', # 여성 
                   'survey_age_group' : 10, # '청소년', 만 12~18세 의미
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.010, # 수술 여부
@@ -649,7 +649,7 @@ female_10_rating = {'survey_sex' : 'f',
                   'DI17' : 0.000 # 호르몬제
                   }
 
-female_20_rating = {'survey_sex' : 'f', 
+female_20_rating = {'survey_sex' : '1', # 여성 
                   'survey_age_group' : 20, # 20대 만 19세 이상 의미
                   'survey_pregnancy_code' : 0.014, # 임신 여부
                   'survey_operation_code' : 0.015, # 수술 여부
@@ -721,7 +721,7 @@ female_20_rating = {'survey_sex' : 'f',
                   'DI17' : 0.050 # 호르몬제
                   }
 
-female_30_rating = {'survey_sex' : 'f', 
+female_30_rating = {'survey_sex' : '1', # 여성 
                   'survey_age_group' : 30, # 30대 
                   'survey_pregnancy_code' : 0.059, # 임신 여부
                   'survey_operation_code' : 0.048, # 수술 여부
@@ -793,7 +793,7 @@ female_30_rating = {'survey_sex' : 'f',
                   'DI17' : 0.050 # 호르몬제
                   }
 
-female_40_rating = {'survey_sex' : 'f', 
+female_40_rating = {'survey_sex' : '1', # 여성 
                   'survey_age_group' : 40, # 40대 
                   'survey_pregnancy_code' : 0.004, # 임신 여부
                   'survey_operation_code' : 0.026, # 수술 여부
@@ -865,7 +865,7 @@ female_40_rating = {'survey_sex' : 'f',
                   'DI17' : 0.050 # 호르몬제
                   }
 
-female_50_rating = {'survey_sex' : 'f', 
+female_50_rating = {'survey_sex' : '1', # 여성 
                   'survey_age_group' : 50, # 50대 
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.031, # 수술 여부
@@ -937,7 +937,7 @@ female_50_rating = {'survey_sex' : 'f',
                   'DI17' : 0.050 # 호르몬제
                   }
 
-female_60_rating = {'survey_sex' : 'f', 
+female_60_rating = {'survey_sex' : '1', # 여성 
                   'survey_age_group' : 60, # 60세 이상 
                   'survey_pregnancy_code' : 0.000, # 임신 여부
                   'survey_operation_code' : 0.073, # 수술 여부
