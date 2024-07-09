@@ -99,14 +99,14 @@ WSGI_APPLICATION = 'ourFamVita.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'ourFamVitaDBNew',
+        # 'NAME': 'backuptestDB',
         'NAME': 'PillSoGood',
         'USER': os.environ.get('MYSQL_USER'),
         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
         'HOST': os.environ.get('MYSQL_HOST'),
         'PORT': 3306,
     }
-}
+} 
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
