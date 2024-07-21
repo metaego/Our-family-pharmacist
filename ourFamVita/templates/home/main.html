@@ -61,14 +61,20 @@
                 <tr>
                     <td>{{ profile.profile_name }}  </td>
                     <td>{{ survey.survey_age_group }}</td>
-                    <td>{%if survey.survey_sex == 'f' %}
+                    <td>{% if survey.survey_sex == 'f' %}
                         {{ '여성' }}
                         {% else %}
                         {{ '남성' }}
                         {% endif %}
                     </td>
                     <td>{{ pregnancy }}</td>
-                    <td style="word-wrap: break-word">{{ allergys|join:', ' }}</td>
+                    <td style="word-wrap: break-word">
+                        {% if allergys|length > 18 %}
+                            {{ allergys|slice:":18" }}...
+                        {% else %}
+                            {{ allergys }}
+                        {% endif %}
+                    </td>
                 </tr>
             </table>
         </div>
