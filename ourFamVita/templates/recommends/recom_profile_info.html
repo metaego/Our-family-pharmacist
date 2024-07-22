@@ -180,7 +180,7 @@
                   <td>{{ pregnancy }}</td>
                   <td style="word-wrap: break-word">{{ allergy|join:', ' }}</td>
                   <td style="word-wrap: break-word">{{ disease|join:', ' }}</td>
-                  <td>{{ survey.survey_smoke }}</td>
+                  <td>{{ smoking }}</td>
                   <td>{{ alcohol }}</td>
               </tr>
           </table>
@@ -222,7 +222,7 @@
   </div>
   <div style="display: inline-block;">
     <!-- 프로필 수정 화면으로 가기 -->
-    <form action="{% url "profiles:profile_info" profile.profile_id %}" method='POST'>
+    <form action="{% url "profiles:profile" %}" method='POST'>
       {% csrf_token %}
         <button class="btn btn-secondary" style="width: 248px; height: 30px;">프로필 수정</button>
     </form>

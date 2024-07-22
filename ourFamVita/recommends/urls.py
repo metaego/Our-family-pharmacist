@@ -7,7 +7,8 @@ urlpatterns = [
     # AI추천받기:나의 프로필 정보 확인
     # menu: ai 영양제 추천받기(profile_info)
     # /recommends/{profile-id}/info
-    path('<int:profile_id>/info/', views.recom_info, name='profile_info'),
+    # path('<int:profile_id>/info/', views.recom_info, name='profile_info'),
+    path('info/', views.recom_info, name='profile_info'),
 
     # 설문 조사 결과 저장
     path('survey_id/<int:profile_id>/<int:survey_id>', views.save_survey_data, name='save_survey_data'),

@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
-# from users.models import (Profile
-#                         , Survey, SurveyAllergy, SurveyDisease, SurveyFunction  
-#                         , ComCode, DiseaseCode, AllergyCode, FunctionCode
-#                         , RecommendationIngredient, RecommendationProduct, Recommendation
-#                         , Product, Ingredient, ProductIngredient) # 코드 가독성을 위해 () 사용
+from users.models import (Profile
+                        , Survey #,  SurveyAllergy, SurveyDisease, SurveyFunction  
+                        , ComCode #, DiseaseCode, AllergyCode, FunctionCode
+                        # , RecommendationIngredient, RecommendationProduct, Recommendation
+                        # , Product, Ingredient, ProductIngredient # 코드 가독성을 위해 () 사용
+                        )
 from django.db.models import Count
 # from .cal_weight_and_height import impute_weight, impute_height 
 from django.utils import timezone
@@ -21,28 +22,29 @@ load_dotenv()
 
 # Create your views here.
 
-def recom_info(request, profile_id):
+def recom_info(request):
     start_time = time.time()
     # ai 추천받기: 나의 프로필 정보 확인
     # ai 영양제 추천받기 전 나의 프로필 정보 확인 페이지
     # /recommends/{profile-id}/info
 
-    user_id = request.session.get('user')
+    user_id = request.session.get('_auth_user_id')
+    profile_id = request.session.get('profile_id')
     if not user_id:
         return redirect('/')
 
     # 프로필 및 survey 데이터 가져오기
     profile = Profile.objects.get(pk=profile_id)
-    survey = Survey.objects.filter(profile_id=profile.pk).latest('created_at')
+    survey = Survey.objects.filter(profile_id=profile.pk).latest('survey_created_at')
     # print("survey_id(recom_info): ", survey.survey_id)
 
 
     
     # 만나이 계산
-    profile_birth = str(profile.profile_birth)
-    birth = datetime.strptime(profile_birth, '%Y-%m-%d').date()
+    survey_birth = str(profile.profile_birth)
+    birth = datetime.strptime(survey_birth, '%Y-%m-%d').date()
     today = datetime.now().date()
-    age = today.year - int(profile_birth[:4])
+    age = today.year - int(survey_birth[:4])
     ## 생일이 있는 달을 아직 안 지남
     if today.month < birth.month:
         age -= 1
@@ -62,20 +64,37 @@ def recom_info(request, profile_id):
 
 
     # 임신상태
-    profile_pregnancy = ComCode.objects.get(com_code=survey.survey_pregnancy_code)
-    
+    pregnancy_code = survey.survey_pregnancy_code
+    pregnancy_kr_code = ComCode.objects.filter(com_code=pregnancy_code).values_list('com_code_name', flat=True)
+    pregnancy_kr_code = ''.join(list(pregnancy_kr_code))
+
 
 
     # 알레르기 여부
-    ## profile allergy 가져오기
-    profile_allergys = SurveyAllergy.objects.filter(survey_id=survey.survey_id).values_list('allergy_code', flat=True)
-    profile_allergys = list(profile_allergys)
-    ## profile allergy 코드를 한글 코드명으로 변환
-    kr_allergy_codes = []
-    for profile_allergy_code in profile_allergys:
-        kr_allergy_code = AllergyCode.objects.filter(allergy_code=profile_allergy_code).values_list('allergy_code_name')
-        kr_allergy_code = ''.join(kr_allergy_code[0])
-        kr_allergy_codes.append(kr_allergy_code)
+    allergy_code_dict = survey.survey_allergy_code
+    allergy_kr_list = []
+    if type(allergy_code_dict['ALLERGY']) == str:
+        code = ComCode.objects.filter(com_code=allergy_code_dict['ALLERGY']).values_list('com_code_name', flat=True)
+        code = ''.join(list(code))
+        allergy_kr_list.append(allergy_kr_list)
+
+    else: 
+        for code_list in allergy_code_dict.values():
+            for code in code_list:
+                code = ComCode.objects.filter(com_code=code).values_list('com_code_name', flat=True)
+                code = ''.join(list(code))
+                if code != 'DI00':
+                    allergy_kr_list.append(code)
+    print(f'allergy_kr_list: {allergy_kr_list}')
+
+
+    # for code_list in allergy_code_dict.values():
+    #     for code in code_list:
+    #         code = ComCode.objects.filter(com_code=code).values_list('com_code_name', flat=True)
+    #         code = ', '.join(list(code))
+    #         allergy_kr_list.append(code)
+    # allergy_kr_list = ', '.join(allergy_kr_list)
+    # print(f'allergy_kr_list: {allergy_kr_list}')
 
 
 
@@ -91,55 +110,54 @@ def recom_info(request, profile_id):
 
 
     # 기저질환
-    profile_disease = SurveyDisease.objects.filter(survey_id=survey.survey_id).values_list('disease_code', flat=True)
-    profile_disease = list(profile_disease)
-    # print(f'profile_disease: {profile_disease}') #  ['DI01', 'DI02', 'DI03', 'DI04', 'DI07']
-    kr_disease_codes = []
-    for profile_disease_code in profile_disease:
-        kr_disease_code = DiseaseCode.objects.filter(disease_code=profile_disease_code).values_list('disease_code_name', flat=True)
-        kr_disease_code = str(kr_disease_code[0])
-        kr_allergy_code = ''.join(kr_disease_code)
-        kr_disease_codes.append(kr_disease_code)
-    # print(f'kr_disease_codes_list: {kr_disease_codes}')
+    disease_code_dict = survey.survey_disease_code
+    disease_kr_list = []
+    print(f'disease_code_dict: {disease_code_dict}')
+    # survey 테이블 survey_disease_code 컬럼의 'DISEASE' 키 값이 1개일 때 리스트로 바뀐다면 아래 코드 수정해야 함 
+    if type(disease_code_dict['DISEASE']) == str:
+        code = ComCode.objects.filter(com_code=disease_code_dict['DISEASE']).values_list('com_code_name', flat=True)
+        code = ''.join(list(code))
+        disease_kr_list.append(code)
+
+    else: 
+        for code_list in disease_code_dict.values():
+            for code in code_list:
+                code = ComCode.objects.filter(com_code=code).values_list('com_code_name', flat=True)
+                code = ''.join(list(code))
+                disease_kr_list.append(code)
+    print(f'disease_kr_list: {disease_kr_list}')
+
 
 
 
     # 음주여부
-    profile_alcohol = ComCode.objects.filter(com_code=survey.survey_alcohol_code).get()
+    alcohol_code = survey.survey_alcohol_code
+    alcohol_code = ComCode.objects.filter(com_code=alcohol_code).values_list('com_code_name', flat=True)
+    alcohol_code = ''.join(list(alcohol_code))
+    print(f'alcohol_code: {alcohol_code}')
     
     
 
     # 흡연여부
-    if survey.survey_smoke == 'y':
-        survey.survey_smoke = '흡연'
-    else:
-        survey.survey_smoke = '비흡연'
+    smoking_code = survey.survey_smoking_code
+    smoking_code = ComCode.objects.filter(com_code=smoking_code).values_list('com_code_name', flat=True)
+    smoking_code = ''.join(list(smoking_code))
+    print(f'smoking_code: {smoking_code}')
+
 
 
     # 건강고민 순위 리스트
-    ## 사용자들 설문조사에서 건강고민 순위 매기기
-    survey_function_codes = SurveyFunction.objects.exclude(function_code='HF00')
-    survey_function_codes = survey_function_codes.values('function_code').annotate(count=Count('function_code'))
-    survey_function_codes = survey_function_codes.order_by('-count')
-    survey_function_codes = list(survey_function_codes)
-    ## 건강고민 코드만 가져오기
-    function_code_list = []
-    for items in survey_function_codes:
-        function_code_list.append(items['function_code'])
-    ## 누락된 건강코드 추가
-    all_function_code = FunctionCode.objects.exclude(function_code__in=['HF00', 'HF26']).values_list('function_code', flat=True)
-    all_function_code = list(all_function_code)
-    for code in all_function_code:
-        if code not in function_code_list:
-            function_code_list.append(code)
-    print(f'function_code_list: {function_code_list}')
-    ## 코드명을 한글명으로 변환
-    kr_function_code_list = []
-    for code in function_code_list:
-        kr_code = FunctionCode.objects.filter(function_code=code).values_list('function_code_name', flat=True)
-        kr_code = ''.join(kr_code)
-        kr_function_code_list.append(kr_code)
-    # print(f'kr_function_code_list: {kr_function_code_list}')
+    function_list = ComCode.objects.filter(com_code_grp='FUNCTION').exclude(com_code='HF00').values_list('com_code', flat=True)
+    function_list = list(function_list)
+    i = 0
+    for code in function_list:
+        code = ComCode.objects.filter(com_code=code).values_list('com_code_name', flat=True)
+        code = ''.join(list(code))
+        function_list[i] = code
+        i += 1
+    print(f'function_list: {function_list}')
+
+
 
     end_time = time.time()
     execution_time_seconds = end_time - start_time
@@ -151,11 +169,12 @@ def recom_info(request, profile_id):
         'profile': profile,
         'survey': survey,
         'age': age,
-        'allergy': kr_allergy_codes,
-        'disease': kr_disease_codes,
-        'alcohol': profile_alcohol.com_code_name,
-        'pregnancy': profile_pregnancy.com_code_name,
-        'function_code_list': kr_function_code_list,
+        'allergy': allergy_kr_list,
+        'disease': disease_kr_list,
+        'alcohol': alcohol_code,
+        'pregnancy': pregnancy_kr_code,
+        'smoking': smoking_code,
+        'function_code_list': function_list,
     })
 
     

@@ -46,13 +46,13 @@ def home_main(request, profile_id):
     allergy = survey.survey_allergy_code
     # print(f'allergy: {allergy}')  # {'ALLERGY': ['AL00', 'AL01', 'AL02', 'AL03', 'AL04']}
     allergy_kr_list = []
-    for alg_code_list in allergy.values():
-        for alg_code in alg_code_list:
+    for code_list in allergy.values():
+        for code in code_list:
             # alg_code: AL00
             # 알러지 한글명으로 변환
-            alg_code = ComCode.objects.filter(com_code=alg_code).values_list('com_code_name', flat=True)
-            alg_code = ', '.join(list(alg_code))
-            allergy_kr_list.append(alg_code)
+            code = ComCode.objects.filter(com_code=code).values_list('com_code_name', flat=True)
+            code = ', '.join(list(code))
+            allergy_kr_list.append(code)
     # print(f'allergy_kr_list: {allergy_kr_list}') # ['해당 사항 없음', '게 또는 새우 등의 갑각류', '옻', '땅콩', '프로폴리스']
     allergy_kr = ', '.join(allergy_kr_list) # 해당 사항 없음, 게 또는 새우 등의 갑각류, 옻, 땅콩, 프로폴리스
     # print(f'allergy_kr: {allergy_kr}')

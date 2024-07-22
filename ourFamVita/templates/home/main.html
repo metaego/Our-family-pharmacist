@@ -84,7 +84,7 @@
 <!-- rending page: recom_profile_info.html -->
 {% comment %} <form action="/recommends/{{ profile_id }}/info/"  method='get'> {% endcomment %}
 <div style="text-align: center">    
-    <form action="{% url "recommends:profile_info" profile_id %}"  method='get'>
+    <form action="{% url "recommends:profile_info" %}"  method='get'>
         <button class="btn btn-recommendation" style="font-size: 15px; width: 500px; height: 30px;">
             건강설문하고 영양제 추천 받기
         </button>
@@ -98,7 +98,7 @@
     {% if survey_base_recom_products == None %}
         <!-- rending page: recom_profile_info.html -->
         영양제를 추천받아보신 적이 없으시군요!
-        <form action="{% url "recommends:profile_info" profile_id %}" method='get'>
+        <form action="{% url "recommends:profile_info" %}" method='get'>
             <button class="btn btn-primary" style="width: 300px; margin-top: 30px">
                 나의 맞춤 영양제 추천을 위한 건강 설문하러 가기
             </button>
