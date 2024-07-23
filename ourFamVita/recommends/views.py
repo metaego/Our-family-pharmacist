@@ -3,8 +3,8 @@ from datetime import datetime
 from users.models import (Profile
                         , Survey #,  SurveyAllergy, SurveyDisease, SurveyFunction  
                         , ComCode #, DiseaseCode, AllergyCode, FunctionCode
-                        # , RecommendationIngredient, RecommendationProduct, Recommendation
-                        # , Product, Ingredient, ProductIngredient # 코드 가독성을 위해 () 사용
+                        , Recom, RecomIngredient, RecomSurveyProduct 
+                        , Product, Ingredient, ProductIngredient # 코드 가독성을 위해 () 사용
                         )
 from django.db.models import Count
 # from .cal_weight_and_height import impute_weight, impute_height 
@@ -88,19 +88,11 @@ def recom_info(request):
     print(f'allergy_kr_list: {allergy_kr_list}')
 
 
-    # for code_list in allergy_code_dict.values():
-    #     for code in code_list:
-    #         code = ComCode.objects.filter(com_code=code).values_list('com_code_name', flat=True)
-    #         code = ', '.join(list(code))
-    #         allergy_kr_list.append(code)
-    # allergy_kr_list = ', '.join(allergy_kr_list)
-    # print(f'allergy_kr_list: {allergy_kr_list}')
-
-
 
     # 키
     if survey.survey_height == None:
         survey.survey_height = '미입력'
+
 
 
     # 몸무게
@@ -126,7 +118,6 @@ def recom_info(request):
                 code = ''.join(list(code))
                 disease_kr_list.append(code)
     print(f'disease_kr_list: {disease_kr_list}')
-
 
 
 
@@ -179,10 +170,11 @@ def recom_info(request):
 
     
 
-def save_survey_data(request, profile_id, survey_id):
+def save_survey_data(request, survey_id):
     start_time = time.time()
+    user_id = request.session.get('_auth_user_id')
+    profile_id = request.session.get('profile_id')
 
-    user_id = request.session.get('user')
     if not user_id:
         return redirect('/')
 
@@ -192,39 +184,64 @@ def save_survey_data(request, profile_id, survey_id):
         # 새로운 survey 데이터 생성
         survey = Survey.objects.get(survey_id=survey_id)
         survey.pk = None
-        survey.created_at = timezone.now()
-        survey.save()
+        survey.survey_created_at = timezone.now()
+        # survey.save()
 
-        survey = Survey.objects.get(survey_id=survey.survey_id)
+        # survey = Survey.objects.get(survey_id=survey.survey_id)
         # print(f'save_survey_data(survey.survey_id): {survey.survey_id}')
-        # 새로운 survey_disease 데이터 생성
-        survey_diseases = SurveyDisease.objects.filter(survey_id=survey_id).values_list('disease_code', flat=True)
-        survey_diseases = list(survey_diseases)  # ['DI01', 'DI02', 'DI03', 'DI04', 'DI05']
-        for d_code in survey_diseases:
-            disease_code = DiseaseCode.objects.get(disease_code=d_code)
-            SurveyDisease.objects.create(survey_id=survey, disease_code=disease_code)
+
+
+
+        # # 새로운 survey_disease 데이터 생성
+        # survey_diseases = SurveyDisease.objects.filter(survey_id=survey_id).values_list('disease_code', flat=True)
+        # survey_diseases = list(survey_diseases)  # ['DI01', 'DI02', 'DI03', 'DI04', 'DI05']
+        # for d_code in survey_diseases:
+        #     disease_code = DiseaseCode.objects.get(disease_code=d_code)
+        #     SurveyDisease.objects.create(survey_id=survey, disease_code=disease_code)
            
 
 
-        # 새로운 survey_allergy 데이터 생성
-        survey_allerges = SurveyAllergy.objects.filter(survey_id=survey_id).values_list('allergy_code', flat=True)
-        survey_allerges = list(survey_allerges)
-        for a_code in survey_allerges:
-            allergy_code = AllergyCode.objects.get(allergy_code=a_code)
-            SurveyAllergy.objects.create(survey_id=survey, allergy_code=allergy_code)
+        # # 새로운 survey_allergy 데이터 생성
+        # survey_allerges = SurveyAllergy.objects.filter(survey_id=survey_id).values_list('allergy_code', flat=True)
+        # survey_allerges = list(survey_allerges)
+        # for a_code in survey_allerges:
+        #     allergy_code = AllergyCode.objects.get(allergy_code=a_code)
+        #     SurveyAllergy.objects.create(survey_id=survey, allergy_code=allergy_code)
 
 
 
         # 새로운 survey_function 데이터 생성
+        # function_codes = form.function_json().values()
+
+        # initial_data = {
+        #     'function1': survey.survey_function_code.get('1st'),
+        #     'function2': survey.survey_function_code.get('2nd'),
+        #     'function3': survey.survey_function_code.get('3rd'),
+        #     'function4': survey.survey_function_code.get('4th'),
+        #     'function5': survey.survey_function_code.get('5th'),
+        # }
+        
+        # form = Survey2Form(initial=initial_data)
+        # print(f'form: {form}')
+
+
+        survey_selected_functions = {}
+        idx = 0
         if not selected_functions:
-            function_code = FunctionCode.objects.get(function_code='HF00')
-            SurveyFunction.objects.create(survey_id=survey, function_code=function_code)
+            survey_selected_functions =  {"1st": "HF00"}
             # print('건강기능 고민을 아무것도 선택하지 않았을 때')
         else:
             for kr_f_code in selected_functions:
-                function_code = FunctionCode.objects.get(function_code_name=kr_f_code)
-                SurveyFunction.objects.create(survey_id=survey, function_code=function_code)
-            # print('survey, survey_disease, survey_allergey, survey_function data 신규 생성...!')
+                # {"1st": "HF10", "2nd": "HF06", "3rd": "HF05", "4th": "HF24", "5th": "HF03"}
+                dict_key = ["1st", "2nd", "3rd", "4th", "5th"]
+                survey_selected_functions[dict_key[idx]] = f'{kr_f_code}'
+                idx += 1
+        survey_selected_functions = json.dumps(survey_selected_functions, ensure_ascii=False)
+        survey.survey_function_code = survey_selected_functions
+        print(f'survey_selected_functions: {survey.survey_function_code}')
+        
+        survey.save()
+
 
     end_time = time.time()
     execution_time_seconds = end_time - start_time
@@ -232,14 +249,14 @@ def save_survey_data(request, profile_id, survey_id):
     execution_seconds = int(execution_time_seconds % 60)
     print("save_survey_data function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
 
-    return redirect('recommends:request_flask_recom_model', profile_id, survey.survey_id)
+    return redirect('recommends:request_flask_recom_model', profile_id, survey_id)
 
 
 def request_flask_recom_model(request, profile_id, survey_id):
 
     start_time = time.time()
 
-    user_id = request.session.get('user')
+    user_id = request.session.get('_auth_user_id')
     if not user_id:
         return redirect('/')
     
@@ -248,7 +265,8 @@ def request_flask_recom_model(request, profile_id, survey_id):
     if client_ip != '127.0.0.1' and client_ip != os.environ.get('AWS_PUBLIC_IP'):
         client_ip = os.environ.get('AWS_PUBLIC_IP')
     csrf_token = get_token(request)
-    survey = Survey.objects.filter(profile_id=profile_id).latest('created_at')
+    survey = Survey.objects.filter(profile_id=profile_id).latest('survey_created_at')
+    request.session['survey_id'] = survey.survey_id
     # print(f'최근 survey_id: {survey.survey_id}')
     response = requests.post('http://' + client_ip + f':5000/ai-total-recom/{survey.survey_id}/', 
                                 headers={'X-CSRFToken': csrf_token,
@@ -266,24 +284,24 @@ def request_flask_recom_model(request, profile_id, survey_id):
     execution_seconds = int(execution_time_seconds % 60)
     print("request_flask_recom_model function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
 
-    return redirect('recommends:profile_total_report', profile.profile_id, survey.survey_id)
+    return redirect('recommends:profile_total_report')
 
 
 
 
-def recom_profile_total_report(request, profile_id, survey_id):
+def recom_profile_total_report(request):
 
     start_time = time.time()
 
-    user_id = request.session.get('user')
+    user_id = request.session.get('_auth_user_id')
     if not user_id:
         return redirect('/')
 
     # AI추천받기: 영양 성분 리포트
     # menu: ai 영양제 추천받기> 영양 성분 리포트
     # /recommends/{profile-id}/surveys/{survey-id}
-    profile = Profile.objects.get(profile_id=profile_id)
-    survey = Survey.objects.get(survey_id=survey_id)
+    profile = Profile.objects.get(profile_id=request.session.get('profile_id'))
+    survey = Survey.objects.get(survey_id=request.session.get('survey_id'))
     # print(profile_id)
     # print(f'profile_id(recom_profile_total_report): {profile.profile_id}')
     # print(survey_id)
@@ -297,35 +315,28 @@ def recom_profile_total_report(request, profile_id, survey_id):
 
     # 1) 추천 영양 성분 가져오기
     ## 영양 성분명, 주요건강기능, 일일 섭취량 상하한
-    recommendation = Recommendation.objects.get(survey_id=survey_id)
-    recommendation_ingredients = RecommendationIngredient.objects.filter(recommendation_id=recommendation.recommendation_id).values_list('ingredient_id', flat=True)
-    recommendation_ingredients = list(recommendation_ingredients)
-    # print(f'recommendation_ingredients: {recommendation_ingredients}') # [150, 362]
-    # print()
-
-    recommend_ingredients = Ingredient.objects.filter(ingredient_id__in=recommendation_ingredients)
-    # print(recommend_ingredients) # <QuerySet [<Ingredient: Ingredient object (150)>, <Ingredient: Ingredient object (362)>]>
-    # print()
-
+    recom = Recom.objects.get(survey_id=survey.survey_id)
+    # print(f'recom_id: {recom_id}')
+    # recom_id = int(list(recom_id))
+    # print(f'recom_id: {recom_id}')
+    recommended_ingredients = RecomIngredient.objects.filter(recom_id=recom.recom_id).values_list('ingredient_id', flat=True)
+    recommended_ingredients = list(recommended_ingredients)
+    recommended_ingredients = Ingredient.objects.filter(ingredient_id__in=recommended_ingredients)
+    
 
 
     # 2) 영양 성분 리포트 바탕으로 영양제 추천
-    ## recommendation_product에서 데이터 가져오기
-    recommendation_products = RecommendationProduct.objects.filter(recommendation_id=recommendation.recommendation_id).values_list('product_id', flat=True)
-    recommendation_products = list(recommendation_products)
-    # print(f'recommendation_products: {recommendation_products}') # [200400150831149, 200400200072802]
-    # print()
+    ## recom_survey_product에서 데이터 가져오기
+    recommended_products = RecomSurveyProduct.objects.filter(recom_id=recom.recom_id).values_list('product_id', flat=True)
+    recommended_products = list(recommended_products)
+    recommended_products = Product.objects.filter(product_id__in=recommended_products)
+    print(f'recommend_products: {recommended_products}')
 
-    recommend_products = Product.objects.filter(product_id__in=recommendation_products)
-    # print(f'products: {recommend_products}') # <QuerySet [<Product: Product object (200400150831149)>, <Product: Product object (200400200072802)>]>
-    # print()
-
-    
     
     # 3) 성별*연령 기반 영양제 추천
     ## 성별*연령별 기반 영양제
-    collabo_recomm_product_list = contents['recom_product_sex_age_list']
-    collabo_recommendation_products = Product.objects.filter(product_id__in=collabo_recomm_product_list)
+    sex_age_recommended_products = contents['recom_product_sex_age_list']
+    sex_age_recommended_products = Product.objects.filter(product_id__in=sex_age_recommended_products)
 
     
     # 만나이 계산
@@ -352,22 +363,29 @@ def recom_profile_total_report(request, profile_id, survey_id):
 
 
     # 임신상태
-    profile_pregnancy = ComCode.objects.get(com_code=survey.survey_pregnancy_code)
-    
+    pregnancy_code = survey.survey_pregnancy_code
+    pregnancy_kr_code = ComCode.objects.filter(com_code=pregnancy_code).values_list('com_code_name', flat=True)
+    pregnancy_kr_code = ''.join(list(pregnancy_kr_code))
+
 
 
     # 알레르기 여부
-    ## profile allergy 가져오기
-    profile_allergys = SurveyAllergy.objects.filter(survey_id=survey.survey_id).values_list('allergy_code', flat=True)
-    profile_allergys = list(profile_allergys)
-    ## profile allergy 코드를 한글 코드명으로 변환
-    kr_allergy_codes = []
-    for profile_allergy_code in profile_allergys:
-        kr_allergy_code = AllergyCode.objects.filter(allergy_code=profile_allergy_code).values_list('allergy_code_name')
-        kr_allergy_code = ''.join(kr_allergy_code[0])
-        kr_allergy_codes.append(kr_allergy_code)
+    allergy_code_dict = survey.survey_allergy_code
+    allergy_kr_list = []
+    if type(allergy_code_dict['ALLERGY']) == str:
+        code = ComCode.objects.filter(com_code=allergy_code_dict['ALLERGY']).values_list('com_code_name', flat=True)
+        code = ''.join(list(code))
+        allergy_kr_list.append(allergy_kr_list)
 
-   
+    else: 
+        for code_list in allergy_code_dict.values():
+            for code in code_list:
+                code = ComCode.objects.filter(com_code=code).values_list('com_code_name', flat=True)
+                code = ''.join(list(code))
+                if code != 'DI00':
+                    allergy_kr_list.append(code)
+    
+     
 
     # 키
     if survey.survey_height == None:
@@ -381,29 +399,39 @@ def recom_profile_total_report(request, profile_id, survey_id):
 
 
     # 기저질환
-    profile_disease = SurveyDisease.objects.filter(survey_id=survey.survey_id).values_list('disease_code', flat=True)
-    profile_disease = list(profile_disease)
-    # print(f'profile_disease: {profile_disease}') #  ['DI01', 'DI02', 'DI03', 'DI04', 'DI07']
-    kr_disease_codes = []
-    for profile_disease_code in profile_disease:
-        kr_disease_code = DiseaseCode.objects.filter(disease_code=profile_disease_code).values_list('disease_code_name', flat=True)
-        kr_disease_code = str(kr_disease_code[0])
-        kr_allergy_code = ''.join(kr_disease_code)
-        kr_disease_codes.append(kr_disease_code)
-    # print(f'kr_disease_codes_list: {kr_disease_codes}')
+    disease_code_dict = survey.survey_disease_code
+    disease_kr_list = []
+    print(f'disease_code_dict: {disease_code_dict}')
+    # survey 테이블 survey_disease_code 컬럼의 'DISEASE' 키 값이 1개일 때 리스트로 바뀐다면 아래 코드 수정해야 함 
+    if type(disease_code_dict['DISEASE']) == str:
+        code = ComCode.objects.filter(com_code=disease_code_dict['DISEASE']).values_list('com_code_name', flat=True)
+        code = ''.join(list(code))
+        disease_kr_list.append(code)
+
+    else: 
+        for code_list in disease_code_dict.values():
+            for code in code_list:
+                code = ComCode.objects.filter(com_code=code).values_list('com_code_name', flat=True)
+                code = ''.join(list(code))
+                disease_kr_list.append(code)
+    print(f'disease_kr_list: {disease_kr_list}')
+
 
 
 
     # 음주여부
-    profile_alcohol = ComCode.objects.filter(com_code=survey.survey_alcohol_code).get()
+    alcohol_code = survey.survey_alcohol_code
+    alcohol_code = ComCode.objects.filter(com_code=alcohol_code).values_list('com_code_name', flat=True)
+    alcohol_code = ''.join(list(alcohol_code))
+    print(f'alcohol_code: {alcohol_code}')
     
     
 
     # 흡연여부
-    if survey.survey_smoke == 'y':
-        survey.survey_smoke = '흡연'
-    else:
-        survey.survey_smoke = '비흡연'
+    smoking_code = survey.survey_smoking_code
+    smoking_code = ComCode.objects.filter(com_code=smoking_code).values_list('com_code_name', flat=True)
+    smoking_code = ''.join(list(smoking_code))
+    print(f'smoking_code: {smoking_code}')
 
 
     end_time = time.time()
@@ -415,14 +443,15 @@ def recom_profile_total_report(request, profile_id, survey_id):
     return render(request, 'recommends/recom_profile_report.html', {
         'profile': profile,
         'survey':survey,
-        'recommend_ingredients': recommend_ingredients,
-        'recommend_products': recommend_products[:3], # 영양 성분 리포트 바탕 추천 product
-        'collabo_recommendation_products' : collabo_recommendation_products[:3], # 연령*성별 기반 추천
+        'recommended_ingredients': recommended_ingredients,
+        'recommended_products': recommended_products[:3], # 영양 성분 리포트 바탕 추천 product
+        'collabo_recommendation_products' : sex_age_recommended_products[:3], # 연령*성별 기반 추천
         'age': age,
-        'allergy': kr_allergy_codes,
-        'disease': kr_disease_codes,
-        'alcohol': profile_alcohol.com_code_name,
-        'pregnancy': profile_pregnancy.com_code_name,
+        'allergy': allergy_kr_list,
+        'disease': disease_kr_list,
+        'alcohol': alcohol_code,
+        'pregnancy': pregnancy_kr_code,
+        'smoking': smoking_code
     })
 
 

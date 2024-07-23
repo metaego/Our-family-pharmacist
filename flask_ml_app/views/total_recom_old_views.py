@@ -7,12 +7,14 @@ import pandas as pd
 from dotenv import load_dotenv
 from .recom_model_240514 import ai_total_recom 
 from datetime import datetime
+import json
 # from werkzeug.utils import redirect
 
 bp = Blueprint('ai-total-recom-old', __name__, url_prefix='/ai-total-recom-old')
 
 @bp.route('/<int:survey_id>/', methods=['POST'])
 def flask_ai_total_recom_old(survey_id):
+    # ai 추천 결과 DB에 저장 안 함
     start_time = time.time()
     load_dotenv()    
 
@@ -21,47 +23,34 @@ def flask_ai_total_recom_old(survey_id):
         host=os.environ.get('MYSQL_HOST'),
         user=os.environ.get('MYSQL_USER'),
         password=os.environ.get('MYSQL_PASSWORD'),
-        # db='ourFamVitaDBNew',
         db='PillSoGood',
         charset='utf8mb4'
 )
 
     
-    # 1) db에서 필요한 데이터 불러오기
-    query = f'select survey_id, survey_age_group, survey_sex, survey_pregnancy_code, survey_operation_code, survey_alcohol_code, survey_smoke, \
-            custom_user_id, profile_id from survey where survey_id="{survey_id}"'
+     # 1-1) db에서 필요한 데이터 불러오기
+    query = f'''select survey_id, survey_age_group, survey_sex, survey_pregnancy_code, survey_operation_code, survey_alcohol_code, survey_smoking_code, \
+            survey_allergy_code, survey_disease_code, \
+            survey_function_code, user_id, profile_id \
+            from survey where survey_id="{survey_id}"'''
     cursor = db.cursor(pymysql.cursors.DictCursor)  # Dict 타입으로 받기
     cursor.execute(query)
     survey_data = cursor.fetchone()
-
-    query = f'select function_code from survey_function where survey_id = {survey_id}'
-    cursor = db.cursor(pymysql.cursors.DictCursor)
-    cursor.execute(query)
-    survey_function_data = cursor.fetchall()
-
-    query = f'select allergy_code from survey_allergy where survey_id = {survey_id}'
-    cursor = db.cursor(pymysql.cursors.DictCursor)
-    cursor.execute(query)
-    survey_allergy_data = cursor.fetchall()
-
-    query = f'select disease_code from survey_disease where survey_id = {survey_id}'
-    cursor = db.cursor(pymysql.cursors.DictCursor)
-    cursor.execute(query)
-    survey_disease_data = cursor.fetchall()
-   
-    data = survey_function_data + survey_allergy_data + survey_disease_data
-
     
+    survey_data['survey_allergy_code'] = json.loads(survey_data['survey_allergy_code'])
+    survey_data['survey_disease_code'] = json.loads(survey_data['survey_disease_code'])
+    survey_data['survey_function_code'] = json.loads(json.loads(survey_data['survey_function_code']))
     
-    # 1-1) 데이터 전처리
+
+    # 1-2) 데이터 전처리
     if survey_data["survey_sex"] == 'm':
         survey_data["survey_sex"] = 0
     else:
         survey_data["survey_sex"] = 1
 
-    if survey_data["survey_age_group"] in ['6~8세', '9~11세']:
+    if survey_data["survey_age_group"] in ['6~8세', '9~11세', '어린이']:
         survey_data["survey_age_group"] = 0
-    elif survey_data["survey_age_group"] in ['12~14세', '15~18세']:
+    elif survey_data["survey_age_group"] in ['12~14세', '15~18세', '청소년']:
         survey_data["survey_age_group"] = 10
     elif survey_data["survey_age_group"] == '20대':
         survey_data["survey_age_group"] = 20
@@ -71,7 +60,7 @@ def flask_ai_total_recom_old(survey_id):
         survey_data["survey_age_group"] = 40
     elif survey_data["survey_age_group"] == '50대':
         survey_data["survey_age_group"] = 50
-    elif survey_data["survey_age_group"] in ['60대']:
+    elif survey_data["survey_age_group"] in ['60대', '60세 이상']:
         survey_data["survey_age_group"] = 60
 
     if survey_data["survey_pregnancy_code"] != 'P0':
@@ -89,17 +78,16 @@ def flask_ai_total_recom_old(survey_id):
     else:
         survey_data["survey_alcohol_code"] = 0
 
-    if survey_data["survey_smoke"] == 'y':
-        survey_data["survey_smoke"] = 1
+    if survey_data["survey_smoking_code"] == 'y':
+        survey_data["survey_smoking_code"] = 1
     else:
-        survey_data["survey_smoke"] = 0
-
+        survey_data["survey_smoking_code"] = 0
     
 
     # 2) survey_df 생성
-    survey_df = pd.DataFrame({'survey_id' : [int(survey_data["survey_id"])], 'user_id' : [int(survey_data["custom_user_id"])], 'profile_id' : [int(survey_data["profile_id"])], 'survey_age_group' : [survey_data["survey_age_group"]], 'survey_sex' : [survey_data["survey_sex"]],
+    survey_df = pd.DataFrame({'survey_id' : [int(survey_data["survey_id"])], 'user_id' : [int(survey_data["user_id"])], 'profile_id' : [int(survey_data["profile_id"])], 'survey_age_group' : [survey_data["survey_age_group"]], 'survey_sex' : [survey_data["survey_sex"]],
               'survey_pregnancy' : [survey_data["survey_pregnancy_code"]], 'survey_operation' : [survey_data["survey_operation_code"]], 'survey_alcohol' : [survey_data["survey_alcohol_code"]],
-              'survey_smoking' : [survey_data["survey_smoke"]], 'HF00' :[0] , 'HF01' : [0], 'HF02' : [0], 'HF03' : [0], 'HF04' : [0], 'HF05' : [0],
+              'survey_smoking' : [survey_data["survey_smoking_code"]], 'HF00' :[0] , 'HF01' : [0], 'HF02' : [0], 'HF03' : [0], 'HF04' : [0], 'HF05' : [0],
               'HF06' : [0], 'HF07' : [0], 'HF08' : [0], 'HF09' : [0], 'HF10' : [0], 'HF11' : [0], 'HF12' : [0], 'HF13' : [0], 'HF14' : [0],
               'HF15' : [0], 'HF16' : [0], 'HF17' : [0], 'HF18' : [0], 'HF19' : [0], 'HF20' : [0], 'HF21' : [0], 'HF22' : [0], 'HF23' : [0],
               'HF24' : [0], 'HF25' : [0], 'AL01' : [0], 'AL02' : [0], 'AL03' : [0], 'AL04' : [0], 'AL05' : [0],
@@ -108,10 +96,19 @@ def flask_ai_total_recom_old(survey_id):
               'DI04' : [0], 'DI05' : [0], 'DI06' : [0], 'DI07' : [0], 'DI08' : [0], 'DI09' : [0], 'DI10' : [0], 'DI11' : [0], 'DI12' : [0],
               'DI13' : [0], 'DI14' : [0], 'DI15' : [0], 'DI16' : [0], 'DI17' : [0]})
 
-    for item in data:
-        for values in item.values():
-            if values in survey_df.columns:
-                survey_df[values] = 1
+    for codes in survey_data["survey_allergy_code"]["ALLERGY"]:
+        for code in codes:
+            if code in survey_df.columns:
+                survey_df[code] = 1
+
+    for codes in survey_data["survey_disease_code"]["DISEASE"]:
+        for code in codes:
+            if code in survey_df.columns:
+                survey_df[code] = 1
+
+    for code in list(survey_data["survey_function_code"].values()):
+        if code in survey_df.columns:
+            survey_df[code] = 1
 
 
 

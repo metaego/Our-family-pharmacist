@@ -9,7 +9,7 @@ from users.models import (Profile, Product, Survey
 from dotenv import load_dotenv
 import time
 # Create your views here.
-def home_main(request, profile_id):
+def home_main(request):
     start_time = time.time()
     
     user_id = request.session.get('_auth_user_id') # dict_keys(['_auth_user_id', '_auth_user_backend', '_auth_user_hash', 'profile_id', 'survey_id'])
@@ -19,7 +19,7 @@ def home_main(request, profile_id):
     if not user_id :
         return redirect('/')
     
-    request.session['profile_id'] = profile_id
+    profile_id = request.session['profile_id'] 
 
 
     # profile 데이터 가져오기
@@ -71,26 +71,26 @@ def home_main(request, profile_id):
 
         
 
-    # # 연령*성별 기반 추천받은 영양제
-    # # flask 요청 
-    # client_ip = request.META.get('REMOTE_ADDR', None)
-    # print(f'client_ip: {client_ip}')
-    # # content = {
-    # #     'profile_id': profile_id,
-    # #     'survey_id': survey_id
-    # # }
-    # if client_ip != '127.0.0.1' and client_ip != os.environ.get('AWS_PUBLIC_IP'):
-    #     client_ip = os.environ.get('AWS_PUBLIC_IP')
-    # csrf_token = get_token(request)
-    # response = requests.post('http://' + client_ip + f':5000/ai-collabo-recom/{survey.survey_id}', 
-    #                         #  data=json.dumps(content), 
-    #                             headers={'X-CSRFToken': csrf_token,
-    #                                     'Content-Type': 'application/json'})
+    # 연령*성별 기반 추천받은 영양제
+    # flask 요청 
+    client_ip = request.META.get('REMOTE_ADDR', None)
+    print(f'client_ip: {client_ip}')
+    # content = {
+    #     'profile_id': profile_id,
+    #     'survey_id': survey_id
+    # }
+    if client_ip != '127.0.0.1' and client_ip != os.environ.get('AWS_PUBLIC_IP'):
+        client_ip = os.environ.get('AWS_PUBLIC_IP')
+    csrf_token = get_token(request)
+    response = requests.post('http://' + client_ip + f':5000/ai-sex-age-recom/{survey.survey_id}', 
+                            #  data=json.dumps(content), 
+                                headers={'X-CSRFToken': csrf_token,
+                                        'Content-Type': 'application/json'})
     
-    # contents = json.loads(response.text)
-    # print(f'contents(home): {contents}')
-    # recom_product_sex_age_list = contents['recom_product_sex_age_list']
-    # sex_age_base_recom_products = Product.objects.filter(product_id__in=recom_product_sex_age_list)
+    contents = json.loads(response.text)
+    print(f'contents(home): {contents}')
+    recom_product_sex_age_list = contents['recom_product_sex_age_list']
+    sex_age_base_recom_products = Product.objects.filter(product_id__in=recom_product_sex_age_list)
     
     
     # 실행 시간 계산
@@ -108,5 +108,5 @@ def home_main(request, profile_id):
         'pregnancy': pregnancy_kr,
         'allergys': allergy_kr,
         'survey_base_recom_products': survey_base_recom_products,
-        # 'sex_age_base_recom_products': sex_age_base_recom_products[:3],
+        'sex_age_base_recom_products': sex_age_base_recom_products[:3],
     })

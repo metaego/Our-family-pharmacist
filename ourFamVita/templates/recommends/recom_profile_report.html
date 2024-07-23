@@ -98,7 +98,7 @@
                     <td>{{ pregnancy }}</td>
                     <td>{{ allergy|join:', ' }}</td>
                     <td>{{ disease|join:', ' }}</td>
-                    <td>{{ survey.survey_smoke }}</td>
+                    <td>{{ smoking }}</td>
                     <td>{{ alcohol }}</td>
                 </tr>
             </table>
@@ -107,7 +107,7 @@
 </div>
 
 <div class="flex-container" style="margin: 0 10%">
-    {% for r_ingredient in recommend_ingredients %}
+    {% for r_ingredient in recommended_ingredients %}
     <div class="flex-item">
         <div style="height: 200px">
         <!-- <h3>추천 영양 성분{{ forloop.counter }}</h3> -->
@@ -136,7 +136,7 @@
         <span style="color:#BC55EF">영양성분 리포트</span>를 바탕으로 추천해요
     </div>
     <div style="display: inline-block">
-        {% for r_product in recommend_products %}
+        {% for r_product in recommended_products %}
         <!-- rending page: recom_profile_product_list.html -->
         <div style="display: inline-block;">
             <div style="display: inline-block;">

@@ -11,16 +11,16 @@ urlpatterns = [
     path('info/', views.recom_info, name='profile_info'),
 
     # 설문 조사 결과 저장
-    path('survey_id/<int:profile_id>/<int:survey_id>', views.save_survey_data, name='save_survey_data'),
+    path('survey_data/<int:survey_id>', views.save_survey_data, name='save_survey_data'),
     # AI추천받기: 나의 프로필 정보 확인
     # menu: ai 영양제 추천받기(profile_info)
     # /recommends/request_flask/{profile_id}/{survey_id}
-    path('request_flask/<int:profile_id>/<int:survey_id>', views.request_flask_recom_model, name='request_flask_recom_model'),
+    path('request_flask/profiles/<int:profile_id>/surveys/<int:survey_id>', views.request_flask_recom_model, name='request_flask_recom_model'),
     
     # AI추천받기: 영양 성분 리포트
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트
     # /recommends/{profile-id}/surveys/{survey-id}
-    path('<int:profile_id>/surveys/<int:survey_id>/', views.recom_profile_total_report, name='profile_total_report'),
+    path('reports/', views.recom_profile_total_report, name='profile_total_report'),
     
     # AI추천받기: 영양제 추천 목록(추천받은 영양 성분 기반)
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록 
