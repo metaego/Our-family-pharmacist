@@ -489,3 +489,19 @@ def create_json_code_col(df, code_list, code_json_col):
     
     return df
 
+# com_code table 생성하는 함수 정의
+def expand_codes(df, pk_col, code_col, com_code_grp_dict):
+    expanded_rows = []
+
+    for idx, row in df.iterrows():
+        id = row[pk_col]
+        codes_dict = row[code_col]
+        
+        for code, value in codes_dict.items():
+            if value == 1:
+                for com_code_grp, com_code_rule in com_code_grp_dict.items():
+                    if re.sub(r'[0-9]', '', code) in com_code_rule:
+                        expanded_rows.append({pk_col: id, 'com_code_grp': com_code_grp, 'com_code': code})
+
+    return pd.DataFrame(expanded_rows)
+
