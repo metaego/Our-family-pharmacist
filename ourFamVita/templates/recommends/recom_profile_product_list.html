@@ -78,7 +78,7 @@
                     <td>{{ pregnancy }}</td>
                     <td>{{ allergy|join:', ' }}</td>
                     <td>{{ disease|join:', ' }}</td>
-                    <td>{{ survey.survey_smoke }}</td>
+                    <td>{{ smoking }}</td>
                     <td>{{ alcohol }}</td>
                 </tr>
             </table>
@@ -129,8 +129,13 @@
                              {{product.product_storage_method}}
                            {% endif %}
             </li>
-            <li>주의사항: <br> {{product.product_caution}}</li>
-            <li>주된 기능성: <br> {{product.product_function_content}}</li> 
+            <li>주의사항: {% if product.product_caution == None %}
+                            {{ '없음' }}
+                         {% else %}
+                            {{product.product_caution}}
+                         {% endif %}
+            </li>
+            <li>주된 기능성: {{product.product_function_content}}</li> 
             {% comment %} <li>제품 기능: {{ product.product_function_content }}</li> {% endcomment %}
         </div>
         

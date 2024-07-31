@@ -37,7 +37,7 @@
       <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
     </div>
     <div style="width: auto; margin-bottom: 40px">
-      <a href="{% url 'products:products_detail' product.1.pk profile.pk %}" style="color:#BC55EF; font-weight: 500">{{ product.1.product_name }}</a>
+      <a href="{% url 'products:products_detail' product.1.pk %}" style="color:#BC55EF; font-weight: 500">{{ product.1.product_name }}</a>
       <li>평점: {{ product.0.product_review_rating }}</li>
       <li>리뷰: {{product.0.product_review_content }}</li>
       <li>제조사: {{product.1.product_company}}</li>

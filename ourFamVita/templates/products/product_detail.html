@@ -168,7 +168,7 @@
     </h3>
     {% if review == False %}
     <!-- profile의 등록된 댓글이 없는 경우 -->
-        <form id="comment-form" action="{% url 'products:product_review' product.product_id profile.profile_id %}" method="post">
+        <form id="comment-form" action="{% url 'products:product_review' product.product_id %}" method="post">
             {% csrf_token %}
             평점:
             <select name="rating">
@@ -184,7 +184,7 @@
             <button class="btn btn-secondary" type="submit" style="margin-bottom: 5px">댓글 등록</button>    
         </form>
     {% else %}
-        <li>{{ review.product_review_rating }} 점 | {{ review.created_at|date:"Y-m-d H:i:s"|slice:":16" }}</li>
+        <li>{{ review.product_review_rating }} 점 | {{ review.product_review_created_at|date:"Y-m-d H:i:s"|slice:":16" }}</li>
         <li>{{ review.product_review_content }}</li> 
     {% endif %}
 </div>
