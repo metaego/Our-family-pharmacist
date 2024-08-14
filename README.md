@@ -8,7 +8,7 @@
 - 👨‍👩‍👧‍👦 **하나의 계정**에서 **멀티 프로필을 생성**해 **여러 사람이 함께 영양 관리**를 할 수 있습니다.
 
 ## 2. 프로젝트 진행
-### 프로젝트 기간
+### 1) 프로젝트 기간
 ```
 - 총 개발기간 : 2024.04.05 ~ 2024.05.16(6주)
 - 기획 : 2024.04.05 ~ 2024.04.12(8일)
@@ -18,21 +18,25 @@
 - 추가 리팩토링 기간 : 2024.05.30 ~ 2024.08.15(11주)
 ```
 
-### TEAM 소개
+### 2) TEAM 소개
 |     이름      |            역할             |                  Contact                  |
-| :-----------: | :-------------------------: | :---------------------------------------: |
-| 김은아 (팀장) | 일정 및 문서화 관리, ERD 및 DB 설계, 더미 데이터 생성, 영양성분 추천 알고리즘 개발 |  [Github](https://github.com/silverA-01)   |
-|    권익태     | ERD 및 DB 설계, 더미 데이터 생성, 영양제 추천 알고리즘 개발 |  [Github](https://github.com/Dreamliners)  |
-|    김수연     | API 설계, 개발환경 구축, Django 백엔드, Flask 모델 서버 개발 |  [Github](https://github.com/metaego)  |
-|    박설연     | API 설계, Django 백엔드/프론트엔드, MySQL DB 관리| [Github](https://github.com/happydgtnmd) |
-|    양은서     | 화면 설계, API 설계, 더미 데이터 생성, Django 백엔드/프론트엔드, 서비스 데이터 분석    |  [Github](https://github.com/yant1001)  |
+| :-----------: | :------------------------- | :---------------------------------------: |
+|김은아(팀장)|일정 및 문서화 관리, ERD/DB 설계, 더미 데이터 생성, 영양성분 추천 알고리즘 개발|  [Github](https://github.com/silverA-01)   |
+|권익태|ERD 및 DB 설계, 더미 데이터 생성, 영양제 추천 알고리즘 개발|  [Github](https://github.com/Dreamliners)  |
+|김수연|API 설계, 개발환경 구축, Django 백엔드, Flask 모델 서버 개발|  [Github](https://github.com/metaego)  |
+|박설연|API 설계, Django 백엔드/프론트엔드, MySQL DB 관리| [Github](https://github.com/happydgtnmd) |
+|양은서|화면 설계, API 설계, 더미 데이터 생성, Django 백엔드/프론트엔드, 서비스 데이터 분석|  [Github](https://github.com/yant1001)  |
 
-- 공통진행 : 서비스 기획, 기능 명세서 및 IA 및 화면 설계도 작성, Open API 영양성분 및 영양제 데이터 수집 및 처리
+- **공통 진행** 
+  - 서비스 기획
+  - 기능 명세서 작성
+  - IA 및 화면 설계도 작성
+  - Open API 영양성분 및 영양제 데이터 수집 및 처리
 
-### Work Flow
+### 3) Work Flow
 ![work_flow_chart](./assets/work_flow_chart.PNG)
 
-### 개발 전략
+### 4) 개발 전략
 ![development_strategy](./assets/development_strategy.PNG)
 
 ### 📄 문서화
@@ -40,10 +44,10 @@
 |:-----------|:-----------|:-------------------------|
 |회의록|6주간 총 35회 회의 내용 기록|[바로가기](https://pillsogood.notion.site/554e11df09284b7ea2a53cddd43867d4?pvs=4)|
 |일정 및 TASK 관리|WBS 및 TASK 관리|[바로가기](https://pillsogood.notion.site/Schedule-242c3e33a4fa4ccc9a18d6dd35fb7426?pvs=4)|
-|기능 명세서|서비스 요구사항을 반영한 필수 기능에 대해 우선순위 부여 후 MVP 확정 후 개발 진행|[바로가기](https://pillsogood.notion.site/3-7fe394f5621d45149d42946b00acbe92?pvs=4)|
+|기능 명세서|서비스 요구사항을 반영한 필수 기능에 대해 우선순위 부여 후 MVP 확정|[바로가기](https://pillsogood.notion.site/3-7fe394f5621d45149d42946b00acbe92?pvs=4)|
 |화면 설계도|Figma로 작성|[바로가기](https://www.figma.com/board/XeUfdNvw9HsDIL34uIQVCQ/PillSoGood_%ED%99%94%EB%A9%B4%EC%84%A4%EA%B3%84%EB%8F%84?node-id=0-1&t=gg3ZgqVuaNN8h9dI-1)|
 |Naming Convention|python PE8 Style Guide 기준으로 작성| [바로가기](https://pillsogood.notion.site/Coding-Conventions-6514279500074b60bdec95d1762ffe1d?pvs=4)|
-|git commit messege 규칙 정의|정의된 규칙에 맞게 작성 후 git push| [바로가기](https://pillsogood.notion.site/git-commit-message-f118e70f1c9445cfb9b50228a37285a7?pvs=4)|
+|git commit messege 규칙|정의된 규칙에 맞게 작성 후 git push| [바로가기](https://pillsogood.notion.site/git-commit-message-f118e70f1c9445cfb9b50228a37285a7?pvs=4)|
 |API 설계|RESTful API 설계 규칙을 준수하여 APP별로 Web API 설계|[바로가기](https://pillsogood.notion.site/API-bc4b435405c94316b432f132343cc3a1?pvs=4)
 
 
@@ -53,7 +57,8 @@
   - 국내 건강기능식품 구매 경험률 81.2% / 가구당 평균 구매액 36만원
   - 국내 건강기능식품 시장 5년 연속 시장 규모 27% 확대 / 6조 2000억원대 추정
 ### 개인형 맞춤 영양제 서비스에 대한 수요 증가
-- 코로나 팬데믹 이후 건강을 중심으로 소비하는 **헬스 디깅(Health Digging) 트랜드**와 소비자 스스로 건강을 챙기는 **셀프 메디케이션(Self-medication) 트랜드** 확산됨에 따라 **자신에게 맞는 영양제를 알아보고 맞춤형으로 구매하려는 수요 증가**
+- 코로나 팬데믹 이후 건강을 중심으로 소비하는 **헬스 디깅(Health Digging) 트랜드**와 소비자 스스로 건강을 챙기는 **셀프 메디케이션(Self-medication) 트랜드** 확산
+- 이에 따라 **자신에게 맞는 영양제를 알아보고 맞춤형으로 구매하려는 수요 증가**
 ### 공동 취식에 대한 니즈 파악
 - **건강기능식품은** 본인 뿐만 아니라 **가족 구성원의 몫까지 같이 직접 구매**하는 경향이 높음
 - 두 사람 이상 섭취하는 **공동 취식 시장의 비중이 꾸준히 성장**
@@ -67,7 +72,7 @@
 ### 타겟 페르소나 설정
 > 🙆 **김은주(대기업 마케팅 부서 과장/42세)**
 > 
-> - **가족 구성원** : 남편(IT 개발자/44세), 아들(중학생/15세), 딸(초등학생/11세), 엄마(63세)
+> - **가족 구성원** : 남편(IT 개발자/44세), 아들(중학생/15세), 딸(초등학생/11세), 엄마(가정주부/63세)
 > 
 > - **라이프 스타일**
 >   - 주중에는 직장에서 바쁘게 일하지만, 주말에는 가족과 시간을 보내며 건강한 생활을 유지하려고 노력
@@ -80,9 +85,9 @@
 >   - 건강 상태를 관리하기 위해 헬스 케어 앱을 사용해왔으며, 사용자 친화적인 인터페이스와 맞춤형 추천 기능을 선호함
 > 
 > - **필요 및 요구사항**
->   1. **가족 영양제 관리** : 가족 구성원마다 필요한 영양제를 다르게 추천받고, 하나의 계정으로 가족의 영양제를 손쉽게 관리할 수 있는 서비스를 원함
->   2. **간편한 사용성** : 가족의 정보를 많이 입력해야 하는 번거로움 없이, 간단한 설문 정보만 입력해도 개인 맞춤형 영양제를 추천받고 싶음
->   3. **신뢰성** : 영양제 추천의 신뢰성을 중요하게 생각하며, 데이터에 기반한 과학적인 추천을 원함
+>   - **가족 영양제 관리** : 가족 구성원마다 필요한 영양제를 다르게 추천받고, 하나의 계정으로 가족의 영양제를 손쉽게 관리할 수 있는 서비스를 원함
+>   - **간편한 사용성** : 가족의 정보를 많이 입력해야 하는 번거로움 없이, 간단한 설문 정보만 입력해도 개인 맞춤형 영양제를 추천받고 싶음
+>   - **신뢰성** : 영양제 추천의 신뢰성을 중요하게 생각하며, 데이터에 기반한 과학적인 추천을 원함
 
 ## 5. 서비스 주요 기능
 ![service_main_features](./assets/service_main_features.PNG)
