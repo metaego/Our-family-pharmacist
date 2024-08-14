@@ -180,7 +180,7 @@
                   <td>{{ pregnancy }}</td>
                   <td style="word-wrap: break-word">{{ allergy|join:', ' }}</td>
                   <td style="word-wrap: break-word">{{ disease|join:', ' }}</td>
-                  <td>{{ survey.survey_smoke }}</td>
+                  <td>{{ smoking }}</td>
                   <td>{{ alcohol }}</td>
               </tr>
           </table>
@@ -199,7 +199,7 @@
     건강고민 순위를 선택하시면 <span style="color:#BC55EF">더 자세한 추천</span>이 가능해요! (최대 5개)
   </h2>
   <div class="profile-container" style="margin: 30px 20%; padding: 20px 65px; height: 200px; justify-content: space-around;">
-    <form id="checkbox-form" action="{% url "recommends:save_survey_data" profile.profile_id survey.survey_id %}" method="post">
+    <form id="checkbox-form" action="{% url "recommends:save_survey_data" survey.survey_id %}" method="post">
       {% csrf_token %}
       {% for code in function_code_list %}
       <input type="checkbox" class="ui-checkbox" name="checkbox[]" value={{ code|urlencode }}> {{ code }}
@@ -215,14 +215,14 @@
   <div style="display: inline-block;">
     <!-- 홈 메인화면으로 가기 -->
     <!-- rending page: main.html -->
-    <form action="{% url "home:home_main" profile.profile_id %}" method='get'>
+    <form action="{% url "home:home_main" %}" method='get'>
       {% csrf_token %}
         <button class="btn btn-secondary" style="width: 248px; height: 30px;">이전</button>
     </form>
   </div>
   <div style="display: inline-block;">
     <!-- 프로필 수정 화면으로 가기 -->
-    <form action="{% url "profiles:profile_info" profile.profile_id %}" method='POST'>
+    <form action="{% url "profiles:profile" %}" method='POST'>
       {% csrf_token %}
         <button class="btn btn-secondary" style="width: 248px; height: 30px;">프로필 수정</button>
     </form>

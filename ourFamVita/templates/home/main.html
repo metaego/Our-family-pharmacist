@@ -61,14 +61,20 @@
                 <tr>
                     <td>{{ profile.profile_name }}  </td>
                     <td>{{ survey.survey_age_group }}</td>
-                    <td>{%if survey.survey_sex == 'f' %}
+                    <td>{% if survey.survey_sex == 'f' %}
                         {{ '여성' }}
                         {% else %}
                         {{ '남성' }}
                         {% endif %}
                     </td>
                     <td>{{ pregnancy }}</td>
-                    <td style="word-wrap: break-word">{{ allergys|join:', ' }}</td>
+                    <td style="word-wrap: break-word">
+                        {% if allergys|length > 18 %}
+                            {{ allergys|slice:":18" }}...
+                        {% else %}
+                            {{ allergys }}
+                        {% endif %}
+                    </td>
                 </tr>
             </table>
         </div>
@@ -78,7 +84,7 @@
 <!-- rending page: recom_profile_info.html -->
 {% comment %} <form action="/recommends/{{ profile_id }}/info/"  method='get'> {% endcomment %}
 <div style="text-align: center">    
-    <form action="{% url "recommends:profile_info" profile_id %}"  method='get'>
+    <form action="{% url "recommends:profile_info" %}"  method='get'>
         <button class="btn btn-recommendation" style="font-size: 15px; width: 500px; height: 30px;">
             건강설문하고 영양제 추천 받기
         </button>
@@ -92,7 +98,7 @@
     {% if survey_base_recom_products == None %}
         <!-- rending page: recom_profile_info.html -->
         영양제를 추천받아보신 적이 없으시군요!
-        <form action="{% url "recommends:profile_info" profile_id %}" method='get'>
+        <form action="{% url "recommends:profile_info" %}" method='get'>
             <button class="btn btn-primary" style="width: 300px; margin-top: 30px">
                 나의 맞춤 영양제 추천을 위한 건강 설문하러 가기
             </button>
@@ -107,7 +113,7 @@
     <div style="display: inline-block;">
         {% for s_recom_product in survey_base_recom_products %}
             <div style="display: inline-block;">
-                <a href="{% url "products:products_detail" s_recom_product.product_id profile.profile_id %}">
+                <a href="{% url "products:products_detail" s_recom_product.product_id %}">
                     {% if s_recom_product.product_image == '0' %}
                         <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
                     {% else %}
@@ -122,7 +128,7 @@
                     </tr>
                     <tr>
                         <th class="product_title">
-                            <a href="{% url "products:products_detail" s_recom_product.product_id profile.profile_id %}">
+                            <a href="{% url "products:products_detail" s_recom_product.product_id %}">
                                 {{ s_recom_product.product_name }}
                             </a>
                         </th>
@@ -138,7 +144,7 @@
                 </table>
             </div>
         {% endfor %}
-        <form action="{% url "recommends:products_profile_base" profile_id survey.survey_id %} " method='get'>
+        <form action="{% url "recommends:products_profile_base" %} " method='get'>
             <button class="btn btn-primary" style="margin-top: 15px;">더보기</button>
         </form>
     </div>
@@ -163,7 +169,7 @@
     <div style="display: inline-block;">
         {% for sa_recom_product in sex_age_base_recom_products %}
             <div style="display: inline-block;">
-                <a href="{% url "products:products_detail" sa_recom_product.product_id profile.profile_id %}">
+                <a href="{% url "products:products_detail" sa_recom_product.product_id %}">
                     {% if sa_recom_product.product_image == '0' %}
                         <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
                     {% else %}
@@ -178,7 +184,7 @@
                     </tr>
                     <tr>
                         <th class="product_title">
-                            <a href="{% url "products:products_detail" sa_recom_product.product_id profile.profile_id %}">
+                            <a href="{% url "products:products_detail" sa_recom_product.product_id %}">
                                 {{ sa_recom_product.product_name }}
                             </a>
                         </th>
@@ -194,7 +200,7 @@
                 </table>
             </div>
         {% endfor %}
-        <form action="{% url "recommends:request_flask_collabo_recom_model" profile_id %} " method='get'>
+        <form action="{% url "recommends:request_flask_sex_age_recom" %} " method='get'>
             <button class="btn btn-primary" style="margin-top: 15px">더보기</button>
         </form>
     </div>

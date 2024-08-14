@@ -123,7 +123,7 @@
                   {% for product in products_list %}
                   <div style="display: inline-block;">
                         <div style="display: inline-block;">
-                              <a href="{% url 'products:products_detail' product.pk profile.pk %}">
+                              <a href="{% url 'products:products_detail' product.pk %}">
                               <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
                         </div> 
                         <div style="display: inline-block;">
@@ -133,7 +133,7 @@
                               </tr>
                               <tr>
                                     <th class="product_title">
-                                          <a href="{% url 'products:products_detail' product.pk profile.pk %}">
+                                          <a href="{% url 'products:products_detail' product.pk %}">
                                                 {{ product.product_name }}
                                           </a>
                                     </th>
@@ -185,7 +185,7 @@
                   {% for product_like in product_like_list %}
                   <div style="display: inline-block;">
                         <div style="display: inline-block;">
-                              <a href="{% url 'products:products_detail' product_like.pk profile.pk %}">
+                              <a href="{% url 'products:products_detail' product_like.pk %}">
                               <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
                               </a>
                         </div> 
@@ -196,7 +196,7 @@
                               </tr>
                               <tr>
                                     <th class="product_title">
-                                          <a href="{% url 'products:products_detail' product_like.pk profile.pk %}">
+                                          <a href="{% url 'products:products_detail' product_like.pk %}">
                                                 {{ product_like.product_name }}
                                           </a>
                                     </th>

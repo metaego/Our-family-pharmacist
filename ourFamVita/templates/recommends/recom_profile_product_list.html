@@ -32,14 +32,6 @@
       }
 </style>
 
-{% comment %} <div>
-    <!-- 영양 성분 리포트 페이지로 가기 -->
-    <!-- render: recommends/recom_profile_report.html -->
-    <form action="{% url 'recommends:profile_total_report' profile.profile_id survey.survey_id %}" method='get'>
-        {% csrf_token %}
-          <button>이전</button>
-    </form>
-</div> {% endcomment %}
 
 <div style="text-align: center; margin-top: 80px">
     <h1 style="font-size: 24px; font-weight: 500">영양제 추천 목록</h1>
@@ -86,7 +78,7 @@
                     <td>{{ pregnancy }}</td>
                     <td>{{ allergy|join:', ' }}</td>
                     <td>{{ disease|join:', ' }}</td>
-                    <td>{{ survey.survey_smoke }}</td>
+                    <td>{{ smoking }}</td>
                     <td>{{ alcohol }}</td>
                 </tr>
             </table>
@@ -137,8 +129,13 @@
                              {{product.product_storage_method}}
                            {% endif %}
             </li>
-            <li>주의사항: <br> {{product.product_caution}}</li>
-            <li>주된 기능성: <br> {{product.product_function_content}}</li> 
+            <li>주의사항: {% if product.product_caution == None %}
+                            {{ '없음' }}
+                         {% else %}
+                            {{product.product_caution}}
+                         {% endif %}
+            </li>
+            <li>주된 기능성: {{product.product_function_content}}</li> 
             {% comment %} <li>제품 기능: {{ product.product_function_content }}</li> {% endcomment %}
         </div>
         
