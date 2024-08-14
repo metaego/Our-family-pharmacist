@@ -20,12 +20,12 @@
 
 ### 2) TEAM 소개
 |     이름      |            역할             |                  Contact                  |
-| :-----------: | :------------------------- | :---------------------------------------: |
-|김은아(팀장)|일정 및 문서화 관리, ERD/DB 설계, 더미 데이터 생성, 영양성분 추천 알고리즘 개발|  [Github](https://github.com/silverA-01)   |
-|권익태|ERD 및 DB 설계, 더미 데이터 생성, 영양제 추천 알고리즘 개발|  [Github](https://github.com/Dreamliners)  |
+| :-----------: | :-------------------------: | :---------------------------------------: |
+|김은아(팀장)|일정 및 문서화 관리, ERD 및 DB 설계, 더미 데이터 생성, 추천 알고리즘 개발|  [Github](https://github.com/silverA-01)   |
+|권익태|ERD 및 DB 설계, 더미 데이터 생성, 추천 알고리즘 개발|  [Github](https://github.com/Dreamliners)  |
 |김수연|API 설계, 개발환경 구축, Django 백엔드, Flask 모델 서버 개발|  [Github](https://github.com/metaego)  |
 |박설연|API 설계, Django 백엔드/프론트엔드, MySQL DB 관리| [Github](https://github.com/happydgtnmd) |
-|양은서|화면 설계, API 설계, 더미 데이터 생성, Django 백엔드/프론트엔드, 서비스 데이터 분석|  [Github](https://github.com/yant1001)  |
+|양은서|화면 설계, API 설계, 더미 데이터 생성, Django 백엔드/프론트엔드, 데이터 분석|  [Github](https://github.com/yant1001)  |
 
 - **공통 진행** 
   - 서비스 기획
