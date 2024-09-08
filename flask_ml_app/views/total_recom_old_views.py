@@ -39,7 +39,7 @@ def flask_ai_total_recom_old(survey_id):
     
     survey_data['survey_allergy_code'] = json.loads(survey_data['survey_allergy_code'])
     survey_data['survey_disease_code'] = json.loads(survey_data['survey_disease_code'])
-    survey_data['survey_function_code'] = json.loads(json.loads(survey_data['survey_function_code']))
+    survey_data['survey_function_code'] = json.loads(survey_data['survey_function_code'])
     
 
     # 1-2) 데이터 전처리

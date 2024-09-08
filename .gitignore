@@ -1,2 +1,5 @@
 .env
 Our-family-pharmacist/data_processing/__pycache__/
+data/product_processing.pkl
+data/product_table.csv
+data/product_table.pkl

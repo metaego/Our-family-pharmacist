@@ -67,7 +67,10 @@ def product_detail(request, product_id):
     
 
     # 건강설문에서 선택한 건강기능 고민 import
-    survey_functions = list(json.loads(survey.survey_function_code).values())
+    survey_functions = list(survey.survey_function_code.values())
+    print()
+    print(f'survey_functions: {survey_functions}')
+    print()
     
     
 

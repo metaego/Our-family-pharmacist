@@ -40,11 +40,18 @@ def flask_ai_total_recom(survey_id):
     cursor = db.cursor(pymysql.cursors.DictCursor)  # Dict 타입으로 받기
     cursor.execute(query)
     survey_data = cursor.fetchone()
+
+    print()
+    print(f'survey_data: {survey_data}')
+    print()
     
     survey_data['survey_allergy_code'] = json.loads(survey_data['survey_allergy_code'])
     survey_data['survey_disease_code'] = json.loads(survey_data['survey_disease_code'])
-    survey_data['survey_function_code'] = json.loads(json.loads(survey_data['survey_function_code']))
-    
+    survey_data['survey_function_code'] = json.loads(survey_data['survey_function_code'])
+    # print()
+    # print(f"survey_data['survey_function_code']: {survey_data['survey_function_code']}")
+    # print(f"type(survey_data['survey_function_code']): {type(survey_data['survey_function_code'])}")
+    # print()
 
     # 1-2) 데이터 전처리
     if survey_data["survey_sex"] == 'm':

@@ -43,7 +43,7 @@ def flask_sex_age_base_ai_recom(survey_id):
     
     survey_data['survey_allergy_code'] = json.loads(survey_data['survey_allergy_code'])
     survey_data['survey_disease_code'] = json.loads(survey_data['survey_disease_code'])
-    survey_data['survey_function_code'] = json.loads(json.loads(survey_data['survey_function_code']))
+    survey_data['survey_function_code'] = json.loads(survey_data['survey_function_code'])
     
     print(f'survey_data["survey_allergy_code"]: {survey_data["survey_allergy_code"]}, type: {type(survey_data["survey_allergy_code"])}')
     print(f'survey_data["survey_function_code"]: {survey_data["survey_function_code"]}, type: {type(survey_data["survey_function_code"])}')

@@ -3,7 +3,7 @@
         <div class = "service_name" style="color:#BC55EF; margin-right: 900px">
             필소굿<i><small>Pill So Good</small></i></div>
         <div style="font-size: 15px; font-weight: 600;">
-            <a href="{% url "home:home_main" %}">Home</a>  
+            <a href="{% url "home:home_main" profile.profile_id %}">Home</a>  
             <a href="{% url "recommends:profile_info" %}">AI영양제추천받기</a>  
             <a href="{% url "mypages:main" profile.profile_id %}">Mypage</a> 
             <a href="{% url "groups:group_main" profile.profile_id %}">GroupPage</a>         

@@ -5,5 +5,5 @@ app_name = 'home'
 
 urlpatterns = [
     # /home/{profile-id}/surveys/{survey-id}
-    path('profile_main/', views.home_main, name='home_main'),
+    path('profile_main/<profile_id>', views.home_main, name='home_main'),
 ]

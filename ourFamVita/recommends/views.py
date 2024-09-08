@@ -13,6 +13,8 @@ import json
 from dotenv import load_dotenv
 import os
 import time
+from django import forms
+
 
 load_dotenv()
 
@@ -161,18 +163,18 @@ def save_survey_data(request, survey_id):
         survey = Survey.objects.get(survey_id=survey_id)
         survey.pk = None
         survey.survey_created_at = timezone.now()
-        
+
         survey_selected_functions = {}
         idx = 0
         if not selected_functions:
             survey_selected_functions =  {"1st": "HF00"}
-            # print('건강기능 고민을 아무것도 선택하지 않았을 때')
         else:
             for kr_f_code in selected_functions:
                 dict_key = ["1st", "2nd", "3rd", "4th", "5th"]
                 survey_selected_functions[dict_key[idx]] = f'{kr_f_code}'
                 idx += 1
-        survey_selected_functions = json.dumps(survey_selected_functions, ensure_ascii=False)
+        survey_selected_functions = survey_selected_functions
+        print(f'survey_selected_functions: {survey_selected_functions}')       
         survey.survey_function_code = survey_selected_functions
         
         survey.save()
@@ -671,7 +673,7 @@ def request_flask_sex_age_recom(request):
     execution_seconds = int(execution_time_seconds % 60)
     print("request_flask_sex_age_recom function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
 
-    return redirect('recommends:products_collabo_base')
+    return redirect('recommends:products_sex_age_base')
 
 
 

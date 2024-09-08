@@ -41,7 +41,7 @@
                 </div>
                 
                 <div>
-                    <form action="{% url "home:home_main" %}" method="POST">
+                    <form action="{% url "home:home_main" profile.profile_id %}" method="POST">
                         {% csrf_token %}
                         <button class="btn btn-primary" style="width: 180px; height: 30px; margin: 0 0 3px 0;">선택</button>
                     </form>

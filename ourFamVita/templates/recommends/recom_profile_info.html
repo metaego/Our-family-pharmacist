@@ -215,7 +215,7 @@
   <div style="display: inline-block;">
     <!-- 홈 메인화면으로 가기 -->
     <!-- rending page: main.html -->
-    <form action="{% url "home:home_main" %}" method='get'>
+    <form action="{% url "home:home_main" profile.profile_id%}" method='get'>
       {% csrf_token %}
         <button class="btn btn-secondary" style="width: 248px; height: 30px;">이전</button>
     </form>

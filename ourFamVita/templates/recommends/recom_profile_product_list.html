@@ -103,7 +103,7 @@
     {% for product in popular_products %}
     <div>
         <div style="margin-right: 20px; float:left;">
-            <a href="{% url "products:products_detail" product.product_id profile.profile_id %}">
+            <a href="{% url "products:products_detail" product.product_id %}">
                 {% if product.product_image == '0' %}
                     <img src="{% static 'product/product_temp_image_240506.png' %}" alt="영양제 제품 이미지" class='product_image'>
                 {% else %}

@@ -9,17 +9,19 @@ from users.models import (Profile, Product, Survey
 from dotenv import load_dotenv
 import time
 # Create your views here.
-def home_main(request):
+def home_main(request, profile_id):
     start_time = time.time()
     
     user_id = request.session.get('_auth_user_id') # dict_keys(['_auth_user_id', '_auth_user_backend', '_auth_user_hash', 'profile_id', 'survey_id'])
     # print(f'user_id: {user_id}')
     # print(f'profile_id: {profile_id}')
+    # session_keys = request.session.keys()
+    # print(f'dict_keys:{list(session_keys)}')
     
     if not user_id :
         return redirect('/')
     
-    profile_id = request.session['profile_id'] 
+    request.session['profile_id'] = profile_id
 
 
     # profile 데이터 가져오기
