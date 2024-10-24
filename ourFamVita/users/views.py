@@ -70,8 +70,9 @@ def acc_info(request):
     user_id = request.user.user_id
     user = User.objects.get(pk=user_id)
 
-    if request.user.is_authenticated:
-        return redirect('/')
+    # @login_required이 존재하기 때문에, 아래 코드 제거 -> 로그인되어 있으나 해당 조건에 걸린다.
+    # if request.user.is_authenticated:
+    #     return redirect('/')
     
     if request.method == "POST":
         form = AccInfoForm(data=request.POST)
