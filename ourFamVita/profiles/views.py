@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from profiles.forms import Survey1Form, Survey2Form, Survey3Form
 from users.models import User, Profile, Survey, ComCode, SurveyComCode
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 
@@ -151,8 +152,12 @@ def survey3(request):
 @login_required
 def profile_edit1(request, profile_id):
     profile_instance = Profile.objects.get(pk=profile_id)
-    survey_instance = Survey.objects.get(profile_id=profile_id)
+    
+    # profile_id에 대한 survey가 여러 개 존재할 경우 가장 최근 survey를 가져오는 것으로 수정
+    # survey_instance = Survey.objects.get(profile_id=profile_id)
+    survey_instance = Survey.objects.filter(profile_id=profile_id).last()
 
+            
     if request.method == 'POST':
         form = Survey1Form(request.POST)
         if form.is_valid():
@@ -184,7 +189,14 @@ def profile_edit1(request, profile_id):
 
 @login_required
 def profile_edit2(request, profile_id):
-    survey_instance = Survey.objects.get(profile_id=profile_id)
+    # profile_id에 대한 survey가 여러 개 존재할 경우 건강기능을 선택하지 않는 경우를 제외하고 가장 최근 survey를 가져오는 것으로 수정
+    # 단 건강고민을 선택하지 않은 경우만 survey가 존재할 경우 해당 survey를 가져온다.
+    # survey_instance = Survey.objects.get(profile_id=profile_id)
+    survey_instance = Survey.objects.filter(
+        profile_id=profile_id
+    ).filter(
+        Q(survey_function_code='{"1st": "HF00"}') | ~Q(survey_function_code='{"1st": "HF00"}')
+    ).latest('survey_created_at')
 
     if request.method == 'POST':
         form = Survey2Form(request.POST)
@@ -218,7 +230,9 @@ def profile_edit2(request, profile_id):
 
 @login_required
 def profile_edit3(request, profile_id):
-    survey_instance = Survey.objects.get(profile_id=profile_id)
+    # profile_id에 대한 survey가 여러 개 존재할 경우 가장 최근 survey를 가져오는 것으로 수정
+    # survey_instance = Survey.objects.get(profile_id=profile_id)
+    survey_instance = Survey.objects.filter(profile_id=profile_id).last()
     
     if request.method == 'POST':
         form = Survey3Form(request.POST)
@@ -235,6 +249,7 @@ def profile_edit3(request, profile_id):
                 SurveyComCode.objects.create(survey_id=survey_instance,
                                              com_code_grp=disease_instance.com_code_grp,
                                              com_code=disease_instance)
+            
             return redirect('/profiles')
     else:
         initial_data = {
