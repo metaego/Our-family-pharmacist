@@ -57,7 +57,8 @@
 <div style="text-align: center; margin-top: 80px">
     <h1 style="font-size: 24px; font-weight: 500">영양 성분 리포트</h1>
     <br>
-    <h2 style="font-size: 15px; font-weight: 400">{{ profile.profile_name }}님의 프로필 정보 확인</h2>
+    <!-- style 수정 -->
+    <h2 style="font-size: 15px; font-weight: 400"><strong style="color:#BC55EF; font-weight: 600">{{ profile.profile_name }}</strong>님의 프로필 정보 확인</h2>
 </div>
 
 <div class="profile-container" style="margin: 20px 20% 20px 20%;">
@@ -107,21 +108,30 @@
 </div>
 
 <div class="flex-container" style="margin: 0 10%">
-    {% for r_ingredient in recommended_ingredients %}
-    <div class="flex-item">
-        <div style="height: 200px">
-        <!-- <h3>추천 영양 성분{{ forloop.counter }}</h3> -->
-        <span style="color:#BC55EF;">{{ r_ingredient.ingredient_name }}</span>
-            <li>주요 건강 기능: {{ r_ingredient.ingredient_function_content }}</li>
-            <li>일일 섭취량: 최대 {{ r_ingredient.ingredient_limit_high }} {{ r_ingredient.ingredient_unit }} / 최소{{ r_ingredient.ingredient_limit_low }} {{ r_ingredient.ingredient_unit }}</li>
-            <!-- rending page: recom_profile_product_list.html -->
+    <!-- style 수정, 주요 불러오는 변수 수정 -->
+    {% for item in new_recom_ingredients %}
+        <div class="flex-item">
+            <div style="height: 200px">
+            <!-- <h3>추천 영양 성분{{ forloop.counter }}</h3> -->
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <span style="color:#BC55EF; font-weight: 600; text-align:center;">{{ item.r_ingredient.ingredient_name }}</span>
+                </div>
+                <div>
+                    <li><strong style="font-weight: 500">주요 건강 기능</strong> : 
+                        <strong style="color:#BC55EF;">{{ item.selected_function_kr_codes|join:", " }}</strong>{% if item.non_selected_function_kr_codes %}{% if item.selected_function_kr_codes|length > 0 %}, {% endif %}{{ item.non_selected_function_kr_codes|join:", " }}{% endif %}                        
+                    </li>
+                </div>
+                <div style="margin-top: 10px;">
+                    <li><strong style="font-weight: 500">일일 섭취량 </strong> : 최대 {{ item.r_ingredient.ingredient_limit_high }} {{ item.r_ingredient.ingredient_unit }} / 최소 {{ item.r_ingredient.ingredient_limit_low }} {{ item.r_ingredient.ingredient_unit }}</li>
+                </div>
+                <!-- rending page: recom_profile_product_list.html -->
+            </div>
+            <div style="text-align: center; margin-top: 30px; align-items: end;">
+                <form action="{% url "recommends:products_nutri_base" item.r_ingredient.ingredient_id %}" method='get'>
+                    <button class="btn btn-primary" style="width: 140px">추천 영양제 보기</button>
+                </form>
+            </div>
         </div>
-        <div style="text-align: center; margin-top: 10px; align-items: end;">
-            <form action="{% url "recommends:products_nutri_base" r_ingredient.ingredient_id %}" method='get'>
-                <button class="btn btn-primary" style="width: 140px">추천 영양제 보기</button>
-            </form>
-        </div>
-    </div>
     {% endfor %}
 </div>
 
