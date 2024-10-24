@@ -10,7 +10,6 @@ urlpatterns = [
     path('info/', views.recom_info, name='profile_info'),
 
 
-
     # 기능: 건강 설문(관심있는 건강기능) 정보를 DB에 저장
     path('survey_data/<int:survey_id>/', views.save_survey_data, name='save_survey_data'),
 
@@ -22,11 +21,11 @@ urlpatterns = [
     path('request_flask/report_base_total_recom/', views.request_flask_total_recom, name='request_flask_total_recom'),
 
 
-
     # AI추천받기: 영양 성분 리포트
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트
     # 기능: flask에서 추천받은 "영양 성분 리포트"화면 조회
-    path('reports/', views.recom_profile_total_report, name='profile_total_report'),
+    # path('reports/', views.recom_profile_total_report, name='profile_total_report'),
+    path('reports/<int:profile_id>/<int:survey_id>/', views.recom_profile_total_report, name='profile_total_report'),
 
 
 
@@ -41,7 +40,6 @@ urlpatterns = [
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록 
     # 기능: "영양 성분 리포트"화면에서 영양성분 리포트 바탕 추천 영양제 리스트 조회
     path('nutri_report_base_products/', views.recom_products_profile_base, name='products_profile_base'),
-
 
 
     # 기능: flask에 성별 & 연령별 영양제 추천 요청 보내기
