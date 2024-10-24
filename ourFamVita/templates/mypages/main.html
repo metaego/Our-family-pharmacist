@@ -39,7 +39,7 @@
         </form>
     </div>
     <div style="display: inline-block;">
-        <form action="{% url "users:acc_info" %}" method="POST">
+        <form action="{% url "users:acc_info" %}" method="GET">
             {% csrf_token %}
             <button class="btn btn-secondary">계정 관리</button>
         </form>
@@ -56,9 +56,9 @@
 
 <div style="text-align: center; margin: 5px">
     <div style="display: inline-block;">
-        <a href="{% url "profiles:profile" %}">
+        <form action="{% url "profiles:profile_edit1" profile.profile_id %}" method="GET">
             <button class="btn btn-primary" style="width: 248px; height: 30px;">현재 프로필 수정</button>
-        </a>
+        </form>
     </div>
     <div style="display: inline-block;">
         <a href="/profiles/">

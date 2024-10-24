@@ -11,7 +11,7 @@
   </a>
 </div> 
 
-<div style="text-align: center; ">
+<div style="text-align: center;">
   <h2 style="font-size: 24px; font-weight: 500">
     영양성분 AI 추천 기록
   </h2>
@@ -20,36 +20,34 @@
 <body> 
   {% if products_list == '[]' %} 
   <div> 아직 추천받은 기록이 없습니다! </div>
-  
   {% else %}
-
-    {% for ingredient in ingredients_list %}
+  {% for ingredient in ingredients_list %}
     <div class="profile-container" style="margin: 40px 10%; padding: 30px">
-      <div style="display: inline-block;">
-
-        <div style="display: inline-block; float: left; margin: 0 50px">
-          <a href="{% url "recommends:request_flask_recom_model_old" profile.profile_id ingredient.2.survey_id.survey_id  %}">        
-            <strong style="color: #BC55EF">{{ingredient.2.created_at}}</strong> 추천 영양 성분 리포트
+      <div style="display: inline-block; width: 100%;"> <!-- width: 100% 추가 -->
+        <div style="display: block; margin-bottom: 20px;"> <!-- block으로 수정/linebreak -->
+          <!-- <a href="{% url "recommends:request_flask_recom_model_old" profile.profile_id ingredient.2.survey_id.survey_id  %}">  -->  
+          <a href="{% url 'recommends:request_flask_recom_model_old' profile.profile_id ingredient.2.survey_id.survey_id %}"> 
+            <strong style="color: #BC55EF; font-weight: 600">{{ingredient.2.recom_created_at}}</strong>  <!-- 강조 -->
+            <strong style="font-weight: 600">추천 영양 성분 리포트</strong> <!-- 강조 -->
           </a>
         </div>
-        <div style="display: inline-block; text-align:left">
-          <li> 영양성분 이름: 
+        <div style="display: inline-block; text-align:center; width: 100%;"> <!-- 가운데 정렬로 수정 -->
+          <li> <strong style="font-weight: 500">영양성분 이름</strong> :    <!-- 강조 -->
             {% for ingredient_indi in ingredient.0 %}
               {{ ingredient_indi.ingredient_name }} 
                 {% if not forloop.last %},  {% endif %}
             {% endfor %} 
           </li>   
-          <li> 선택한 건강고민:
-            {% for ingredient_func in  ingredient.1 %}
-              {{ ingredient_func.function_code_name }}
+          <li> <strong style="font-weight: 500">선택한 건강고민</strong> :   <!-- 강조 -->
+            {% for selected_function in  ingredient.1 %}
+              {{ selected_function }}
               {% if not forloop.last %},  {% endif %}
             {% endfor %} 
           </li>
         </div>
-
       </div>
     </div>
-    {% endfor %}
-    {% endif %}
+  {% endfor %}
+  {% endif %}
 </body> 
 {% endblock content %}
