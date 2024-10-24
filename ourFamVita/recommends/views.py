@@ -152,6 +152,8 @@ def recom_info(request):
 def save_survey_data(request, survey_id):
     start_time = time.time()
     user_id = request.session.get('_auth_user_id')
+    
+    profile_id=request.session.get('profile_id')
 
     if not user_id:
         return redirect('/')
@@ -159,6 +161,14 @@ def save_survey_data(request, survey_id):
     if request.method == 'POST':
         selected_functions = [unquote(code) for code in request.POST.getlist('checkbox[]')]
 
+        # 한글(name)로 된 function을 code 값으로 수정
+        selected_com_codes = []
+        for kr_f_code in selected_functions:
+            selected_com_code = ComCode.objects.get(com_code_name=kr_f_code).com_code
+            selected_com_codes.append(selected_com_code)
+        selected_functions = selected_com_codes
+
+        
         # 새로운 survey 데이터 생성
         survey = Survey.objects.get(survey_id=survey_id)
         survey.pk = None
@@ -197,13 +207,18 @@ def request_flask_total_recom(request):
     if not user_id:
         return redirect('/')
     
+    profile_id = request.session.get('profile_id')
+    if not profile_id:
+        return redirect('/')
+    
 
     # flask에 요청 보내기
     client_ip = request.META.get('REMOTE_ADDR', None)
     if client_ip != '127.0.0.1' and client_ip != os.environ.get('AWS_PUBLIC_IP'):
         client_ip = os.environ.get('AWS_PUBLIC_IP')
     csrf_token = get_token(request)
-    survey = Survey.objects.filter(profile_id=request.session.get('profile_id')).latest('survey_created_at')
+    # survey = Survey.objects.filter(profile_id=request.session.get('profile_id')).latest('survey_created_at')
+    survey = Survey.objects.filter(profile_id=profile_id).latest('survey_created_at')
     request.session['survey_id'] = survey.survey_id
 
     response = requests.post('http://' + client_ip + f':5000/ai-total-recom/{survey.survey_id}/', 
@@ -222,12 +237,11 @@ def request_flask_total_recom(request):
     execution_seconds = int(execution_time_seconds % 60)
     print("request_flask_total_recom function Execution Time:", execution_minutes, "minutes", execution_seconds, "seconds")
 
-    return redirect('recommends:profile_total_report')
+    return redirect('recommends:profile_total_report', profile_id, survey.survey_id)
 
 
-
-
-def recom_profile_total_report(request):
+# def recom_profile_total_report(request):
+def recom_profile_total_report(request, profile_id, survey_id): # 세션 대신 mypage에서 인자를 받아서 가져오는 쪽으로 해야 에러 X
 
     start_time = time.time()
 
@@ -237,8 +251,10 @@ def recom_profile_total_report(request):
 
     # AI추천받기: 영양 성분 리포트
     # menu: ai 영양제 추천받기> 영양 성분 리포트
-    profile = Profile.objects.get(profile_id=request.session.get('profile_id'))
-    survey = Survey.objects.get(survey_id=request.session.get('survey_id'))
+    # profile = Profile.objects.get(profile_id=request.session['profile_id'])
+    # survey = Survey.objects.get(survey_id=request.session['survey_id'])
+    profile = Profile.objects.get(profile_id=profile_id)
+    survey = Survey.objects.get(survey_id=survey_id)
 
 
     # 세션에서 contents 가져오기
@@ -251,6 +267,49 @@ def recom_profile_total_report(request):
     recommended_ingredients = RecomIngredient.objects.filter(recom_id=recom.recom_id).values_list('ingredient_id', flat=True)
     recommended_ingredients = list(recommended_ingredients)
     recommended_ingredients = Ingredient.objects.filter(ingredient_id__in=recommended_ingredients)
+    
+    # 1-2) 프로필이 선택한 건강기능 추출
+    selected_function_codes = list(survey.survey_function_code.values())
+
+
+    # 1-3) 추천 영양성분 건강기능 코드명 추출
+    ## 건강기능 코드 dict
+    com_codes = ComCode.objects.filter(com_code_grp='FUNCTION').values('com_code', 'com_code_name')
+    function_dict = {code['com_code']: code['com_code_name'] for code in com_codes}
+    
+    # ## 프로필이 선택한 건강기능 코드명
+    # survey_function_kr_codes = []
+    # for key, value in function_dict.items():
+    #     if key in selected_function_codes:
+    #         survey_function_kr_codes.append(value)
+    #     elif key == 'HF00':
+            
+    # print(f'survey_function_kr_codes : { survey_function_kr_codes}')
+    
+    ## recommended_ingredients를 처리하여 추천 영양성분 건강기능 code name 저장
+    new_recom_ingredients = []
+    for r_ingredient in recommended_ingredients:
+        ingredient_function_codes = r_ingredient.ingredient_function_code  # {'HF18': 1, 'HF22': 1}
+        
+        selected_function_kr_codes = []
+        non_selected_function_kr_codes = []
+        
+        for key, value in ingredient_function_codes.items():
+            # 추천 영양성분의 건강 기능 코드가 1인 경우, 해당 com_code_name을 찾음
+            if value == 1 and key in function_dict:
+                # 프로필이 선택한 건강기능 코드일 경우 selected_function_kr_codes에 저장, 그렇지 않을 경우 non_selected_function_kr_codes에 담음
+                if key in selected_function_codes:
+                    selected_function_kr_codes.append(function_dict[key])
+                else:
+                    non_selected_function_kr_codes.append(function_dict[key])
+        
+        # 각 성분과 관련된 선택된 기능 코드와 선택되지 않은 기능 코드를 저장
+        new_recom_ingredients.append({
+            'r_ingredient': r_ingredient,
+            'selected_function_kr_codes': selected_function_kr_codes,
+            'non_selected_function_kr_codes': non_selected_function_kr_codes,
+        })
+        
     
 
     # 2) 영양 성분 리포트 바탕으로 영양제 추천
@@ -366,9 +425,11 @@ def recom_profile_total_report(request):
         'disease': disease_kr_list,
         'alcohol': alcohol_code,
         'pregnancy': pregnancy_kr_code,
-        'smoking': smoking_code
+        'smoking': smoking_code,
+        'new_recom_ingredients' : new_recom_ingredients,
+        'selected_function_codes' : selected_function_codes,
+        # 'survey_function_kr_codes' : survey_function_kr_codes,
     })
-
 
 
 def recom_products_nutri_base(request, nutri_num):
@@ -508,8 +569,8 @@ def recom_products_nutri_base(request, nutri_num):
 
 
 def recom_products_profile_base(request):
-
     start_time = time.time()
+    
     # AI추천받기: 영양제 추천 목록(영양 성분 리포트 기반)
     # menu: ai 영양제 추천받기(profile_info) > 영양 성분 리포트 > 영양제 추천 목록(영양 성분 리포트 기반)
     user_id = request.session.get('_auth_user_id')
@@ -808,15 +869,24 @@ def recom_products_sex_age_base(request):
 
 
 def request_flask_recom_model_old(request, profile_id, survey_id):
+# def request_flask_recom_model_old(request):
     start_time = time.time()
 
+    # 세션에서 user_id, profile_id, survey_id 가져오기
     user_id = request.session.get('_auth_user_id')
+    
+    # profile_id = request.session.get('profile_id')
+    # survey_id = request.session.get('survey_id')
+    
     if not user_id:
         return redirect('/')
+
+    # if not user_id or not profile_id or not survey_id:
+    #     return redirect('/')
     
     profile = Profile.objects.get(profile_id=profile_id)
     
-
+    
     # flask 요청 
     client_ip = request.META.get('REMOTE_ADDR', None)
 
