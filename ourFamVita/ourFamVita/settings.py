@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [os.environ.get('AWS_PUBLIC_IP'), '0.0.0.0', '127.0.0.1']
 
@@ -137,7 +137,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False # False 로 설정해야 DB에 변경 된 TIME_ZONE 이 반영 됨 
+USE_TZ = False # `True`로 설정해야 DB에 변경 된 TIME_ZONE 이 반영 됨 / `False`로 설정할 경우 서버의 시스템 시간대를 기준으로 날짜와 시간이 저장됨(AWS 상의 서버 시간대도 Asia/Seoul로 수정함)
 
 DEFAULT_CHARSET = 'utf-8'
 
