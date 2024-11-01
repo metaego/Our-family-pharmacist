@@ -53,6 +53,9 @@
     function showAlert() {
         alert("영양제를 찜했어요!");
     }
+    function showAlert2() {
+        alert("영양제 찜하기를 취소했어요!");
+    }
 </script>
 <div style="text-align: center; margin-top: 80px">
     <h2 style="font-size: 24px; font-weight: 500">
@@ -92,9 +95,18 @@
         <div style="display: inline-block; margin-bottom: 40px">
             <span style="color:#BC55EF; font-weight: 500; font-size: 15px; ">{{ product.product_name }}</span>
             <div style="display: inline-block">
-                <button id="likeButton" class="btn btn-primary" type="submit" style="width: 88px" onclick="showAlert()">찜하기</button>
+                <form action="{% url 'products:product_like' product.product_id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    {% if product_like%}
+                        <!-- 이미 찜한 상태 -->
+                        <button id="likeButton" class="btn btn-primary" type="submit" style="width: 88px" onclick="showAlert2()">찜하기 취소</button>
+                    {% else %}
+                        <!-- 찜하지 않은 상태 -->
+                        <button id="likeButton" class="btn btn-primary" type="submit" style="width: 88px" onclick="showAlert()">찜하기</button>
+                    {% endif %}
+                </form>
             </div>
-            <li>평점: {{ product.product_rating_avg }}</li>
+            <li>평점: <span class="star-rating" style="--rating:{{ product.product_rating_avg }}; margin-right: 3px;"></span>{{ product.product_rating_avg }} ({{ product.product_rating_cnt }})</li>
             <li>제조사: {% if product.product_company == None %}
                             {{ '없음' }}
                         {% else %}
@@ -166,8 +178,8 @@
     <h3 class="recommend_title">
         리뷰
     </h3>
-    {% if review == False %}
     <!-- profile의 등록된 댓글이 없는 경우 -->
+    {% if not review_profile %}
         <form id="comment-form" action="{% url 'products:product_review' product.product_id %}" method="post">
             {% csrf_token %}
             평점:
@@ -183,9 +195,32 @@
             <textarea class="comment" name="comment" rows="4" cols="100" maxlength="200" placeholder="댓글을 입력하세요(최대 200자)"></textarea><br>
             <button class="btn btn-secondary" type="submit" style="margin-bottom: 5px">댓글 등록</button>    
         </form>
-    {% else %}
-        <li>{{ review.product_review_rating }} 점 | {{ review.product_review_created_at|date:"Y-m-d H:i:s"|slice:":16" }}</li>
-        <li>{{ review.product_review_content }}</li> 
+    {% endif %}
+    <!-- 제품 관련 전체 댓글이 존재할 경우 -->
+    {% if reviews %}
+        {% for review in reviews %}
+        <div class="review-container" style="margin-top: 10px">
+            <div style="display: flex; align-items: center;">
+                <div class="star-rating" style="--rating:{{ review.product_review_rating }}; margin-right: 10px;"></div>
+                <strong style="font-weight: 500;">{{ review.profile_id.profile_name }}</strong>
+                <span style="margin: 0 5px;">|</span>
+                <span>{{ review.product_review_created_at|date:"Y-m-d H:i"|slice:":16" }}</span>
+            {% comment %}                 
+            </div>
+            <div>{{ review.product_review_content }}</div>
+            {% endcomment %}
+                {% if review.profile_id == profile %}
+                    <form action="{% url 'products:product_review_delete' product.product_id profile.profile_id review.product_review_id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-secondary" style="margin-left: 5px;" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                    </form>
+                {% endif %}
+            </div>
+            <div>
+                {{ review.product_review_content }}
+            </div>
+        </div>
+        {% endfor %}
     {% endif %}
 </div>
 <script>

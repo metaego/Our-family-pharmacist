@@ -26,7 +26,7 @@
 </div>
 
 <body> 
-  {% if products_list == '[]' %} 
+  {% if not products_list %} 
     <p> 아직 조회한 영양제가 없습니다! </p>
   
   {% else %}
@@ -37,7 +37,7 @@
         </div>
         <div style="display: inline-block; width: 850px">
           <a href="{% url 'products:products_detail' product.pk %}" style="color:#BC55EF; font-weight: 500">{{ product.product_name }}</a>
-          <li> 평점: {{ product.product_rating_avg }}</li>
+          <li> 평점: <span class="star-rating" style="--rating:{{ product.product_rating_avg }}; margin-right: 3px;"></span>{{ product.product_rating_avg }} ({{ product.product_rating_cnt }})</li>
           <li> 제조사: {{product.product_company}}</li> 
           <li> 섭취 방법: {{ product.product_instruction }}</li> 
           <li> 소비기한: {{product.product_serving}}</li> 

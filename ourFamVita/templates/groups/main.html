@@ -139,7 +139,7 @@
                                     </th>
                               </tr>
                               <tr>
-                                    <th>평점: {{ product.product_rating_avg }}</th>
+                                    <th>평점: <span class="star-rating" style="--rating:{{ product.product_rating_avg }}; margin-right: 3px;"></span>{{ product.product_rating_avg }} ({{ product.product_rating_cnt }})</th>
                               </tr>
                               </table>
                         </div>
@@ -165,34 +165,30 @@
             최근 <span style="color:#BC55EF">우리가족</span>이 찜한 영양제에요
       </div>
       <div style="display: inline-block; margin: 10px">
-            {% if not product_like_list %}
+            {% if not product_likes %}
                   <div> 아직 찜한 기록이 없습니다! </div>
             {% else %}
-                  {% for product_like in product_like_list %}
+                  {% for product_like in product_likes %}
                   <div style="display: inline-block;">
                         <div style="display: inline-block;">
-                              <a href="{% url 'products:products_detail' product_like.product_id %}">
+                              <a href="{% url 'products:products_detail' product_like.product_id.product_id %}">
                               <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
                               </a>
                         </div> 
                         <div style="display: inline-block;">
                               <table class="product_info">
                               <tr>
-                                    <th>{{product_like.product_company}}</th>
+                                    <th>{{product_like.product_id.product_company}}</th>
                               </tr>
                               <tr>
                                     <th class="product_title">
-                                          <a href="{% url 'products:products_detail' product_like.product_id %}">
-                                                {{ product_like.product_name }}
+                                          <a href="{% url 'products:products_detail' product_like.product_id.product_id %}">
+                                                {{ product_like.product_id.product_name }}
                                           </a>
                                     </th>
                               </tr>
                               <tr>
-                                    <th>평점: {% if product.product_rating_avg == None %}
-                                                {{ '0' }}
-                                              {% else %}
-                                                {{ product.product_rating_avg }}
-                                              {% endif %} 
+                                    <th>평점: <span class="star-rating" style="--rating:{{ product_like.product_id.product_rating_avg }}; margin-right: 3px;"></span>{{ product_like.product_id.product_rating_avg }} ({{ product_like.product_id.product_rating_cnt }})
                                     </th>
                               </tr>
                               </table>

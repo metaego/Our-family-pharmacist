@@ -1288,4 +1288,46 @@ input:-webkit-autofill:active {
   margin-bottom: 10px;
 }
 
+/* 별점_기본 스타일 설정 */
+.star-rating {
+  font-size: 14px;
+  color: rgb(211, 211, 211); /* 기본 별 색상 */
+  unicode-bidi: bidi-override;
+  direction: ltr; /* 왼쪽 정렬 */
+  position: relative;
+  width: max-content;
+}
+
+/* 별점_전체 별 표시 */
+.star-rating::before {
+  content: "★★★★★";
+}
+
+/* 별점_노란색 별 표시 (채워지는 부분) */
+.star-rating::after {
+  content: "★★★★★";
+  color: gold;
+  padding: 0;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: calc(var(--rating, 0) * 20%); /* 평점에 맞게 채워짐 */
+  overflow: hidden;
+}
+
+.review-container {
+  border: 1px solid #bbb;
+  border-radius: 20px;
+  max-width: 1080px;
+  text-align: left;
+  padding: 15px 20px;
+  align-items: left;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  word-wrap: break-word; /* 자동 줄바꿈 */
+}
+
 /*# sourceMappingURL=style.css.map */

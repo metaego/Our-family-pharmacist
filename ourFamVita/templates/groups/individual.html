@@ -56,7 +56,7 @@
     </div>
     <div style="width: auto; margin-bottom: 40px">
       <a href="{% url 'products:products_detail' product.product_id %}" style="color:#BC55EF; font-weight: 500">{{ product.product_name }}</a></li> 
-      <li> 평점: {{ product.product_rating_avg }}</li>
+      <li> 평점: <span class="star-rating" style="--rating:{{ product.product_rating_avg }}; margin-right: 3px;"></span>{{ product.product_rating_avg }} ({{ product.product_rating_cnt }})</li>
       <li> 제조사: {{product.product_company}}</li> 
       <li> 섭취 방법: {{ product.product_instruction }}</li> 
       <li> 소비기한: {{product.product_serving}}</li> 

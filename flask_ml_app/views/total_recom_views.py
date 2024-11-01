@@ -25,7 +25,7 @@ def flask_ai_total_recom(survey_id):
         password=os.environ.get('MYSQL_PASSWORD'),
         port=int(os.environ.get('MYSQL_PORT')),
         # db='ourFamVitaDBNew',
-        db='PillSoGood',
+        db=os.environ.get('MYSQL_DATABASE_NAME'),
         charset='utf8mb4'
 )
     # data = request.get_json()

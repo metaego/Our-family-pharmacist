@@ -24,30 +24,29 @@
 </div>
 
 <div style="margin: 40px 15%;">
-  {% if products_list == '[]' %} 
-  <div style="display: inline-block;">
-    아직 찜한 영양제가 없습니다!
-  </div>
+  {% if not product_likes %} 
+    <div style="display: inline-block;">
+      아직 찜한 영양제가 없습니다!
+    </div>
   {% else %}
-
-  {% for product in products_list %}
-  <div>
-    <div style="margin-right: 20px; float: left">
-      <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
+    {% for product_like in product_likes %}
+    <div>
+      <div style="margin-right: 20px; float: left">
+        <img src= "{% static 'groups/product_temp_image_240506.png' %}" alt="영양제 대체 이미지" class="product_image">
+      </div>
+      <div style="width: auto; margin-bottom: 40px">
+        <a href="{% url 'products:products_detail' product_like.product_id.product_id %}" style="color:#BC55EF; font-weight: 500">{{ product_like.product_id.product_name }}</a>
+        <li> 평점: <span class="star-rating" style="--rating:{{ product_like.product_id.product_rating_avg }}; margin-right: 3px;"></span>{{ product_like.product_id.product_rating_avg }} ({{ product_like.product_id.product_rating_cnt }})</li>
+        <li> 제조사: {{product_like.product_id.product_company}}</li>
+        <li> 섭취 방법: {{ product_like.product_id.product_instruction }}</li>
+        <li> 소비기한: {{product_like.product_id.product_serving}}</li>
+        <li> 제품 형태: {{product_like.product_id.product_dispos}}</li>
+        <li> 보관 방법: {{product_like.product_id.product_storage_method}}</li>
+        <li> 주의사항: <br> {{product_like.product_id.product_caution}}</li>
+        <li> 주된 기능성: <br> {{product_like.product_id.product_function_content}}</li>
+      </div>
     </div>
-    <div style="width: auto; margin-bottom: 40px">
-      <a href="{% url 'products:products_detail' product.pk %}" style="color:#BC55EF; font-weight: 500">{{ product.product_name }}</a>
-      <li> 평점: {{ product.product_rating_avg }}</li>
-      <li> 제조사: {{product.product_company}}</li>
-      <li> 섭취 방법: {{ product.product_instruction }}</li>
-      <li> 소비기한: {{product.product_serving}}</li>
-      <li> 제품 형태: {{product.product_dispos}}</li>
-      <li> 보관 방법: {{product.product_storage_method}}</li>
-      <li> 주의사항: <br> {{product.product_caution}}</li>
-      <li> 주된 기능성: <br> {{product.product_function_content}}</li>
-    </div>
-  </div>
-  {% endfor %}
+    {% endfor %}
   {% endif %}
 </div>
 {% endblock content %}

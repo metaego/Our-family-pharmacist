@@ -22,8 +22,7 @@ def flask_sex_age_base_ai_recom(survey_id):
         user=os.environ.get('MYSQL_USER'),
         password=os.environ.get('MYSQL_PASSWORD'),
         port=int(os.environ.get('MYSQL_PORT')),
-        # db='ourFamVitaDBNew',
-        db='PillSoGood',
+        db=os.environ.get('MYSQL_DATABASE_NAME'),
         charset='utf8mb4',
         cursorclass=pymysql.cursors.DictCursor
     )
