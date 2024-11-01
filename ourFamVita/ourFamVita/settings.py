@@ -99,8 +99,7 @@ WSGI_APPLICATION = 'ourFamVita.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'backuptestDB',
-        'NAME': 'PillSoGood',
+        'NAME': os.environ.get('MYSQL_DATABASE_NAME'),
         'USER': os.environ.get('MYSQL_USER'),
         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
         'HOST': os.environ.get('MYSQL_HOST'),
