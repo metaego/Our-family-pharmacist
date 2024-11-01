@@ -7,7 +7,7 @@ from users.models import (Profile, Product, ProductView, ProductLike, ProductRev
                           , Ingredient  
                           , Recom, RecomIngredient
                           )
-
+from django.db.models import Max
 # Create your views here.
 
 def mypage_main(request, profile_id):
@@ -17,11 +17,10 @@ def mypage_main(request, profile_id):
     return render(request, 'mypages/main.html', context)
 
 
-
+# 최근 조회한 제품
 def mypage_views(request, profile_id):
     profile = get_object_or_404(Profile, profile_id=profile_id)
-    # productlogs = ProductLog.objects.filter(profile_id=profile_id).order_by('-visited_at')[:5] 
-    product_views = ProductView.objects.filter(profile_id=profile_id).order_by('-product_view_visited_at')[:5] 
+    product_views = ProductView.objects.filter(profile_id=profile_id).order_by('-product_view_visited_at')[:10] 
     products_list = []
 
     # for productlog in productlogs: 
@@ -29,6 +28,9 @@ def mypage_views(request, profile_id):
         # product = Product.objects.get(product_id = productlog.product_id.product_id)
         product = Product.objects.get(product_id = product_view.product_id.product_id)
         products_list.append(product)
+        # 최근 조회한 제품 중복 제거
+        products_list = list(set(products_list))[:5]
+        
     context =  {'profile': profile, 
                 'products_list':products_list,
                 }
@@ -84,34 +86,54 @@ def mypage_recommends(request, profile_id):
 # 영양제 찜하기 기능 구현 전
 def mypage_likes(request, profile_id):
     profile = get_object_or_404(Profile, profile_id=profile_id) 
-    # print(f'profile:{profile}')
-    # product_likes = ProductLike.objects.filter(profile_id=profile_id).order_by('-created_at')[:5]
-    product_likes = ProductLike.objects.filter(profile_id=profile_id).order_by('-product_like_created_at')[:5]
-    # print(f'product_likes:{product_likes}')
-    products_list = []
-    for product_like in product_likes:
-        product = Product.objects.get(product_id = product_like.product_id.product_id)
-        # print(f'product:{product}')
-        products_list.append(product)
-    # print(f'products_list:{products_list}')
+    
+    # 각 product_id별로 최신 product_like_created_at을 가지는 레코드 필터링
+    latest_likes = ProductLike.objects.filter(
+        profile_id=profile_id,
+        product_like_deleted_at__isnull=True  # 삭제되지 않은 값만 필터링
+    ).values('product_id').annotate(
+        latest_like_date=Max('product_like_created_at')
+    )
+
+    # 최신 찜 날짜 기준으로 product_likes 필터링
+    product_likes = ProductLike.objects.filter(
+        profile_id=profile_id,
+        product_like_deleted_at__isnull=True,
+        product_like_created_at__in=[like['latest_like_date'] for like in latest_likes]
+    ).select_related('product_id').order_by('-product_like_created_at')
+
     context = {'profile': profile,
-               'products_list':products_list,                                
+               'product_likes':product_likes,                                
                   }
     return render(request, 'mypages/likes.html', context)    
      
 
 def mypage_reviews(request, profile_id):
     profile = get_object_or_404(Profile, profile_id=profile_id) 
-    # product_reviews = ProductReview.objects.filter(profile_id=profile_id).order_by('-created_at')[:5]
-    product_reviews = ProductReview.objects.filter(profile_id=profile_id).order_by('-product_review_created_at')[:5]
-    products_list = []
-    for product_review in product_reviews:
-        product = Product.objects.get(product_id = product_review.product_id.product_id)
-        products_info= [product_review, product]
-        products_list.append(products_info)
-    
+    product_reviews = ProductReview.objects.filter(profile_id=profile_id, product_review_content__isnull=False).exists()
+    if product_reviews:
+    # 각 product_id 별로 최신 product_review_created_at을 가지는 레코드 필터링
+        latest_reviews = ProductReview.objects.filter(
+            profile_id=profile_id,
+            product_review_content__isnull=False,
+            product_review_deleted_at__isnull=True
+        ).values('product_id').annotate(
+            latest_review_date=Max('product_review_created_at')
+        )
+        
+        # 최신 리뷰 날짜 기준으로 product_reviews 필터링
+        product_reviews = ProductReview.objects.filter(
+            profile_id=profile_id,
+            product_review_content__isnull=False,
+            product_review_deleted_at__isnull=True,
+            product_review_created_at__in=[review['latest_review_date'] for review in latest_reviews]
+        ).select_related('product_id').order_by('-product_review_created_at')
+        
+        print(f'product_reviews:{product_reviews}')
+        
     context = {'profile': profile,
-               'products_list':products_list,                                   
+               'product_reviews': product_reviews,                                   
                   }
+    
     return render(request, 'mypages/reviews.html', context)    
 
