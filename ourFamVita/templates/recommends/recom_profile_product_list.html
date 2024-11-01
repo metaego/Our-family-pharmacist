@@ -113,11 +113,7 @@
         </div>
         <div style="width: auto; margin-bottom: 40px">
             <span style="color:#BC55EF; font-weight: 500">{{ product.product_name }}</span>
-            <li>평점: {% if product.product_rating_avg == 0.00 %}
-                                {{ 0 }}
-                        {% else %}
-                                {{ product.product_rating_avg }}
-                        {% endif %}
+            <li>평점: <span class="star-rating" style="--rating:{{ product.product_rating_avg }}; margin-right: 3px;"></span>{{ product.product_rating_avg }} ({{ product.product_rating_cnt }})
             </li>
             <li>제조사: {{ product.product_company }}</li>
             <li>섭취 방법: {{ product.product_instruction }}</li>
