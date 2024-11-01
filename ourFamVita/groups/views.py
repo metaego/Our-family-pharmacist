@@ -82,17 +82,20 @@ def group_main(request, profile_id):
         
     
     # user 좋아요 영양제
-    product_likes = ProductLike.objects.filter(user_id=user.user_id).order_by('-product_like_created_at')[:3]   
-    product_like_list = []
-    for product_like in product_likes:
-        product = Product.objects.get(product_id = product_like.product_id.product_id)
-        product_like_list.append(product) 
+    product_likes = ProductLike.objects.filter(
+        user_id=user.user_id, product_like_deleted_at__isnull=True
+    ).select_related('product_id').order_by('-product_like_created_at')[:3]   
+    
+    # product_like_list = []
+    # for product_like in product_likes:
+    #     product = Product.objects.get(product_id = product_like.product_id.product_id)
+    #     product_like_list.append(product) 
       
     context = { 'profile':profile,
                 'functions_list': functions_list,
                 'ingredients_list': ingredients_list[:3],
                 'products_list' : products_list[:3],
-                'product_like_list' : product_like_list,  
+                'product_likes' : product_likes,  
                 'group_latest_functions' : group_latest_functions                               
                 } 
    
@@ -106,7 +109,7 @@ def group_detail(request, profile_id):
     
     # user 추천 영양제
     products_list = []
-    recommendation_products = RecomSurveyProduct.objects.filter(recom_id = recommendations_info.recom_id)[:5]
+    recommendation_products = RecomSurveyProduct.objects.filter(recom_id = recommendations_info.recom_id)
     for recommendation_product in recommendation_products:
         product = Product.objects.get(product_id = recommendation_product.product_id.product_id)
         products_list.append(product)
