@@ -166,16 +166,12 @@
                     <tr>
                         <th class="product_title">
                             <a href="{% url "products:products_detail" r_product.product_id %}">
-                                {{ r_product.product_name}}
+                                <strong style="font-weight: 500;">{{ r_product.product_name}}</strong>
                             </a>
                         </th>
                     </tr>
                     <tr>
-                        <th>평점: {% if r_product.product_rating_avg == 0.00 %}
-                            {{ '0' }}
-                          {% else %}
-                            {{ r_product.product_rating_avg }}
-                          {% endif %}
+                        <th>평점: <span class="star-rating" style="--rating:{{ r_product.product_rating_avg }}; margin-right: 3px;"></span>{{ r_product.product_rating_avg }} ({{ r_product.product_rating_cnt }})
                         </th>
                     </tr>
                 </table>
@@ -215,16 +211,12 @@
                     <tr>
                         <th class="product_title">
                             <a href="{% url "products:products_detail" c_product.product_id %}">
-                                {{ c_product.product_name}}
+                                <strong style="font-weight: 500;">{{ c_product.product_name}}</strong>
                             </a>
                         </th>
                     </tr>
                     <tr>
-                        <th>평점: {% if c_product.product_rating_avg == 0.00 %}
-                                    {{ '0' }}
-                                {% else %}
-                                    {{ c_product.product_rating_avg }}
-                                {% endif %}
+                        <th>평점: <span class="star-rating" style="--rating:{{ c_product.product_rating_avg }}; margin-right: 3px;"></span>{{ c_product.product_rating_avg }} ({{ c_product.product_rating_cnt }})
                         </th>
                     </tr>
                 </table>
